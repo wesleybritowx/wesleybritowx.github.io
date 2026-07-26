@@ -882,8 +882,9 @@
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Desligamento em 12 meses</span>Para cada pessoa: houve desligamento
-            dentro de <strong>365 dias da admissão</strong>? Quem segue ativo dentro da janela conta como retido.
+          <p><span class="label">Desligamento em 12 meses</span>Para cada pessoa: houve desligamento dentro de
+            <strong>365 dias da admissão</strong> e dentro da janela observada do grupo? Quem não aparece como
+            desligado nessa janela conta como <strong>retido</strong> naquela safra.
             <br><code>taxa = desligados em 12m ÷ total de admitidos no grupo</code>
           </p>
         </div>
@@ -891,6 +892,24 @@
         <p>O denominador é o <strong>total de admitidos no período do grupo</strong> — não o headcount ativo.
           Essa escolha garante que grupos de tamanhos muito diferentes (8.388 contra 2.670 pessoas) continuem
           comparáveis: a taxa não depende de quantos sobraram.</p>
+
+        <h3>A regra da janela e o que ela implica</h3>
+        <p>Como o desligamento só é contado <em>dentro da janela do grupo</em>, quem foi admitido perto do fim de
+          uma janela teve pouco tempo de observação e entra como retido, mesmo que venha a sair pouco depois.
+          Isso é <strong>censura à direita</strong> — e é a razão de fundo para as janelas terem a mesma duração
+          nos três grupos.</p>
+
+        <div class="callout" style="margin-bottom:0">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">Por que isso não quebra a comparação</span>Com janelas de 13 meses em todos os
+            grupos, o efeito é <strong>simétrico</strong>: cada grupo tem a mesma proporção de gente
+            pouco observada, na mesma posição da janela. O viés não favorece nenhum lado. O que ele afeta é o
+            <em>nível</em> das taxas — todas subestimam o desligamento verdadeiro em 12 meses — e não a
+            <em>diferença</em> entre elas, que é o objeto da análise.
+          </p>
+        </div>
       </section>
 
       <section id="achados">
@@ -909,43 +928,93 @@
               <tr>
                 <th>Grupo</th>
                 <th class="num">Admitidos</th>
-                <th class="num">Desligamento 12m</th>
-                <th class="num">Retenção 12m</th>
+                <th class="num">Desligados 12m</th>
+                <th class="num">Taxa</th>
+                <th class="num">IC 95%</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Sem Fit <span style="color:var(--text-faint)">(abr/24 – abr/25)</span></td>
                 <td class="num">8.388</td>
+                <td class="num">5.838</td>
                 <td class="num">69,6%</td>
-                <td class="num">30,4%</td>
+                <td class="num">68,6 – 70,6%</td>
               </tr>
               <tr class="winner">
                 <td>Com Fit <span style="opacity:.75">(mai/25 – mai/26)</span></td>
                 <td class="num">2.670</td>
+                <td class="num">657</td>
                 <td class="num">24,6%</td>
-                <td class="num">75,4%</td>
+                <td class="num">23,0 – 26,3%</td>
               </tr>
               <tr>
                 <td>Sem nota <span style="color:var(--text-faint)">(mai/25 – mai/26)</span></td>
                 <td class="num">5.753</td>
+                <td class="num">2.307</td>
                 <td class="num">40,1%</td>
-                <td class="num">59,9%</td>
+                <td class="num">38,8 – 41,4%</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3>Duas leituras, e a segunda é a que importa</h3>
-        <p>Contra o grupo Sem Fit, a queda é de <strong>45 pontos percentuais</strong> (69,6% → 24,6%). É o
-          número de manchete, mas compara períodos diferentes.</p>
-        <p>A comparação mais rigorosa é <strong>dentro do mesmo período</strong>: Com Fit (24,6%) contra o
-          controle interno (40,1%), uma diferença de <strong>15,5 p.p.</strong> entre pessoas que viveram o mesmo
-          contexto de mercado e de empresa, separadas apenas por terem passado ou não pela avaliação. É uma
-          margem menor que a manchete — e é a que sustenta a conclusão.</p>
-        <p>O controle interno também mostra que <em>parte</em> da melhora vem do período em si: ele está bem
-          abaixo dos 69,6% do grupo Sem Fit. Reconhecer isso é o que impede a análise de superestimar o efeito da
-          ferramenta.</p>
+        <p>Com amostras nessa ordem de grandeza, os intervalos de confiança ficam estreitos — no máximo
+          ±1,6 p.p. Vale registrar por que os intervalos aparecem aqui e o p-valor não: com milhares de
+          observações, <em>qualquer</em> diferença sai significativa, então o teste de hipótese não distingue
+          nada. O intervalo responde a pergunta útil, que é de quanto é a diferença e com que precisão.</p>
+
+        <h3>Decompondo os 45 pontos</h3>
+        <p>Contra o grupo Sem Fit, a queda é de <strong>45,0 p.p.</strong> (69,6% → 24,6%). É o número de
+          manchete, mas ele compara períodos diferentes — e o controle interno permite separar o que é efeito da
+          ferramenta do que é efeito do período:</p>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Contraste</th>
+                <th class="num">Diferença</th>
+                <th class="num">IC 95%</th>
+                <th class="num">Risco relativo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="wrap-cell">Efeito do <strong>período</strong><br>
+                    <span style="color:var(--text-faint);font-size:.86em">Sem nota vs Sem Fit</span></span></td>
+                <td class="num">−29,5 p.p.</td>
+                <td class="num">−31,1 a −27,9</td>
+                <td class="num">0,58</td>
+              </tr>
+              <tr class="winner">
+                <td><span class="wrap-cell">Efeito do <strong>Fit Cultural</strong><br>
+                    <span style="opacity:.75;font-size:.86em">Com Fit vs Sem nota, mesmo período</span></span>
+                </td>
+                <td class="num">−15,5 p.p.</td>
+                <td class="num">−17,5 a −13,4</td>
+                <td class="num">0,61</td>
+              </tr>
+              <tr>
+                <td><span class="wrap-cell"><strong>Total observado</strong><br>
+                    <span style="color:var(--text-faint);font-size:.86em">Com Fit vs Sem Fit</span></span></td>
+                <td class="num">−45,0 p.p.</td>
+                <td class="num">−46,9 a −43,1</td>
+                <td class="num">0,35</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>A conta fecha: <code>29,5 + 15,5 = 45,0</code>. E a leitura incômoda é que <strong>o período explica
+            quase o dobro da ferramenta</strong>. Alguma coisa mudou em 2025 — mercado, política salarial,
+          operação — que já derrubaria o turnover de qualquer jeito. Atribuir os 45 pontos ao Fit Cultural seria
+          inflar o resultado em cerca de três vezes.</p>
+
+        <p>O que sobra para a ferramenta, ainda assim, é sólido: <strong>15,5 p.p.</strong> com intervalo
+          inteiramente negativo (−17,5 a −13,4), um <strong>risco 39% menor</strong> de desligamento em 12 meses
+          entre pessoas que viveram o mesmo contexto e se separam só por terem passado pela avaliação. Em termos
+          operacionais, é <strong>1 saída evitada a cada ~6,5 contratações</strong> feitas com Fit.</p>
 
         <h3>Quando as pessoas saem</h3>
         <figure>
@@ -993,11 +1062,56 @@
           <figcaption>Taxa de pedido de demissão em 12 meses, sobre o total de admitidos de cada grupo.</figcaption>
         </figure>
 
-        <p>É aqui que o resultado fica mais convincente: <strong>14,2%</strong> no grupo Com Fit contra
-          <strong>36,9%</strong> no Sem Fit, com o controle interno em <strong>19,2%</strong>. O efeito aparece
-          exatamente na categoria que a teoria previa — e o controle interno, mais uma vez, fica no meio do
-          caminho.
+        <p>Na comparação de manchete o resultado é forte: <strong>14,2%</strong> [13,0 – 15,6] no grupo Com Fit
+          contra <strong>36,9%</strong> [35,9 – 37,9] no Sem Fit. Mas o teste que interessa é de novo o
+          <strong>de dentro do período</strong>, contra o controle interno em <strong>19,2%</strong>
+          [18,2 – 20,2] — e aí a margem cai para <strong>4,9 p.p.</strong> [3,2 – 6,6].
         </p>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Efeito do Fit no mesmo período</th>
+                <th class="num">Diferença</th>
+                <th class="num">Risco relativo</th>
+                <th class="num">Redução</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Desligamento total em 12m</td>
+                <td class="num">−15,5 p.p.</td>
+                <td class="num">0,61 <span style="color:var(--text-faint)">[0,57–0,66]</span></td>
+                <td class="num">39%</td>
+              </tr>
+              <tr>
+                <td>Pedido de demissão em 12m</td>
+                <td class="num">−4,9 p.p.</td>
+                <td class="num">0,74 <span style="color:var(--text-faint)">[0,67–0,83]</span></td>
+                <td class="num">26%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">A hipótese não se confirma inteiramente</span>Se o Fit Cultural agisse
+            <em>sobretudo</em> sobre a saída voluntária, a redução relativa deveria ser <strong>maior</strong> no
+            pedido de demissão do que no desligamento total. É o contrário: 26% contra 39%, com intervalos que
+            mal se tocam. A vantagem do grupo avaliado existe e é consistente, mas está distribuída por todos os
+            motivos de saída, não concentrada no canal que a teoria previa.
+          </p>
+        </div>
+
+        <p>Isso não invalida o resultado — reduzir o desligamento em 12 meses em 39% continua sendo o achado
+          principal. Mas muda a explicação: o efeito não parece ser puramente de alinhamento cultural. Uma
+          hipótese alternativa é que passar pela avaliação esteja correlacionado com outra coisa — o tipo de
+          vaga, o recrutador, o canal de origem, o rigor do processo naquele fluxo. Separar isso exige controlar
+          por essas variáveis, o que fica como próximo passo.</p>
 
         <figure>
           <img src="img/turnover/motivos-desligamento.png"
@@ -1015,8 +1129,11 @@
 
         <h3>O que esta análise não prova</h3>
         <ul>
-          <li><strong>Observação incompleta no fim da janela.</strong> Quem foi admitido perto de mai/2026 ainda
-            não completou 365 dias, então a retenção do grupo Com Fit pode estar levemente superestimada.</li>
+          <li><strong>As taxas subestimam o desligamento real, nos três grupos.</strong> Quem entra no fim de
+            qualquer uma das janelas tem pouco tempo observado e conta como retido — inclusive no grupo Sem Fit,
+            onde alguém admitido em mar/2025 que saiu em jun/2025 caiu fora da janela abr/24–abr/25. Como o
+            efeito é simétrico, ele não distorce a comparação entre os grupos, mas os valores absolutos são um
+            <strong>piso</strong>, não a taxa verdadeira de 12 meses.</li>
           <li><strong>Grupos não controlados por cargo, faixa etária ou região</strong> — variáveis que também
             movem a rotatividade e que não foram isoladas.</li>
           <li><strong>Não é um experimento.</strong> A atribuição ao grupo Com Fit não foi aleatória: quem foi
@@ -1028,6 +1145,11 @@
             anormalmente baixo no mês final, provavelmente por fechamento incompleto. Por isso a análise se apoia
             nas taxas por coorte e não na série mensal.</li>
         </ul>
+
+        <p>O caminho natural para tratar a censura de frente é a <strong>análise de sobrevivência</strong>
+          (Kaplan-Meier, e um modelo de Cox para ajustar por cargo e região). Ela usa cada pessoa pelo tempo que
+          de fato foi observada, em vez de classificá-la como retida por falta de janela — o que devolveria as
+          taxas em nível, não só a diferença entre grupos.</p>
 
         <h3>Recomendações entregues</h3>
         <ol>
@@ -1051,7 +1173,7 @@
           <li><svg aria-hidden="true">
               <use href="#i-check" />
             </svg><strong>Comparação sem viés de exposição</strong> — janelas de admissão fechadas e de mesma
-            duração dos dois lados.</li>
+            duração nos três grupos, o que também torna a censura no fim da janela simétrica entre eles.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
             </svg><strong>Grupo de controle no mesmo período</strong>, que separa o efeito da ferramenta do
