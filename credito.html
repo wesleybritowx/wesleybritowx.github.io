@@ -608,10 +608,30 @@
         break-inside: avoid;
       }
 
+      /* Fill the text column, so charts line up with the body margins.
+         Dropping the on-screen padding is what removes the recessed look. */
       figure img {
-        max-height: 62mm;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        padding: 0;
+        border-color: #ddd;
+      }
+
+      /* A square chart would run the full 184mm column height — cap it and
+         centre it, so the narrower block reads as deliberate. */
+      figure.tall img {
         width: auto;
         max-width: 100%;
+        max-height: 110mm;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Side by side these print at ~86mm each and the axis labels blur.
+         Stack them so each gets the full column. */
+      .fig-grid {
+        grid-template-columns: 1fr;
       }
 
       .table-scroll {
@@ -1087,7 +1107,7 @@
         </figure>
 
         <h3>A probabilidade é confiável?</h3>
-        <figure>
+        <figure class="tall">
           <img src="img/credito/calibracao.png"
             alt="Curva de calibração do LightGBM, com os pontos sobre a diagonal" loading="lazy" />
           <figcaption>Curva de calibração — os pontos caem sobre a diagonal.</figcaption>

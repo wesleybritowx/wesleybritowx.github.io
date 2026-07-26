@@ -647,10 +647,15 @@
         break-inside: avoid;
       }
 
+      /* Fill the text column, so charts line up with the body margins.
+         Dropping the on-screen padding is what removes the recessed look.
+         No chart here is tall enough to need a height cap (worst is ~99mm). */
       figure img {
-        max-height: 62mm;
-        width: auto;
-        max-width: 100%;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        padding: 0;
+        border-color: #ddd;
       }
 
       .table-scroll {
