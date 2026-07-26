@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise Diagnóstica de Turnover — Wesley Brito</title>
+  <meta name="description"
+    content="Case de People Analytics: medir o impacto do Fit Cultural sobre a retenção usando períodos de admissão fechados e um grupo de controle interno, eliminando o viés de exposição." />
+  <meta name="author" content="Wesley Brito" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Análise Diagnóstica de Turnover — impacto do Fit Cultural na retenção" />
+  <meta property="og:description"
+    content="Períodos fechados e grupo de controle interno para isolar o efeito do Fit Cultural sobre o desligamento em 12 meses." />
+  <meta property="og:image" content="img/turnover/desligamento-retencao.png" />
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+
+  <style>
+    /* ------------------------------------------------------------------ */
+    /*  Tokens — shared with index.html                                    */
+    /* ------------------------------------------------------------------ */
+    :root {
+      --accent: #1d6fd6;
+      --accent-soft: #e8f1fd;
+      --accent-text: #1558ab;
+      --good: #1f8a54;
+
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #fafbfc;
+
+      --text: #16202e;
+      --text-muted: #5a6779;
+      --text-faint: #8a94a3;
+
+      --border: #e3e7ec;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .12);
+
+      --radius: 14px;
+      --radius-sm: 8px;
+      --maxw: 940px;
+      --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #5aa2f5;
+        --accent-soft: #16283f;
+        --accent-text: #8ec0fb;
+        --good: #4cc38a;
+        --bg: #0e1319;
+        --surface: #151b23;
+        --surface-2: #1a212a;
+        --text: #e7ecf3;
+        --text-muted: #9aa7b8;
+        --text-faint: #6f7d8f;
+        --border: #263140;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+      }
+    }
+
+    /* Explicit toggle always wins over the OS preference. */
+    :root[data-theme="light"] {
+      --accent: #1d6fd6;
+      --accent-soft: #e8f1fd;
+      --accent-text: #1558ab;
+      --good: #1f8a54;
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #fafbfc;
+      --text: #16202e;
+      --text-muted: #5a6779;
+      --text-faint: #8a94a3;
+      --border: #e3e7ec;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .12);
+    }
+
+    :root[data-theme="dark"] {
+      --accent: #5aa2f5;
+      --accent-soft: #16283f;
+      --accent-text: #8ec0fb;
+      --good: #4cc38a;
+      --bg: #0e1319;
+      --surface: #151b23;
+      --surface-2: #1a212a;
+      --text: #e7ecf3;
+      --text-muted: #9aa7b8;
+      --text-faint: #6f7d8f;
+      --border: #263140;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Base                                                               */
+    /* ------------------------------------------------------------------ */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 72px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--accent-text);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: .88em;
+      padding: 1px 5px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Toolbar                                                            */
+    /* ------------------------------------------------------------------ */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: saturate(180%) blur(10px);
+    }
+
+    .toolbar .spacer {
+      flex: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, transform .15s;
+    }
+
+    .btn:hover {
+      color: var(--accent-text);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Layout                                                             */
+    /* ------------------------------------------------------------------ */
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    header.hero {
+      padding: 16px 0 30px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 3px 11px;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4.6vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    .hero .lede {
+      margin: 12px 0 0;
+      max-width: 68ch;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      font-size: .84rem;
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    main {
+      display: grid;
+      gap: 22px;
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 28px;
+    }
+
+    section>h2 {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 0 0 6px;
+      font-size: 1.28rem;
+      line-height: 1.3;
+      letter-spacing: -.01em;
+    }
+
+    section>h2 .num {
+      font-size: .8rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent-text);
+    }
+
+    .deck {
+      margin: 0 0 20px;
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 1.02rem;
+      line-height: 1.4;
+    }
+
+    h3:first-child {
+      margin-top: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 14px;
+      padding-left: 20px;
+      display: grid;
+      gap: 7px;
+    }
+
+    li::marker {
+      color: var(--accent);
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Metric tiles                                                       */
+    /* ------------------------------------------------------------------ */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .tile {
+      padding: 16px 18px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .tile .val {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      color: var(--accent-text);
+    }
+
+    .tile .key {
+      display: block;
+      margin-top: 4px;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tile .hint {
+      display: block;
+      font-size: .78rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Callout                                                            */
+    /* ------------------------------------------------------------------ */
+    .callout {
+      display: flex;
+      gap: 12px;
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .callout:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout svg {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      margin-top: 3px;
+      color: var(--accent-text);
+    }
+
+    .callout p {
+      margin: 0;
+      font-size: .95rem;
+    }
+
+    .callout .label {
+      display: block;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Group cards                                                        */
+    /* ------------------------------------------------------------------ */
+    .groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .group {
+      padding: 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .group.treated {
+      border-color: var(--accent);
+    }
+
+    .group .tagline {
+      display: block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+    }
+
+    .group h4 {
+      margin: 3px 0 4px;
+      font-size: 1rem;
+    }
+
+    .group .win {
+      display: block;
+      margin-bottom: 8px;
+      font-size: .82rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-faint);
+    }
+
+    .group p {
+      margin: 0;
+      font-size: .88rem;
+      color: var(--text-muted);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Tables                                                             */
+    /* ------------------------------------------------------------------ */
+    .table-scroll {
+      overflow-x: auto;
+      margin: 0 0 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    th,
+    td {
+      padding: 9px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      background: var(--surface-2);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    td.num,
+    th.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    tr.winner td {
+      background: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    tr.winner td:first-child {
+      color: var(--accent-text);
+    }
+
+    .wrap-cell {
+      display: block;
+      min-width: 210px;
+      white-space: normal;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Figures — charts keep a light canvas in both themes                */
+    /* ------------------------------------------------------------------ */
+    figure {
+      margin: 0 0 18px;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-size: .86rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Checklist & TOC                                                    */
+    /* ------------------------------------------------------------------ */
+    .checks {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .checks li {
+      position: relative;
+      padding-left: 27px;
+    }
+
+    .checks li svg {
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 16px;
+      height: 16px;
+      color: var(--good);
+    }
+
+    .toc ol {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 4px 20px;
+      margin: 0;
+      padding-left: 20px;
+      font-size: .93rem;
+    }
+
+    .toc a {
+      color: var(--text-muted);
+    }
+
+    .toc a:hover {
+      color: var(--accent-text);
+    }
+
+    footer {
+      padding: 32px 20px 40px;
+      text-align: center;
+      font-size: .85rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Responsive                                                         */
+    /* ------------------------------------------------------------------ */
+    @media (max-width: 640px) {
+      section {
+        padding: 22px 18px;
+      }
+
+      .tile .val {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Print / Save as PDF                                                */
+    /* ------------------------------------------------------------------ */
+    @media print {
+      @page {
+        size: A4;
+        margin: 12mm 13mm;
+      }
+
+      :root,
+      :root[data-theme="dark"],
+      :root[data-theme="light"] {
+        --bg: #fff;
+        --surface: #fff;
+        --surface-2: #fff;
+        --text: #000;
+        --text-muted: #262626;
+        --text-faint: #555;
+        --border: #ccc;
+        --accent: #1558ab;
+        --accent-text: #1558ab;
+        --accent-soft: #eef4fc;
+        --shadow: none;
+      }
+
+      body {
+        font-size: 10pt;
+        line-height: 1.45;
+        background: #fff;
+      }
+
+      .toolbar,
+      .toc,
+      .no-print {
+        display: none !important;
+      }
+
+      .wrap {
+        max-width: none;
+        padding: 0;
+      }
+
+      main {
+        gap: 12px;
+      }
+
+      section {
+        padding: 12px 0 0;
+        border: none;
+        border-top: 1px solid #ccc;
+        border-radius: 0;
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      figure,
+      .tile,
+      .group,
+      .callout,
+      tr {
+        break-inside: avoid;
+      }
+
+      figure img {
+        max-height: 62mm;
+        width: auto;
+        max-width: 100%;
+      }
+
+      .table-scroll {
+        overflow: visible;
+      }
+
+      footer {
+        padding: 14px 0 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M7 10l5 5 5-5M12 15V3" />
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4M12 8h.01" />
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5" />
+    </symbol>
+  </svg>
+
+  <div class="toolbar">
+    <a class="btn" href="index.html">
+      <svg aria-hidden="true">
+        <use href="#i-back" />
+      </svg>
+      Portfólio
+    </a>
+    <span class="spacer"></span>
+    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+      <svg id="themeIcon" aria-hidden="true">
+        <use href="#i-moon" />
+      </svg>
+      <span id="themeLabel">Escuro</span>
+    </button>
+    <button class="btn" id="pdfBtn" type="button">
+      <svg aria-hidden="true">
+        <use href="#i-download" />
+      </svg>
+      Baixar PDF
+    </button>
+  </div>
+
+  <div class="wrap">
+
+    <header class="hero">
+      <span class="eyebrow">People Analytics</span>
+      <h1>Análise Diagnóstica de Turnover</h1>
+      <p class="lede">O Fit Cultural adotado no processo seletivo realmente segura as pessoas na empresa? A
+        pergunta é fácil de fazer e fácil de responder errado. A comparação óbvia — quem entrou "antes" contra
+        quem entrou "depois" — está <strong>viciada por construção</strong>. Este case é sobre montar o
+        recorte que torna a comparação honesta, e só então olhar para o resultado.
+      </p>
+      <div class="stack">
+        <span class="badge">Python</span>
+        <span class="badge">Pandas</span>
+        <span class="badge">Plotly</span>
+        <span class="badge">People Analytics</span>
+        <span class="badge">Análise diagnóstica</span>
+        <span class="badge">Grupo de controle</span>
+        <span class="badge">Análise de coorte</span>
+      </div>
+    </header>
+
+    <main>
+
+      <section id="resultado">
+        <h2>Resultado</h2>
+        <p class="deck">Desligamento nos 12 primeiros meses de contrato, em janelas de admissão equivalentes.</p>
+        <div class="metrics">
+          <div class="tile">
+            <span class="val">69,6%</span>
+            <span class="key">Sem Fit</span>
+            <span class="hint">admitidos abr/24 – abr/25</span>
+          </div>
+          <div class="tile">
+            <span class="val">24,6%</span>
+            <span class="key">Com Fit</span>
+            <span class="hint">admitidos mai/25 – mai/26</span>
+          </div>
+          <div class="tile">
+            <span class="val">40,1%</span>
+            <span class="key">Controle interno</span>
+            <span class="hint">mesmo período, sem avaliação</span>
+          </div>
+          <div class="tile">
+            <span class="val">14,2%</span>
+            <span class="key">Pedido de demissão</span>
+            <span class="hint">Com Fit, contra 36,9% Sem Fit</span>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:20px;margin-bottom:0">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">Confidencialidade</span>O cliente não é identificado. Esta página descreve o
+            método e os resultados agregados; nomes, unidades e recortes que permitiriam identificar a empresa
+            foram removidos.</p>
+        </div>
+      </section>
+
+      <section class="toc">
+        <h2>Roteiro</h2>
+        <ol>
+          <li><a href="#contexto">Contexto e objetivo</a></li>
+          <li><a href="#vies">O viés que invalida a comparação óbvia</a></li>
+          <li><a href="#grupos">Os três grupos</a></li>
+          <li><a href="#metrica">A métrica</a></li>
+          <li><a href="#achados">Achados</a></li>
+          <li><a href="#motivos">Por que as pessoas saem</a></li>
+          <li><a href="#limitacoes">Limitações e recomendações</a></li>
+        </ol>
+      </section>
+
+      <section id="contexto">
+        <h2><span class="num">01</span>Contexto e objetivo</h2>
+        <p>Em <strong>maio de 2025</strong>, a empresa passou a usar uma avaliação de <strong>Fit Cultural</strong>
+          como critério complementar nas contratações. A ferramenta mede o alinhamento do candidato com o perfil
+          cultural da empresa e gera um score que <em>orienta</em>, sem substituir, a decisão do recrutador.</p>
+        <p>Um ano depois veio a pergunta natural: isso melhorou a retenção? O objetivo da análise foi quantificar
+          o impacto sobre os <strong>12 primeiros meses de contrato</strong> — a janela em que a rotatividade se
+          concentra e em que o alinhamento cultural teria mais chance de aparecer.</p>
+        <p>A base cobre <strong>abr/2024 a mai/2026</strong>, com mais de <strong>16 mil admissões</strong>
+          distribuídas entre os grupos comparados.</p>
+      </section>
+
+      <section id="vies">
+        <h2><span class="num">02</span>O viés que invalida a comparação óbvia</h2>
+        <p class="deck">Esta é a decisão que sustenta toda a análise.</p>
+
+        <p>O caminho natural seria comparar <em>Pré</em> (todos os colaboradores admitidos antes de mai/2025) com
+          <em>Pós</em> (todos os admitidos depois). Esse recorte é enganoso, e o motivo é simples: o grupo Pré
+          acumula gente com 1, 5 ou 10 anos de casa, enquanto o grupo Pós tem <strong>no máximo 13 meses</strong>
+          de empresa.
+        </p>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">Viés de exposição</span>Quem está há mais tempo na empresa teve mais tempo para
+            se desligar. Comparar grupos com tempos de observação diferentes mede a diferença de exposição, não o
+            efeito da intervenção — e sempre favorece o grupo mais novo.</p>
+        </div>
+
+        <p>A correção: restringir <strong>os dois lados</strong> a janelas de admissão fechadas de 13 meses, de
+          modo que o tempo máximo de observação seja idêntico. Assim, quando os números divergem, a divergência
+          não vem do relógio.</p>
+
+        <figure>
+          <img src="img/turnover/composicao-grupos.png"
+            alt="Barras empilhadas com o total de admitidos de cada grupo, separando ativos e desligados"
+            loading="lazy" />
+          <figcaption>Composição dos três grupos em períodos fechados — ativos e desligados sobre o total de
+            admitidos.</figcaption>
+        </figure>
+      </section>
+
+      <section id="grupos">
+        <h2><span class="num">03</span>Os três grupos</h2>
+        <p class="deck">Dois grupos responderiam a pergunta pela metade. O terceiro é o que separa efeito de
+          coincidência.</p>
+
+        <div class="groups">
+          <div class="group">
+            <span class="tagline">Referência</span>
+            <h4>Sem Fit</h4>
+            <span class="win">admitidos abr/24 – abr/25 · 8.388 pessoas</span>
+            <p>O score é ignorado mesmo quando existe, porque o processo seletivo ainda não o usava como
+              critério.</p>
+          </div>
+          <div class="group treated">
+            <span class="tagline">Tratamento</span>
+            <h4>Com Fit</h4>
+            <span class="win">admitidos mai/25 – mai/26 · 2.670 pessoas</span>
+            <p>Candidatos avaliados pelo Fit Cultural e contratados já sob o novo critério.</p>
+          </div>
+          <div class="group">
+            <span class="tagline">Controle interno</span>
+            <h4>Sem nota</h4>
+            <span class="win">admitidos mai/25 – mai/26 · 5.753 pessoas</span>
+            <p>Mesmo período pós-implantação, mas sem score — a cobertura não era total. Isola o efeito do Fit do
+              efeito do próprio período.</p>
+          </div>
+        </div>
+
+        <p>O terceiro grupo é o mais importante do desenho. Sem ele, qualquer melhora poderia ser atribuída a
+          outra coisa que mudou em 2025 — mercado de trabalho, política salarial, mudança na operação. Como esse
+          grupo viveu <strong>exatamente o mesmo período</strong> e a única diferença é não ter passado pela
+          avaliação, ele responde: "e se nada tivesse mudado no processo seletivo?"</p>
+      </section>
+
+      <section id="metrica">
+        <h2><span class="num">04</span>A métrica</h2>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">Desligamento em 12 meses</span>Para cada pessoa: houve desligamento
+            dentro de <strong>365 dias da admissão</strong>? Quem segue ativo dentro da janela conta como retido.
+            <br><code>taxa = desligados em 12m ÷ total de admitidos no grupo</code>
+          </p>
+        </div>
+
+        <p>O denominador é o <strong>total de admitidos no período do grupo</strong> — não o headcount ativo.
+          Essa escolha garante que grupos de tamanhos muito diferentes (8.388 contra 2.670 pessoas) continuem
+          comparáveis: a taxa não depende de quantos sobraram.</p>
+      </section>
+
+      <section id="achados">
+        <h2><span class="num">05</span>Achados</h2>
+
+        <figure>
+          <img src="img/turnover/desligamento-retencao.png"
+            alt="Barras da taxa de desligamento e da taxa de retenção em 12 meses para os três grupos"
+            loading="lazy" />
+          <figcaption>Desligamento e retenção em 12 meses, por grupo.</figcaption>
+        </figure>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Grupo</th>
+                <th class="num">Admitidos</th>
+                <th class="num">Desligamento 12m</th>
+                <th class="num">Retenção 12m</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sem Fit <span style="color:var(--text-faint)">(abr/24 – abr/25)</span></td>
+                <td class="num">8.388</td>
+                <td class="num">69,6%</td>
+                <td class="num">30,4%</td>
+              </tr>
+              <tr class="winner">
+                <td>Com Fit <span style="opacity:.75">(mai/25 – mai/26)</span></td>
+                <td class="num">2.670</td>
+                <td class="num">24,6%</td>
+                <td class="num">75,4%</td>
+              </tr>
+              <tr>
+                <td>Sem nota <span style="color:var(--text-faint)">(mai/25 – mai/26)</span></td>
+                <td class="num">5.753</td>
+                <td class="num">40,1%</td>
+                <td class="num">59,9%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Duas leituras, e a segunda é a que importa</h3>
+        <p>Contra o grupo Sem Fit, a queda é de <strong>45 pontos percentuais</strong> (69,6% → 24,6%). É o
+          número de manchete, mas compara períodos diferentes.</p>
+        <p>A comparação mais rigorosa é <strong>dentro do mesmo período</strong>: Com Fit (24,6%) contra o
+          controle interno (40,1%), uma diferença de <strong>15,5 p.p.</strong> entre pessoas que viveram o mesmo
+          contexto de mercado e de empresa, separadas apenas por terem passado ou não pela avaliação. É uma
+          margem menor que a manchete — e é a que sustenta a conclusão.</p>
+        <p>O controle interno também mostra que <em>parte</em> da melhora vem do período em si: ele está bem
+          abaixo dos 69,6% do grupo Sem Fit. Reconhecer isso é o que impede a análise de superestimar o efeito da
+          ferramenta.</p>
+
+        <h3>Quando as pessoas saem</h3>
+        <figure>
+          <img src="img/turnover/curva-evasao.png"
+            alt="Curvas acumuladas de desligamento ao longo dos 12 meses após a admissão, para os três grupos"
+            loading="lazy" />
+          <figcaption>Evasão acumulada mês a mês. A curva mais baixa retém mais; a inclinação inicial revela
+            risco de saída precoce.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="img/turnover/distribuicao-saidas.png"
+            alt="Barras agrupadas com o percentual do grupo que sai em cada mês após a admissão" loading="lazy" />
+          <figcaption>Percentual do grupo que sai em cada mês pós-admissão.</figcaption>
+        </figure>
+
+        <p>As duas visões contam a mesma história por ângulos diferentes: a evasão se concentra nos
+          <strong>primeiros três meses</strong> em todos os grupos. No grupo Sem Fit, o pico do 2º mês sozinho
+          leva 13,9% de toda a coorte. No grupo Com Fit o mesmo pico é de 4,7%. A diferença não está só no total
+          — está em <em>quando</em> as pessoas desistem, o que aponta diretamente para o onboarding.
+        </p>
+      </section>
+
+      <section id="motivos">
+        <h2><span class="num">06</span>Por que as pessoas saem</h2>
+        <p class="deck">Contar quantos saíram não basta. O motivo é o que liga o resultado à causa.</p>
+
+        <p>Os desligamentos se dividem em dois tipos: os de <strong>iniciativa da empresa</strong> (demissão com
+          ou sem justa causa, término de contrato) e as <strong>saídas voluntárias</strong> — o pedido de
+          demissão.</p>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">O teste decisivo</span>O Fit Cultural atua sobre a decisão <em>do
+              colaborador</em>: quem se identifica com o ambiente tem menos motivo para pedir para sair. Se a
+            ferramenta funciona, o efeito tem que aparecer no <strong>pedido de demissão</strong> — não numa queda
+            genérica do total.</p>
+        </div>
+
+        <figure>
+          <img src="img/turnover/pedido-demissao.png"
+            alt="Barras da taxa de pedido de demissão nos 12 primeiros meses, por grupo" loading="lazy" />
+          <figcaption>Taxa de pedido de demissão em 12 meses, sobre o total de admitidos de cada grupo.</figcaption>
+        </figure>
+
+        <p>É aqui que o resultado fica mais convincente: <strong>14,2%</strong> no grupo Com Fit contra
+          <strong>36,9%</strong> no Sem Fit, com o controle interno em <strong>19,2%</strong>. O efeito aparece
+          exatamente na categoria que a teoria previa — e o controle interno, mais uma vez, fica no meio do
+          caminho.
+        </p>
+
+        <figure>
+          <img src="img/turnover/motivos-desligamento.png"
+            alt="Barras agrupadas com o volume de desligamentos por motivo em cada grupo" loading="lazy" />
+          <figcaption>Volume de desligamentos por motivo, apenas para saídas dentro dos 365 dias.</figcaption>
+        </figure>
+
+        <p>Os percentuais são calculados sobre o <strong>total de admitidos</strong> do grupo, não sobre os
+          desligados. Sobre os desligados, um grupo que retém mais teria automaticamente percentuais maiores em
+          cada motivo — a comparação ficaria sem sentido.</p>
+      </section>
+
+      <section id="limitacoes">
+        <h2><span class="num">07</span>Limitações e recomendações</h2>
+
+        <h3>O que esta análise não prova</h3>
+        <ul>
+          <li><strong>Observação incompleta no fim da janela.</strong> Quem foi admitido perto de mai/2026 ainda
+            não completou 365 dias, então a retenção do grupo Com Fit pode estar levemente superestimada.</li>
+          <li><strong>Grupos não controlados por cargo, faixa etária ou região</strong> — variáveis que também
+            movem a rotatividade e que não foram isoladas.</li>
+          <li><strong>Não é um experimento.</strong> A atribuição ao grupo Com Fit não foi aleatória: quem foi
+            avaliado pode diferir sistematicamente de quem não foi. O controle interno reduz esse risco, mas não
+            o elimina.</li>
+          <li><strong>Cobertura parcial da ferramenta</strong> no período pós-implantação — 2.670 avaliados
+            contra 5.753 não avaliados.</li>
+          <li><strong>Qualidade do último mês.</strong> A base recebida traz um volume de desligamentos
+            anormalmente baixo no mês final, provavelmente por fechamento incompleto. Por isso a análise se apoia
+            nas taxas por coorte e não na série mensal.</li>
+        </ul>
+
+        <h3>Recomendações entregues</h3>
+        <ol>
+          <li><strong>Ampliar a cobertura da avaliação.</strong> O grupo sem nota, com mais que o dobro do
+            tamanho do avaliado, mostra que a maior parte das contratações ainda não passa pelo Fit — o que
+            limita o alcance do efeito.</li>
+          <li><strong>Priorizar as áreas de maior turnover</strong>, concentrando a avaliação onde o diferencial
+            de retenção foi maior.</li>
+          <li><strong>Atacar o onboarding precoce.</strong> A curva de evasão mostra que o risco se concentra nos
+            primeiros 90 dias; rituais de acompanhamento nesse período rendem mais do que ajustes na triagem.
+          </li>
+          <li><strong>Testar o score como preditor individual</strong>, e não só como marcador de grupo. Se a
+            correlação entre faixa de score e retenção se confirmar, faixas mínimas viram critério de triagem
+            para cargos com histórico de evasão precoce.</li>
+          <li><strong>Reavaliar em 6 meses.</strong> Com 18 meses de dados pós-implantação, as estimativas ficam
+            mais estáveis e a análise por faixa de score ganha volume para conclusões mais firmes.</li>
+        </ol>
+
+        <h3>O que a análise entrega bem</h3>
+        <ul class="checks">
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Comparação sem viés de exposição</strong> — janelas de admissão fechadas e de mesma
+            duração dos dois lados.</li>
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Grupo de controle no mesmo período</strong>, que separa o efeito da ferramenta do
+            efeito do contexto.</li>
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Hipótese testável antes de olhar o dado</strong> — o efeito tinha que aparecer no
+            pedido de demissão, e apareceu.</li>
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Denominadores explícitos</strong>, escolhidos para manter grupos de tamanhos diferentes
+            comparáveis.</li>
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Limitações declaradas</strong> junto com o resultado, não em nota de rodapé.</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
+  </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var icon = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+
+      function prefersDark() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      // Reflect the *next* theme the button will switch to.
+      function paint(isDark) {
+        icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
+        label.textContent = isDark ? 'Claro' : 'Escuro';
+      }
+
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) { }
+      if (saved === 'dark' || saved === 'light') {
+        root.setAttribute('data-theme', saved);
+      }
+      paint(saved ? saved === 'dark' : prefersDark());
+
+      document.getElementById('themeToggle').addEventListener('click', function () {
+        var isDark = root.getAttribute('data-theme')
+          ? root.getAttribute('data-theme') === 'dark'
+          : prefersDark();
+        var next = isDark ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) { }
+        paint(next === 'dark');
+      });
+
+      document.getElementById('pdfBtn').addEventListener('click', function () {
+        window.print();
+      });
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
+
+</body>
+
+</html>

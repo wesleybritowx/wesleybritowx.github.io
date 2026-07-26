@@ -11,8 +11,10 @@ Currículo e portfólio de **Wesley Brito** — Analista de Dados (People Analyt
 | `index.html` | Currículo/portfólio — página única, HTML + CSS, sem dependências externas |
 | `credito.html` | Case de risco de crédito: previsão de inadimplência com LightGBM |
 | `relatorio.html` | Case de automação: relatório de R&S no GitHub Actions com análise da API do Claude |
+| `turnover.html` | Case de People Analytics: impacto do Fit Cultural na retenção |
 | `img/` | Foto de perfil |
 | `img/credito/` | Gráficos do case de crédito, exportados do notebook |
+| `img/turnover/` | Gráficos do case de turnover |
 
 ## Recursos
 
