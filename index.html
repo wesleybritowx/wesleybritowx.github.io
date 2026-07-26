@@ -1,225 +1,1049 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wesley Brito - Portfólio</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wesley Brito — Analista de Dados</title>
+  <meta name="description"
+    content="Analista de Dados com experiência em People Analytics, pipelines de ETL com Python e BigQuery, automação de processos e desenvolvimento de dashboards." />
+  <meta name="author" content="Wesley Brito" />
+
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Wesley Brito — Analista de Dados" />
+  <meta property="og:description"
+    content="People Analytics, ETL com Python e BigQuery, automação e dashboards de negócio." />
+  <meta property="og:image" content="img/eu.jpg" />
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+
   <style>
+    /* ------------------------------------------------------------------ */
+    /*  Tokens                                                             */
+    /* ------------------------------------------------------------------ */
     :root {
-      --primary: #1565c0;
-      --secondary: #1976d2;
-      --bg: #f4f6f9;
-      --text: #333;
+      --accent: #1d6fd6;
+      --accent-soft: #e8f1fd;
+      --accent-text: #1558ab;
+
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #fafbfc;
+
+      --text: #16202e;
+      --text-muted: #5a6779;
+      --text-faint: #8a94a3;
+
+      --border: #e3e7ec;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .12);
+
+      --radius: 14px;
+      --radius-sm: 8px;
+      --maxw: 940px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #5aa2f5;
+        --accent-soft: #16283f;
+        --accent-text: #8ec0fb;
+
+        --bg: #0e1319;
+        --surface: #151b23;
+        --surface-2: #1a212a;
+
+        --text: #e7ecf3;
+        --text-muted: #9aa7b8;
+        --text-faint: #6f7d8f;
+
+        --border: #263140;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+      }
+    }
+
+    /* Explicit toggle always wins over the OS preference. */
+    :root[data-theme="light"] {
+      --accent: #1d6fd6;
+      --accent-soft: #e8f1fd;
+      --accent-text: #1558ab;
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #fafbfc;
+      --text: #16202e;
+      --text-muted: #5a6779;
+      --text-faint: #8a94a3;
+      --border: #e3e7ec;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .12);
+    }
+
+    :root[data-theme="dark"] {
+      --accent: #5aa2f5;
+      --accent-soft: #16283f;
+      --accent-text: #8ec0fb;
+      --bg: #0e1319;
+      --surface: #151b23;
+      --surface-2: #1a212a;
+      --text: #e7ecf3;
+      --text-muted: #9aa7b8;
+      --text-faint: #6f7d8f;
+      --border: #263140;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Base                                                               */
+    /* ------------------------------------------------------------------ */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       background: var(--bg);
       color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
-    header {
-      text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
+    a {
+      color: var(--accent-text);
+      text-decoration: none;
     }
 
-    header img {
-      width: 150px;
-      height: 150px;
+    a:hover {
+      text-decoration: underline;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Toolbar                                                            */
+    /* ------------------------------------------------------------------ */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 20px;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid transparent;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, transform .15s;
+    }
+
+    .btn:hover {
+      color: var(--accent-text);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Header                                                             */
+    /* ------------------------------------------------------------------ */
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    header.hero {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 24px 0 36px;
+    }
+
+    .hero img {
+      width: 132px;
+      height: 132px;
+      flex: none;
       object-fit: cover;
       border-radius: 50%;
-      border: 4px solid white;
-      margin-bottom: 15px;
+      border: 3px solid var(--surface);
+      box-shadow: var(--shadow);
     }
 
-    header h1 {
-      margin: 10px 0 5px;
-      font-size: 2.2rem;
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.9rem, 5vw, 2.6rem);
+      line-height: 1.15;
+      letter-spacing: -.02em;
     }
 
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
+    .hero .role {
+      margin: 6px 0 0;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--accent-text);
     }
 
-    .social-links a {
-      color: white;
-      margin: 0 10px;
-      font-size: 1.4rem;
-      transition: 0.3s;
+    .hero .location {
+      margin: 2px 0 0;
+      font-size: .92rem;
+      color: var(--text-faint);
     }
 
-    .social-links a:hover {
-      color: #ffd54f;
+    .contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-top: 14px;
+      font-size: .9rem;
     }
 
+    .contacts a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .contacts a:hover {
+      color: var(--accent-text);
+    }
+
+    .contacts svg {
+      width: 15px;
+      height: 15px;
+      flex: none;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Sections                                                           */
+    /* ------------------------------------------------------------------ */
     main {
-      max-width: 1100px;
-      margin: auto;
-      padding: 30px 20px;
       display: grid;
-      gap: 30px;
+      gap: 22px;
     }
 
     section {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 28px;
     }
 
-    section h2 {
-      color: var(--primary);
-      border-left: 4px solid var(--primary);
-      padding-left: 10px;
-      margin-bottom: 15px;
+    section>h2 {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--accent-text);
     }
 
-    ul {
-      padding-left: 20px;
+    section>h2 svg {
+      width: 17px;
+      height: 17px;
+      flex: none;
+    }
+
+    section p {
+      margin: 0;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Experience timeline                                               */
+    /* ------------------------------------------------------------------ */
+    .job {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .job+.job {
+      margin-top: 26px;
+      padding-top: 26px;
+      border-top: 1px solid var(--border);
+    }
+
+    .job::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .job::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 22px;
+      bottom: 4px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .job:last-child::after {
+      display: none;
+    }
+
+    .job h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.35;
+    }
+
+    .job .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 10px;
+      margin: 3px 0 12px;
+      font-size: .88rem;
+      color: var(--text-muted);
+    }
+
+    .job .company {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .period {
+      display: inline-block;
+      padding: 2px 9px;
+      font-size: .78rem;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .period.now {
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      border-color: transparent;
+    }
+
+    ul.bullets {
+      margin: 0;
+      padding-left: 19px;
+      display: grid;
+      gap: 7px;
+    }
+
+    ul.bullets li {
+      color: var(--text-muted);
+    }
+
+    ul.bullets li::marker {
+      color: var(--accent);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Projects                                                           */
+    /* ------------------------------------------------------------------ */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      padding: 18px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color .18s, transform .18s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card h3 {
+      margin: 0 0 7px;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .card p {
+      flex: 1;
+      margin: 0 0 14px;
+      font-size: .9rem;
+      color: var(--text-muted);
+    }
+
+    .card .link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      align-self: flex-start;
+      font-size: .87rem;
+      font-weight: 600;
+    }
+
+    .card .link svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .card .tag {
+      align-self: flex-start;
+      font-size: .78rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Skills                                                             */
+    /* ------------------------------------------------------------------ */
+    .skills {
+      display: grid;
+      gap: 16px;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 6px 18px;
+      align-items: baseline;
+    }
+
+    .skill-row dt {
+      font-size: .84rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .skill-row dd {
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .badge {
-      display: inline-block;
-      background: #e3f2fd;
-      color: var(--primary);
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      margin: 3px;
+      padding: 3px 10px;
+      font-size: .84rem;
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      border-radius: 6px;
+      white-space: nowrap;
     }
 
-    .project-card {
-      background: #fafafa;
-      padding: 15px;
-      border-radius: 8px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* ------------------------------------------------------------------ */
+    /*  Lists (education, certs, highlights)                              */
+    /* ------------------------------------------------------------------ */
+    .entry+.entry {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
     }
 
-    .project-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    .entry {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 4px 14px;
     }
 
-    .project-card a {
-      text-decoration: none;
-      color: var(--secondary);
-      font-weight: bold;
+    .entry strong {
+      font-weight: 600;
     }
 
+    .entry .sub {
+      display: block;
+      width: 100%;
+      font-size: .9rem;
+      color: var(--text-muted);
+    }
+
+    .highlights {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .highlights li {
+      position: relative;
+      padding-left: 26px;
+      color: var(--text-muted);
+    }
+
+    .highlights li svg {
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 16px;
+      height: 16px;
+      color: var(--accent);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Footer                                                             */
+    /* ------------------------------------------------------------------ */
     footer {
+      padding: 32px 20px 40px;
       text-align: center;
-      padding: 20px;
-      font-size: 0.9rem;
-      color: #777;
+      font-size: .85rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Responsive                                                         */
+    /* ------------------------------------------------------------------ */
+    @media (max-width: 640px) {
+      header.hero {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+      }
+
+      .hero img {
+        width: 104px;
+        height: 104px;
+      }
+
+      section {
+        padding: 22px 18px;
+      }
+
+      .skill-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Print / Save as PDF                                                */
+    /* ------------------------------------------------------------------ */
+    @media print {
+      @page {
+        size: A4;
+        margin: 12mm 13mm;
+      }
+
+      :root,
+      :root[data-theme="dark"],
+      :root[data-theme="light"] {
+        --bg: #fff;
+        --surface: #fff;
+        --surface-2: #fff;
+        --text: #000;
+        --text-muted: #262626;
+        --text-faint: #555;
+        --border: #ccc;
+        --accent: #1558ab;
+        --accent-text: #1558ab;
+        --accent-soft: #eef4fc;
+        --shadow: none;
+      }
+
+      body {
+        font-size: 10.5pt;
+        line-height: 1.45;
+        background: #fff;
+      }
+
+      .toolbar,
+      .no-print {
+        display: none !important;
+      }
+
+      .wrap {
+        max-width: none;
+        padding: 0;
+      }
+
+      header.hero {
+        padding: 0 0 14px;
+        gap: 20px;
+      }
+
+      .hero img {
+        width: 92px;
+        height: 92px;
+        border: none;
+      }
+
+      main {
+        gap: 12px;
+      }
+
+      section {
+        padding: 12px 0 0;
+        border: none;
+        border-top: 1px solid #ccc;
+        border-radius: 0;
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      section>h2 {
+        margin-bottom: 10px;
+      }
+
+      .job,
+      .card,
+      .entry,
+      .highlights li {
+        break-inside: avoid;
+      }
+
+      .card {
+        border: 1px solid #ddd;
+      }
+
+      .projects {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      /* Print the destination of every outbound link. */
+      a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 8pt;
+        color: #666;
+        word-break: break-all;
+      }
+
+      .contacts a[href^="http"]::after,
+      .contacts a[href^="mailto"]::after,
+      .contacts a[href^="tel"]::after {
+        content: "";
+      }
+
+      footer {
+        padding: 14px 0 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <header>
-    <img src="img\eu.jpg" alt="Foto de Wesley Brito">
-    <h1>Wesley Brito</h1>
-    <p>Ciência de Dados | DataOps | Machine Learning</p>
-    <div class="social-links">
-      <a href="mailto:wesleybritowx@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-      <a href="https://www.linkedin.com/in/wesley-brito-211bb4263" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-      <a href="https://github.com/wbrito0" target="_blank"><i class="fa-brands fa-github"></i></a>
-    </div>
-  </header>
+  <!-- Reusable icon sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-10 6L2 7" />
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z" />
+    </symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0Z" />
+    </symbol>
+    <symbol id="i-github" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4 18.3 4.3 18.3 4.3c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z" />
+    </symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+      <circle cx="12" cy="10" r="3" />
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M7 10l5 5 5-5M12 15V3" />
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="7" width="20" height="14" rx="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+    </symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 16.5c-1.5 1.3-2 5.5-2 5.5s4.2-.5 5.5-2c.7-.9.7-2.2-.1-3a2.1 2.1 0 0 0-3.4-.5Z" />
+      <path d="M12 15 9 12a13 13 0 0 1 4-8c1.6-1.6 4.2-2.5 6.5-2.5.9 0 1.7.1 2.4.4.3.7.4 1.5.4 2.4 0 2.3-.9 4.9-2.5 6.5a13 13 0 0 1-8 4Z" />
+      <path d="M9 12H4s.5-2.8 2-4c1.6-1.3 5 0 5 0M12 15v5s2.8-.5 4-2c1.3-1.6 0-5 0-5" />
+    </symbol>
+    <symbol id="i-tools" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.7 3.8Z" />
+    </symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 10 12 5 2 10l10 5 10-5Z" />
+      <path d="M6 12v5c3 3 9 3 12 0v-5" />
+    </symbol>
+    <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8" r="6" />
+      <path d="m8.2 13.9-1.3 7.6L12 18.8l5.1 2.7-1.3-7.6" />
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z" />
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5" />
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M13 5l7 7-7 7" />
+    </symbol>
+  </svg>
 
-  <main>
-    <section>
-      <h2>📌 Resumo</h2>
-      <p>Tenho experiência em projetos de Machine Learning, análise de dados. Atualmente curso graduação em Data Science e possuo certificação em Data Analytics pelo Google. Já desenvolvi soluções que otimizam tarefas manuais, automatizam coletas de dados e realizam análises de sentimento em e-mails, painéis para acompanhamento dos indicadores de qualidade das equipes usando Power BI, sempre com foco em eficiência e geração de valor para o negócio. </p>
-    </section>
+  <div class="toolbar">
+    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+      <svg id="themeIcon" aria-hidden="true">
+        <use href="#i-moon" />
+      </svg>
+      <span id="themeLabel">Escuro</span>
+    </button>
+    <button class="btn" id="pdfBtn" type="button">
+      <svg aria-hidden="true">
+        <use href="#i-download" />
+      </svg>
+      Baixar PDF
+    </button>
+  </div>
 
-    <section>
-      <h2>💼 Experiência Profissional</h2>
-      <h3>Analista de Dados — Mindsight</h3>
-      <p><em>São Paulo, SP | Jul 2024 – Atual</em></p>
-      <ul>
-        <li>Desenvolvimento de pipelines de ETL em Python e BigQuery, automatizando a ingestão e tratamento de dados via APIs REST e SOAP, reduzindo atividades manuais e melhorando a confiabilidade das informações. </li>
-      </ul>
-    </section>
+  <div class="wrap">
 
-    <section>
-      <h2>🎓 Educação</h2>
-      <p><strong>Graduação em Data Science</strong> — Universidade Estácio de Sá | Jan 2024 – Jun 2026</p>
-    </section>
-
-    <section>
-      <h2>📜 Certificações</h2>
-      <ul>
-        <li>Data Analytics — Coursera | Jun 2024 <a href="https://www.coursera.org/account/accomplishments/professional-cert/CBX9QRHHK9BT">Link</a></li>
-        <li>Desenvolvimento de Aplicações em Python — Estácio | Dez 2024 <a href="https://certificado.estacio.br/e790ac557a13169ee1c68cf">Link</a></li>
-        <li>Técnicas de IA: Machine Learning e PLN — Estácio | Jun 2025 <a href="#">Link</a></li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>🛠️ Habilidades Técnicas</h2>
-      <p>
-        <span class="badge">Python</span>
-        <span class="badge">Pandas</span>
-        <span class="badge">NumPy</span>
-        <span class="badge">Scikit-learn</span>
-        <span class="badge">TensorFlow</span>
-        <span class="badge">SQL</span>
-        <span class="badge">Google BigQuery</span>
-        <span class="badge">Databricks</span>
-        <span class="badge">Power BI</span>
-        <span class="badge">Looker Studio</span>
-        <span class="badge">Selenium</span>
-        <span class="badge">Jupyter</span>
-        <span class="badge">APIs</span>
-        <span class="badge">SOAP</span>
-        <span class="badge">Data Lakehouse</span>
-        <span class="badge">ETL</span>
-      </p>
-    </section>
-
-    <section>
-      <h2>🚀 Projetos Destaque</h2>
-
-      <div class="project-card">
-        <h3>Dashboard de Resultados com Python e Looker Studio</h3>
-        <p>Limpeza, tratamento e feature engineering com Python, integração com BigQuery e atualização contínua de dados.</p>
-        <a href="https://lookerstudio.google.com/reporting/1228c10f-401b-4b86-a531-202ccfcb3a99">Ver projeto</a>
+    <header class="hero">
+      <img src="img/eu.jpg" alt="Foto de Wesley Brito" width="132" height="132" />
+      <div>
+        <h1>Wesley Brito</h1>
+        <p class="role">Analista de Dados</p>
+        <p class="location">
+          <svg width="13" height="13" style="vertical-align:-2px" aria-hidden="true">
+            <use href="#i-pin" />
+          </svg>
+          São Vicente, SP — Brasil
+        </p>
+        <div class="contacts">
+          <a href="mailto:wesleybritowx@gmail.com">
+            <svg aria-hidden="true"><use href="#i-mail" /></svg>wesleybritowx@gmail.com
+          </a>
+          <a href="https://web.whatsapp.com/send?phone=5513981369021&text=Ol%C3%A1%2C%20vi%20seu%20curr%C3%ADculo%20e%20gostei.">
+            <svg aria-hidden="true"><use href="#i-phone" /></svg>+55 (13) 98136-9021
+          </a>
+          <a href="https://www.linkedin.com/in/wesley-brito-211bb4263/" target="_blank" rel="noopener">
+            <svg aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn
+          </a>
+          <a href="https://github.com/wesleybritowx/" target="_blank" rel="noopener">
+            <svg aria-hidden="true"><use href="#i-github" /></svg>GitHub
+          </a>
+        </div>
       </div>
+    </header>
 
-      <div class="project-card">
-        <h3>Modelo Preditivo de Risco de Crédito</h3>
-        <p>Análise exploratória, engenharia de features, comparação de algoritmos e documentação para MLOps.</p>
-        <a href="credito.html">Ver projeto</a>
-      </div>
+    <main>
 
-      <div class="project-card">
-        <h3>Automação de Tarefas no Google Sheets</h3>
-        <p>Atualização automática de dashboards no Looker Studio usando Selenium, Pandas e API Google Sheets.</p>
-        <a href="#">Ver projeto</a>
-      </div>
+      <section id="resumo">
+        <h2><svg aria-hidden="true"><use href="#i-user" /></svg>Resumo Profissional</h2>
+        <p>Analista de Dados com experiência em People Analytics, desenvolvimento de análises exploratórias,
+          diagnósticas e preditivas para apoio à tomada de decisão. Atuo na construção de pipelines de ETL com
+          Python e BigQuery, integração de APIs, automação de processos e desenvolvimento de dashboards e
+          indicadores de negócio. Tenho experiência em tratamento e modelagem de dados, aplicação de métodos
+          estatísticos e geração de insights para apoiar decisões estratégicas. Atualmente curso Ciência de Dados
+          e sou certificado pelo Google Data Analytics Professional Certificate.</p>
+      </section>
 
-      <div class="project-card">
-        <h3>Classificação de Sentimento em E-mails</h3>
-        <p>IA para análise de sentimentos em tempo real e monitoramento de padrões de pré-churn.</p>
-        <a href="#">Ver projeto</a>
-      </div>
-    </section>
-  </main>
+      <section id="experiencia">
+        <h2><svg aria-hidden="true"><use href="#i-briefcase" /></svg>Experiência Profissional</h2>
+
+        <article class="job">
+          <h3>Analista de Dados</h3>
+          <div class="meta">
+            <span class="company">Mindsight</span>
+            <span class="period now">Out 2025 — Atual</span>
+          </div>
+          <ul class="bullets">
+            <li>Desenvolvimento de análises exploratórias, diagnósticas e preditivas para identificar padrões,
+              fatores associados a resultados e oportunidades de melhoria.</li>
+            <li>Planejamento e execução de estudos analíticos voltados à resolução de problemas de negócio
+              utilizando Python e BigQuery.</li>
+            <li>Tratamento, integração e modelagem de dados provenientes de múltiplas fontes para construção de
+              bases analíticas.</li>
+            <li>Desenvolvimento e manutenção de pipelines de ETL, automatizando processos de preparação e
+              transformação de dados.</li>
+            <li>Aplicação de métodos estatísticos para validação de hipóteses e apoio à tomada de decisão baseada
+              em dados.</li>
+            <li>Construção de dashboards, indicadores e relatórios analíticos para acompanhamento de métricas de
+              negócio.</li>
+            <li>Documentação de pipelines, regras de negócio e processos analíticos para garantir rastreabilidade
+              e reprodutibilidade das análises.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <h3>Analista de Suporte</h3>
+          <div class="meta">
+            <span class="company">Mindsight</span>
+            <span class="period">Jul 2024 — Out 2025</span>
+          </div>
+          <ul class="bullets">
+            <li>Desenvolvimento de automações utilizando Python, Pandas e Google Sheets API para reduzir
+              atividades operacionais.</li>
+            <li>Suporte técnico e consultivo a clientes na utilização da plataforma de People Analytics.</li>
+            <li>Investigação e resolução de problemas envolvendo dados e integrações.</li>
+            <li>Colaboração com a equipe de dados na construção de soluções analíticas e melhorias internas.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="projetos">
+        <h2><svg aria-hidden="true"><use href="#i-rocket" /></svg>Projetos em Destaque</h2>
+        <div class="projects">
+
+          <div class="card">
+            <h3>Relatório Automático de R&amp;S com Análise de IA</h3>
+            <p>ETL agendado no GitHub Actions que lê a base no Google Sheets, compara os períodos, escreve a
+              análise com a API do Claude e envia o PDF por e-mail — semanal e mensal.</p>
+            <a class="link" href="relatorio.html">Ver projeto <svg aria-hidden="true"><use href="#i-arrow" /></svg></a>
+          </div>
+
+          <div class="card">
+            <h3>Previsão de Inadimplência com LightGBM</h3>
+            <p>Probabilidade de atraso em cobranças mensais, com features <em>point-in-time</em> e validação
+              out-of-time. AUC 0,933 · KS 0,737 · Brier 0,035.</p>
+            <a class="link" href="credito.html">Ver projeto <svg aria-hidden="true"><use href="#i-arrow" /></svg></a>
+          </div>
+
+          <div class="card">
+            <h3>Automação de Tarefas no Google Sheets</h3>
+            <p>Atualização automática de dashboards no Looker Studio usando Selenium, Pandas e a API do Google
+              Sheets.</p>
+            <span class="tag">Projeto interno</span>
+          </div>
+
+          <div class="card">
+            <h3>Classificação de Sentimento em E-mails</h3>
+            <p>Modelo de PLN para análise de sentimento em tempo real e monitoramento de padrões de pré-churn.</p>
+            <span class="tag">Projeto interno</span>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="skills">
+        <h2><svg aria-hidden="true"><use href="#i-tools" /></svg>Tecnologias e Ferramentas</h2>
+        <dl class="skills">
+          <div class="skill-row">
+            <dt>Linguagens</dt>
+            <dd>
+              <span class="badge">Python</span>
+              <span class="badge">SQL</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt>Análise de Dados</dt>
+            <dd>
+              <span class="badge">Pandas</span>
+              <span class="badge">NumPy</span>
+              <span class="badge">Testes de hipótese</span>
+              <span class="badge">Estatística aplicada</span>
+              <span class="badge">Excel</span>
+              <span class="badge">Google Sheets</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt>Dados e Engenharia</dt>
+            <dd>
+              <span class="badge">BigQuery</span>
+              <span class="badge">Databricks</span>
+              <span class="badge">ETL</span>
+              <span class="badge">Data Lakehouse</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt>BI e Visualização</dt>
+            <dd>
+              <span class="badge">Power BI</span>
+              <span class="badge">Looker Studio</span>
+              <span class="badge">Plotly</span>
+              <span class="badge">Matplotlib</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt>Integrações e Automação</dt>
+            <dd>
+              <span class="badge">APIs REST</span>
+              <span class="badge">SOAP</span>
+              <span class="badge">Google Sheets API</span>
+              <span class="badge">Selenium</span>
+              <span class="badge">GitHub Actions</span>
+              <span class="badge">API Anthropic (Claude)</span>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="formacao">
+        <h2><svg aria-hidden="true"><use href="#i-cap" /></svg>Formação Acadêmica</h2>
+        <div class="entry">
+          <strong>Graduação em Ciência de Dados</strong>
+          <span class="period">Jan 2024 — Dez 2026</span>
+          <span class="sub">Universidade Estácio de Sá</span>
+        </div>
+      </section>
+
+      <section id="certificacoes">
+        <h2><svg aria-hidden="true"><use href="#i-award" /></svg>Cursos e Certificações</h2>
+
+        <div class="entry">
+          <strong>Google Data Analytics Professional Certificate</strong>
+          <span class="period">2024</span>
+          <span class="sub">Coursera —
+            <a href="https://www.coursera.org/account/accomplishments/professional-cert/CBX9QRHHK9BT"
+              target="_blank" rel="noopener">ver credencial</a>
+          </span>
+        </div>
+
+        <div class="entry">
+          <strong>Desenvolvimento de Aplicações em Python</strong>
+          <span class="period">2024</span>
+          <span class="sub">Estácio —
+            <a href="https://drive.google.com/file/d/1MspunEBrbG2X5rwNle2Dq8HrNGqNqdDI/view" target="_blank"
+              rel="noopener">ver credencial</a>
+          </span>
+        </div>
+
+        <div class="entry">
+          <strong>Técnicas de IA: Machine Learning e PLN</strong>
+          <span class="period">2025</span>
+          <span class="sub">Estácio</span>
+          
+          <span class="sub">Estácio —
+            <a href="https://drive.google.com/file/d/1B7f0oUXzlOciFUndrN-uKk7vXNJQvNE8/view" target="_blank"
+              rel="noopener">ver credencial</a>
+          </span>
+        </div>
+      </section>
+
+      <section id="diferenciais">
+        <h2><svg aria-hidden="true"><use href="#i-star" /></svg>Diferenciais</h2>
+        <ul class="highlights">
+          <li><svg aria-hidden="true"><use href="#i-check" /></svg>Experiência em People Analytics e análise de
+            retenção de colaboradores.</li>
+          <li><svg aria-hidden="true"><use href="#i-check" /></svg>Desenvolvimento de pipelines de dados e
+            automação de processos analíticos.</li>
+          <li><svg aria-hidden="true"><use href="#i-check" /></svg>Aplicação de métodos estatísticos para
+            validação de hipóteses e apoio à tomada de decisão.</li>
+          <li><svg aria-hidden="true"><use href="#i-check" /></svg>Capacidade de traduzir problemas de negócio em
+            análises orientadas por dados.</li>
+          <li><svg aria-hidden="true"><use href="#i-check" /></svg>Experiência atuando em parceria com áreas
+            técnicas e clientes na definição de soluções analíticas.</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
 
   <footer>
-    &copy; 2025 Wesley Brito | Feito com ❤️ e Ciência de Dados
+    &copy; <span id="year">2026</span> Wesley Brito · Feito com ❤️ e Ciência de Dados
   </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var icon = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+
+      function prefersDark() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      // Reflect the *next* theme the button will switch to.
+      function paint(isDark) {
+        icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
+        label.textContent = isDark ? 'Claro' : 'Escuro';
+      }
+
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) { }
+      if (saved === 'dark' || saved === 'light') {
+        root.setAttribute('data-theme', saved);
+      }
+      paint(saved ? saved === 'dark' : prefersDark());
+
+      document.getElementById('themeToggle').addEventListener('click', function () {
+        var isDark = root.getAttribute('data-theme')
+          ? root.getAttribute('data-theme') === 'dark'
+          : prefersDark();
+        var next = isDark ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) { }
+        paint(next === 'dark');
+      });
+
+      document.getElementById('pdfBtn').addEventListener('click', function () {
+        window.print();
+      });
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
 
 </body>
 
 </html>
-
-
-
-
