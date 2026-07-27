@@ -5,14 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KF44KXPH');</script>
-  <!-- End Google Tag Manager -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3N5JWG3XB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-N3N5JWG3XB');
+  </script>
   <title>Wesley Brito — Analista de Dados</title>
   <meta name="description"
     content="Analista de Dados com experiência em People Analytics, pipelines de ETL com Python e BigQuery, automação de processos e desenvolvimento de dashboards." />
@@ -680,10 +680,6 @@
 
 <body>
 
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KF44KXPH" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
   <!-- Reusable icon sprite -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
@@ -1064,15 +1060,99 @@
       });
 
       document.getElementById('pdfBtn').addEventListener('click', function () {
-        // Sinaliza a intencao de salvar em PDF; vira gatilho no GTM.
-        (window.dataLayer = window.dataLayer || []).push({
-          event: 'baixar_pdf',
-          pagina: document.title
-        });
+        // Sinaliza a intenção de salvar em PDF. Enviado aqui de forma
+        // autônoma porque este bloco roda antes da camada de comportamento.
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'baixar_pdf', { pagina: document.title });
+        }
         window.print();
       });
 
       document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+
+    // ------------------------------------------------------------------
+    //  Camada de comportamento -> dataLayer (consumida por gatilhos no GTM)
+    // ------------------------------------------------------------------
+    (function () {
+      // O gtag.js é a única tag do Google na página, então os eventos vão
+      // por gtag('event', ...). Um push cru de {event:...} no dataLayer só
+      // teria efeito com o GTM carregado.
+      function push(evento, dados) {
+        if (typeof window.gtag !== 'function') return;
+        dados = dados || {};
+        dados.pagina = document.title;
+        window.gtag('event', evento, dados);
+      }
+
+      // 1. Profundidade de rolagem — 25/50/75/100%, uma vez cada.
+      var marcos = [25, 50, 75, 100], atingidos = {}, agendado = false;
+
+      function medirRolagem() {
+        agendado = false;
+        var rolavel = document.documentElement.scrollHeight - window.innerHeight;
+        // Numa página que cabe na tela, rolagem não significa leitura.
+        if (rolavel < 200) return;
+        var pct = (window.scrollY / rolavel) * 100;
+        for (var i = 0; i < marcos.length; i++) {
+          if (pct >= marcos[i] - 0.5 && !atingidos[marcos[i]]) {
+            atingidos[marcos[i]] = true;
+            push('rolagem', { profundidade: marcos[i] });
+          }
+        }
+      }
+
+      // setTimeout, e não requestAnimationFrame: marco de rolagem não precisa
+      // de precisão de quadro, e o rAF fica suspenso sempre que o compositor
+      // não desenha (aba em segundo plano, por exemplo) — o evento se perderia.
+      window.addEventListener('scroll', function () {
+        if (!agendado) { agendado = true; setTimeout(medirRolagem, 200); }
+      }, { passive: true });
+      medirRolagem();
+
+      // 2. Seções efetivamente lidas. Num currículo esse é o sinal que
+      //    importa: chegaram até Experiência? Até Projetos? A margem
+      //    negativa exige que a seção cruze a faixa central da tela, o que
+      //    funciona tanto para seções curtas quanto para as mais altas que
+      //    o viewport.
+      if ('IntersectionObserver' in window) {
+        var observador = new IntersectionObserver(function (entradas) {
+          entradas.forEach(function (entrada) {
+            if (!entrada.isIntersecting) return;
+            observador.unobserve(entrada.target);
+            push('secao_vista', { secao: entrada.target.id });
+          });
+        }, { rootMargin: '-25% 0px -25% 0px', threshold: 0 });
+
+        Array.prototype.forEach.call(
+          document.querySelectorAll('section[id]'),
+          function (secao) { observador.observe(secao); }
+        );
+      }
+
+      // 3. Saída e contato — o clique que revela interesse real.
+      document.addEventListener('click', function (ev) {
+        var alvo = ev.target;
+        if (!alvo || !alvo.closest) return;
+        var link = alvo.closest('a[href]');
+        if (!link) return;
+
+        var href = link.getAttribute('href') || '';
+
+        if (/^mailto:/i.test(href)) {
+          push('contato', { canal: 'email' });
+        } else if (/^tel:/i.test(href)) {
+          push('contato', { canal: 'telefone' });
+        } else if (/whatsapp\.com|wa\.me/i.test(href)) {
+          push('contato', { canal: 'whatsapp' });
+        } else if (/^https?:/i.test(href) && link.hostname !== location.hostname) {
+          push('clique_externo', {
+            destino: link.hostname,
+            url: link.href,
+            texto: (link.textContent || '').trim().slice(0, 60)
+          });
+        }
+      }, true);
     })();
   </script>
 
