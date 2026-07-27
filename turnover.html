@@ -4,6 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-KF44KXPH');</script>
+  <!-- End Google Tag Manager -->
   <title>Análise Diagnóstica de Turnover — Wesley Brito</title>
   <meta name="description"
     content="Case de People Analytics: medir o impacto do Fit Cultural sobre a retenção usando períodos de admissão fechados e um grupo de controle interno, eliminando o viés de exposição." />
@@ -678,6 +687,11 @@
 
 <body>
 
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KF44KXPH" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
     <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
@@ -1202,6 +1216,8 @@
 
   <footer>
     <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
+  
+    <br><span class="no-print">Este site usa Google Analytics para medir audiência. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Como o Google usa os dados</a>.</span>
   </footer>
 
   <script>
@@ -1238,6 +1254,11 @@
       });
 
       document.getElementById('pdfBtn').addEventListener('click', function () {
+        // Sinaliza a intencao de salvar em PDF; vira gatilho no GTM.
+        (window.dataLayer = window.dataLayer || []).push({
+          event: 'baixar_pdf',
+          pagina: document.title
+        });
         window.print();
       });
 
