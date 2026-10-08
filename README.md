@@ -13,6 +13,7 @@ Currículo e portfólio de **Wesley Brito** — Analista de Dados (People Analyt
 | `relatorio.html` | Case de automação: relatório de R&S no GitHub Actions com análise da API do Claude |
 | `turnover.html` | Case de People Analytics: impacto do Fit Cultural na retenção |
 | `classificador.html` | Case de NLP: classificador de notícias servido por FastAPI em Docker |
+| `matching.html` | Case de busca semântica: matching de currículos x vaga com EmbeddingGemma e DuckDB |
 | `img/` | Foto de perfil |
 | `img/credito/` | Gráficos do case de crédito, exportados do notebook |
 | `img/turnover/` | Gráficos do case de turnover |

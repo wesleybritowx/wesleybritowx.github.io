@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3N5JWG3XB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-N3N5JWG3XB');
+  </script>
+  <title>Matching de Candidatos por Embedding — Wesley Brito</title>
+  <meta name="description"
+    content="Protótipo de matching de currículos por similaridade semântica: EmbeddingGemma-300m, DuckDB e Streamlit. 68% de precisão@10 no gabarito de teste, com regras determinísticas para os pontos cegos do embedding (anos de experiência, termos técnicos)." />
+  <meta name="author" content="Wesley Brito" />
+  <link rel="alternate" hreflang="pt-BR" href="matching.html" />
+  <link rel="alternate" hreflang="en" href="matching.en.html" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Matching de Candidatos por Embedding — banco de talentos x vaga" />
+  <meta property="og:description"
+    content="EmbeddingGemma-300m + DuckDB + Streamlit. 68% de precisão@10 no gabarito, com regra determinística para anos de experiência e termos técnicos — os dois pontos cegos do embedding sozinho." />
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+
+  <style>
+    /* ------------------------------------------------------------------ */
+    /*  Tokens — shared with index.html                                    */
+    /* ------------------------------------------------------------------ */
+    :root {
+      --accent: #1d6fd6;
+      --accent-soft: #e8f1fd;
+      --accent-text: #1558ab;
+      --good: #1f8a54;
+
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #fafbfc;
+
+      --text: #16202e;
+      --text-muted: #5a6779;
+      --text-faint: #8a94a3;
+
+      --border: #e3e7ec;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .12);
+
+      --radius: 14px;
+      --radius-sm: 8px;
+      --maxw: 940px;
+      --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #5aa2f5;
+        --accent-soft: #16283f;
+        --accent-text: #8ec0fb;
+        --good: #4cc38a;
+        --bg: #0e1319;
+        --surface: #151b23;
+        --surface-2: #1a212a;
+        --text: #e7ecf3;
+        --text-muted: #9aa7b8;
+        --text-faint: #6f7d8f;
+        --border: #263140;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+      }
+    }
+
+    /* Explicit toggle always wins over the OS preference. */
+    :root[data-theme="light"] {
+      --accent: #1d6fd6;
+      --accent-soft: #e8f1fd;
+      --accent-text: #1558ab;
+      --good: #1f8a54;
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #fafbfc;
+      --text: #16202e;
+      --text-muted: #5a6779;
+      --text-faint: #8a94a3;
+      --border: #e3e7ec;
+      --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .12);
+    }
+
+    :root[data-theme="dark"] {
+      --accent: #5aa2f5;
+      --accent-soft: #16283f;
+      --accent-text: #8ec0fb;
+      --good: #4cc38a;
+      --bg: #0e1319;
+      --surface: #151b23;
+      --surface-2: #1a212a;
+      --text: #e7ecf3;
+      --text-muted: #9aa7b8;
+      --text-faint: #6f7d8f;
+      --border: #263140;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+    }
+
+    /* Chart palette — slot-1 blue, validated against these surfaces
+       (4,26:1 light / 4,46:1 dark). Single series, so no categorical set. */
+    .viz {
+      --series-1: #2a78d6;
+      --grid: #e1e0d9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:where(:not([data-theme="light"])) .viz {
+        --series-1: #3987e5;
+        --grid: #2c2c2a;
+      }
+    }
+
+    :root[data-theme="dark"] .viz {
+      --series-1: #3987e5;
+      --grid: #2c2c2a;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Base                                                               */
+    /* ------------------------------------------------------------------ */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 72px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--accent-text);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: .88em;
+      padding: 1px 5px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    pre {
+      margin: 0 0 16px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    pre code {
+      display: block;
+      padding: 0;
+      background: none;
+      border: none;
+      white-space: pre;
+      font-size: .82rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    pre code b {
+      color: var(--accent-text);
+      font-weight: 600;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Toolbar                                                            */
+    /* ------------------------------------------------------------------ */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: saturate(180%) blur(10px);
+    }
+
+    .toolbar .spacer {
+      flex: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, transform .15s;
+    }
+
+    .btn:hover {
+      color: var(--accent-text);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Layout                                                             */
+    /* ------------------------------------------------------------------ */
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    header.hero {
+      padding: 16px 0 30px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 3px 11px;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .eyebrow-row .eyebrow {
+      margin-bottom: 0;
+    }
+
+    .wip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 11px;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--text-faint);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .wip::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-faint);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4.6vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    .hero .lede {
+      margin: 12px 0 0;
+      max-width: 68ch;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      font-size: .84rem;
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    main {
+      display: grid;
+      gap: 22px;
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 28px;
+    }
+
+    section>h2 {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 0 0 6px;
+      font-size: 1.28rem;
+      line-height: 1.3;
+      letter-spacing: -.01em;
+    }
+
+    section>h2 .num {
+      font-size: .8rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent-text);
+    }
+
+    .deck {
+      margin: 0 0 20px;
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 1.02rem;
+      line-height: 1.4;
+    }
+
+    h3:first-child {
+      margin-top: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 14px;
+      padding-left: 20px;
+      display: grid;
+      gap: 7px;
+    }
+
+    li::marker {
+      color: var(--accent);
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Metric tiles                                                       */
+    /* ------------------------------------------------------------------ */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .tile {
+      padding: 16px 18px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .tile .val {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      color: var(--accent-text);
+    }
+
+    .tile .key {
+      display: block;
+      margin-top: 4px;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tile .hint {
+      display: block;
+      font-size: .78rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Callout                                                            */
+    /* ------------------------------------------------------------------ */
+    .callout {
+      display: flex;
+      gap: 12px;
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .callout:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout svg {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      margin-top: 3px;
+      color: var(--accent-text);
+    }
+
+    .callout p {
+      margin: 0;
+      font-size: .95rem;
+    }
+
+    .callout .label {
+      display: block;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Bar chart                                                          */
+    /* ------------------------------------------------------------------ */
+    .chart {
+      margin: 0 0 20px;
+      padding: 18px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .chart-title {
+      margin: 0 0 3px;
+      font-size: .98rem;
+      font-weight: 600;
+    }
+
+    .chart-sub {
+      margin: 0 0 16px;
+      font-size: .84rem;
+      color: var(--text-faint);
+    }
+
+    .bars {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(104px, 168px) 1fr minmax(56px, auto);
+      align-items: center;
+      gap: 6px 12px;
+      font-size: .86rem;
+    }
+
+    .bar-row .bl {
+      color: var(--text-muted);
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .bar-row .bl em {
+      display: block;
+      font-size: .84em;
+      font-style: normal;
+      color: var(--text-faint);
+    }
+
+    .bar-track {
+      height: 20px;
+      border-left: 1px solid var(--grid);
+      padding-left: 1px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      min-width: 3px;
+      border-radius: 0 4px 4px 0;
+      background: var(--series-1);
+      transition: filter .15s;
+    }
+
+    .bar-row:hover .bar-fill {
+      filter: brightness(1.08);
+    }
+
+    .bar-val {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  3D embedding plot                                                  */
+    /* ------------------------------------------------------------------ */
+    .embed3d-wrap {
+      height: 520px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    @media (max-width: 640px) {
+      .embed3d-wrap {
+        height: 400px;
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Before / after comparison                                          */
+    /* ------------------------------------------------------------------ */
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .pane {
+      padding: 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .pane.after {
+      border-color: var(--accent);
+    }
+
+    .pane .tagline {
+      display: block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .pane.after .tagline {
+      color: var(--accent-text);
+    }
+
+    .pane h4 {
+      margin: 3px 0 10px;
+      font-size: .97rem;
+    }
+
+    .terms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .terms span {
+      padding: 2px 8px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .pane p {
+      margin: 0;
+      font-size: .86rem;
+      color: var(--text-muted);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Tables                                                             */
+    /* ------------------------------------------------------------------ */
+    .table-scroll {
+      overflow-x: auto;
+      margin: 0 0 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    th,
+    td {
+      padding: 9px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      background: var(--surface-2);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    td.num,
+    th.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    tr.winner td {
+      background: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    tr.winner td:first-child {
+      color: var(--accent-text);
+    }
+
+    .wrap-cell {
+      display: block;
+      min-width: 210px;
+      white-space: normal;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Checklist & TOC                                                    */
+    /* ------------------------------------------------------------------ */
+    .checks {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .checks li {
+      position: relative;
+      padding-left: 27px;
+    }
+
+    .checks li svg {
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 16px;
+      height: 16px;
+      color: var(--good);
+    }
+
+    .toc ol {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 4px 20px;
+      margin: 0;
+      padding-left: 20px;
+      font-size: .93rem;
+    }
+
+    .toc a {
+      color: var(--text-muted);
+    }
+
+    .toc a:hover {
+      color: var(--accent-text);
+    }
+
+    footer {
+      padding: 32px 20px 40px;
+      text-align: center;
+      font-size: .85rem;
+      color: var(--text-faint);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Responsive                                                         */
+    /* ------------------------------------------------------------------ */
+    @media (max-width: 640px) {
+      section {
+        padding: 22px 18px;
+      }
+
+      .tile .val {
+        font-size: 1.5rem;
+      }
+
+      .bar-row {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .bar-row .bl {
+        text-align: left;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .bar-row .bl em {
+        display: inline;
+        margin-left: 6px;
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Print / Save as PDF                                                */
+    /* ------------------------------------------------------------------ */
+    @media print {
+      @page {
+        size: A4;
+        margin: 12mm 13mm;
+      }
+
+      :root,
+      :root[data-theme="dark"],
+      :root[data-theme="light"] {
+        --bg: #fff;
+        --surface: #fff;
+        --surface-2: #fff;
+        --text: #000;
+        --text-muted: #262626;
+        --text-faint: #555;
+        --border: #ccc;
+        --accent: #1558ab;
+        --accent-text: #1558ab;
+        --accent-soft: #eef4fc;
+        --shadow: none;
+      }
+
+      :root .viz,
+      :root[data-theme="dark"] .viz {
+        --series-1: #2a78d6;
+        --grid: #c3c2b7;
+      }
+
+      body {
+        font-size: 10pt;
+        line-height: 1.45;
+        background: #fff;
+      }
+
+      .toolbar,
+      .toc,
+      .no-print {
+        display: none !important;
+      }
+
+      .wrap {
+        max-width: none;
+        padding: 0;
+      }
+
+      main {
+        gap: 12px;
+      }
+
+      section {
+        padding: 12px 0 0;
+        border: none;
+        border-top: 1px solid #ccc;
+        border-radius: 0;
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      .chart,
+      .tile,
+      .pane,
+      .callout,
+      pre,
+      .bar-row,
+      tr {
+        break-inside: avoid;
+      }
+
+      .bar-fill {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .links .btn {
+        padding: 3px 0;
+        background: none;
+        border: none;
+        border-radius: 0;
+      }
+
+      .links .btn svg {
+        display: none;
+      }
+
+      .links .btn::after {
+        content: " — " attr(href);
+        color: #555;
+        word-break: break-all;
+      }
+
+      pre {
+        overflow: visible;
+      }
+
+      pre code {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .table-scroll {
+        overflow: visible;
+      }
+
+      footer {
+        padding: 14px 0 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    /* ------------------------------------------------------------------ */
+    /*  Language switch (PT | EN)                                          */
+    /* ------------------------------------------------------------------ */
+    .lang {
+      display: inline-flex;
+      overflow: hidden;
+      font-size: .88rem;
+      font-weight: 600;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .lang a,
+    .lang span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 13px;
+      line-height: 1.2;
+      color: var(--text-muted);
+    }
+
+    .lang a:hover {
+      color: var(--accent-text);
+      background: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    .flag {
+      width: 20px;
+      height: 14px;
+      flex: none;
+      border-radius: 2px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
+    }
+
+    .lang .on {
+      color: var(--bg);
+      background: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M7 10l5 5 5-5M12 15V3" />
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4M12 8h.01" />
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5" />
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+      <path d="M12 9v4M12 17h.01" />
+    </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
+      <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
+    </symbol>
+      <symbol id="f-br" viewBox="0 0 50 35">
+      <rect width="50" height="35" fill="#009c3b" />
+      <path d="M25 4 46 17.5 25 31 4 17.5Z" fill="#ffdf00" />
+      <circle cx="25" cy="17.5" r="8.5" fill="#002776" />
+      <path d="M17 15.5c5-1.2 11-.4 16 3.2" stroke="#fff" stroke-width="1.6" fill="none" />
+    </symbol>
+    <symbol id="f-us" viewBox="0 0 50 35">
+      <rect width="50" height="35" fill="#fff" />
+      <path d="M0 2.7h50M0 8.1h50M0 13.5h50M0 18.9h50M0 24.3h50M0 29.7h50" stroke="#b22234" stroke-width="2.7" />
+      <rect width="22" height="18.9" fill="#3c3b6e" />
+      <g fill="#fff"><circle cx="4" cy="4" r="1.1" /><circle cx="9" cy="4" r="1.1" /><circle cx="14" cy="4" r="1.1" /><circle cx="19" cy="4" r="1.1" /><circle cx="6.5" cy="9.5" r="1.1" /><circle cx="11.5" cy="9.5" r="1.1" /><circle cx="16.5" cy="9.5" r="1.1" /><circle cx="4" cy="15" r="1.1" /><circle cx="9" cy="15" r="1.1" /><circle cx="14" cy="15" r="1.1" /><circle cx="19" cy="15" r="1.1" /></g>
+    </symbol>
+  </svg>
+
+  <div class="toolbar">
+    <a class="btn" href="index.html">
+      <svg aria-hidden="true">
+        <use href="#i-back" />
+      </svg>
+      Portfólio
+    </a>
+    <span class="spacer"></span>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <span class="on" aria-current="true"><svg class="flag" aria-hidden="true"><use href="#f-br" /></svg>BR</span><a href="matching.en.html" hreflang="en" lang="en" title="English"><svg class="flag" aria-hidden="true"><use href="#f-us" /></svg>USA</a>
+    </div>
+    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+      <svg id="themeIcon" aria-hidden="true">
+        <use href="#i-moon" />
+      </svg>
+      <span id="themeLabel">Escuro</span>
+    </button>
+    <button class="btn" id="pdfBtn" type="button">
+      <svg aria-hidden="true">
+        <use href="#i-download" />
+      </svg>
+      Baixar PDF
+    </button>
+  </div>
+
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="eyebrow-row">
+        <span class="eyebrow">Busca Semântica &amp; NLP</span>
+        <span class="wip">Projeto em andamento</span>
+      </div>
+      <h1>Matching de Candidatos por Embedding</h1>
+      <p class="lede">Rankear os candidatos de um banco de talentos pela aderência de conteúdo a uma vaga nova, a
+        partir do currículo em PDF. O trabalho interessante não foi gerar o embedding — foi descobrir
+        <strong>onde ele erra sozinho</strong> (anos de experiência, negação) e substituir cada ponto cego por
+        <strong>uma regra determinística</strong>, sem perder a cobertura semântica no resto.
+      </p>
+      <div class="stack">
+        <span class="badge">Python</span>
+        <span class="badge">EmbeddingGemma (Gemma 3)</span>
+        <span class="badge">sentence-transformers</span>
+        <span class="badge">DuckDB</span>
+        <span class="badge">Streamlit</span>
+        <span class="badge">pdfplumber</span>
+        <span class="badge">Regex</span>
+        <span class="badge">Similaridade de cosseno</span>
+      </div>
+    </header>
+
+    <main>
+
+      <section id="resultado">
+        <h2>Resultado</h2>
+        <p class="deck">Teste de sanidade: para 8 vagas eu já sabia de antemão quem deveria aparecer no topo —
+          e conferi quantos o sistema realmente trouxe.</p>
+        <div class="metrics">
+          <div class="tile">
+            <span class="val">7 em 10</span>
+            <span class="key">Candidatos certos no topo</span>
+            <span class="hint">média de 8 vagas com resposta conhecida</span>
+          </div>
+          <div class="tile">
+            <span class="val">6 a 9 em 10</span>
+            <span class="key">Faixa por vaga</span>
+            <span class="hint">pior e melhor caso entre as 8</span>
+          </div>
+          <div class="tile">
+            <span class="val">768</span>
+            <span class="key">Dimensões do vetor</span>
+            <span class="hint">EmbeddingGemma-300m, CPU</span>
+          </div>
+          <div class="tile">
+            <span class="val">82</span>
+            <span class="key">Currículos testados</span>
+            <span class="hint">503 vetores (geral + 4 seções)</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="toc">
+        <h2>Roteiro</h2>
+        <ol>
+          <li><a href="#problema">O problema</a></li>
+          <li><a href="#pipeline">Da vaga ao vetor</a></li>
+          <li><a href="#espaco-embeddings">O espaço em 3D</a></li>
+          <li><a href="#validacao">7 em cada 10, no teste</a></li>
+          <li><a href="#pontos-cegos">Dois pontos cegos corrigidos por regra</a></li>
+          <li><a href="#explicabilidade">Score por seção + checklist</a></li>
+          <li><a href="#arquitetura">Por que DuckDB, não Postgres</a></li>
+          <li><a href="#app">O app e como rodar</a></li>
+          <li><a href="#limitacoes">Limitações</a></li>
+        </ol>
+      </section>
+
+      <section id="problema">
+        <h2><span class="num">01</span>O problema</h2>
+        <p>Ao migrar um cliente para a plataforma, é comum ele trazer uma base grande de candidatos já
+          cadastrados — um banco de talentos de milhares de currículos. Quando esse cliente abre uma vaga nova,
+          não existe forma prática de achar rapidamente um grupo de candidatos aderentes nessa base: a busca
+          depende de filtro manual e leitura currículo por currículo. Prototipei um pipeline que extrai o texto do
+          PDF, gera um embedding do currículo e da vaga, e rankeia por similaridade — com explicação de por quê,
+          não só um número.</p>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">O que o score mede (e o que não mede)</span>Aderência de <strong>conteúdo</strong> —
+            o quanto o texto do currículo fala das mesmas coisas que a vaga pede. Não é nota de qualidade do
+            candidato, nem mede potencial, fit cultural ou comportamental: no dataset de teste esses sinais já
+            existem como colunas separadas (Raciocínio, Social, Motivacional, Fit cultural).</p>
+        </div>
+      </section>
+
+      <section id="pipeline">
+        <h2><span class="num">02</span>Da vaga ao vetor</h2>
+        <p class="deck">Extração → seções → embedding → similaridade de cosseno, tudo guardado em DuckDB.</p>
+
+        <p>O texto de cada currículo é extraído do PDF (<code>pdfplumber</code>) e dividido em 5 seções —
+          cabeçalho, resumo, experiência, formação e competências. Cada seção vira um vetor próprio, mais um vetor
+          "geral" do documento inteiro: <strong>5 embeddings por currículo</strong>. O modelo é o
+          <code>google/embeddinggemma-300m</code>, da linha Gemma 3 — 300 milhões de parâmetros, roda em CPU, sem
+          GPU, e gera vetores de <strong>768 dimensões</strong>. A vaga usa o prompt <code>query</code> do modelo e
+          o currículo o prompt <code>document</code> — o EmbeddingGemma foi treinado especificamente para esses
+          papéis assimétricos de busca.</p>
+
+        <p>Um script (<code>build_store.py</code>) calcula um hash do texto de cada currículo e só reembeda quem
+          mudou ou é novo — adicionar um currículo não reprocessa a base inteira. Os vetores ficam num arquivo
+          DuckDB local (<code>data/vetores.duckdb</code>), que suporta array nativo com
+          <code>array_cosine_similarity</code>: o ranking roda direto em SQL, sem servidor de banco separado.</p>
+      </section>
+
+      <section id="espaco-embeddings">
+        <h2><span class="num">03</span>O espaço de embeddings, em 3D</h2>
+        <p class="deck">Os mesmos 79 currículos reais do teste, com os vetores de 768 dimensões reduzidos pra 3 —
+          arraste pra girar.</p>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">Como ler este gráfico</span>Cada bolinha é um currículo; a cor indica a vaga que a
+            pessoa tinha em mente ao escrever o currículo. A estrela é uma vaga nova de exemplo ("Python avançado,
+            SQL, BigQuery e Machine Learning") — repare que ela cai perto do grupo de Desenvolvedor sênior, o mais
+            parecido com o que ela pede.</p>
+        </div>
+
+        <div id="embedding3d" class="embed3d-wrap"
+          aria-label="Gráfico 3D interativo dos currículos no espaço de embeddings"></div>
+        <p class="chart-sub" style="margin-top:8px">Arraste para girar · role o mouse pra dar zoom · passe o mouse
+          num ponto pra ver o nome</p>
+      </section>
+
+      <section id="validacao" class="viz">
+        <h2><span class="num">04</span>7 em cada 10 candidatos certos no topo</h2>
+        <p class="deck">Teste de sanidade com resposta conhecida de antemão, em 8 vagas — na ciência de dados isso
+          se chama "precisão@10".</p>
+
+        <p>Cada currículo do dataset de teste (82 no total) foi criado já pensando numa vaga-alvo — ou seja, eu
+          sabia de antemão qual era a resposta certa. Para conferir se o sistema funciona, rodei 8 descrições de
+          vaga reais contra a base inteira e contei: dos 10 primeiros colocados em cada busca, quantos eram
+          realmente da vaga certa? Na média das 8 vagas, o sistema acertou <strong>7 em cada 10</strong> (68%) —
+          na pior vaga, 6 em cada 10; na melhor (Diretor de RH), 9 em cada 10.</p>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-info" />
+          </svg>
+          <p><span class="label">O que esse teste mostra (e o que não mostra)</span>Ele mede se o sistema traz as
+            pessoas certas para perto do topo — não se a ordem exata entre elas está perfeita. É um teste
+            propositalmente simples, pensado pra pegar regressão quando eu mudar o modelo ou o pipeline no
+            futuro, não uma nota final de qualidade do produto.</p>
+        </div>
+
+        <div class="chart">
+          <p class="chart-title">Acerto no topo, por vaga-teste</p>
+          <p class="chart-sub">82 currículos na base · % dos 10 primeiros colocados que eram da vaga certa</p>
+          <div class="bars">
+            <div class="bar-row">
+              <span class="bl">Diretor de RH</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:90%"></div>
+              </div>
+              <span class="bar-val">90%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Desenvolvedor senior</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:70%"></div>
+              </div>
+              <span class="bar-val">70%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Gerente financeiro</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:70%"></div>
+              </div>
+              <span class="bar-val">70%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Estagiário de marketing</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:70%"></div>
+              </div>
+              <span class="bar-val">70%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Vendedor de loja</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:60%"></div>
+              </div>
+              <span class="bar-val">60%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Caixa de supermercado</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:60%"></div>
+              </div>
+              <span class="bar-val">60%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Vendedor de software</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:60%"></div>
+              </div>
+              <span class="bar-val">60%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bl">Analista de contas a pagar</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:60%"></div>
+              </div>
+              <span class="bar-val">60%</span>
+            </div>
+          </div>
+        </div>
+
+        <p>Essa média de 7 em cada 10 vira a régua: qualquer mudança futura no pipeline (modelo, prompt, seções)
+          precisa manter esse nível ou melhorar. Mesmo no pior caso, 6 das 10 primeiras sugestões já eram da vaga
+          certa; vagas com vocabulário mais distintivo (como Diretor de RH) ficam mais fáceis de separar.</p>
+      </section>
+
+      <section id="pontos-cegos">
+        <h2><span class="num">05</span>Dois pontos cegos corrigidos por regra</h2>
+        <p class="deck">O embedding captura tópico muito bem e número quase nada. Em vez de forçar o modelo a
+          aprender aritmética, tratei isso fora dele.</p>
+
+        <h3>Anos de experiência: de similaridade pra conta</h3>
+        <p>Testei um requisito "5+ anos de experiência" contra currículos com 2, 5, 6, 7, 10 e 15 anos descritos.
+          O embedding sozinho quase não diferenciava pouca de muita experiência.</p>
+
+        <div class="compare">
+          <div class="pane">
+            <span class="tagline">Antes · só embedding</span>
+            <h4>Score contra "5+ anos de experiência"</h4>
+            <div class="terms">
+              <span>2 anos → 0,39</span>
+              <span>5 anos → 0,41</span>
+              <span>17 anos → 0,46</span>
+            </div>
+            <p>A diferença entre 2 e 17 anos é quase invisível pro modelo — ele capta o tópico "tempo de
+              experiência", não o número em si.</p>
+          </div>
+          <div class="pane after">
+            <span class="tagline">Depois · regra + embedding</span>
+            <h4>Contagem extraída e comparada numericamente</h4>
+            <div class="terms">
+              <span>atende/supera → nota máxima</span>
+              <span>3 de 5 anos → 0,60</span>
+              <span>sem data clara → não penaliza</span>
+            </div>
+            <p>Regex extrai o mínimo exigido da vaga; datas da experiência ("fev/2021 – atual") e números por
+              extenso ("seis anos de experiência") somam os anos do candidato, usando o maior valor entre as duas
+              fontes.</p>
+          </div>
+        </div>
+
+        <p>Esse item aparece no checklist de requisitos marcado como tipo <code>quantitativo</code>. Quando não dá
+          pra extrair os anos do candidato, o item simplesmente não entra na média — não penaliza por falta de
+          informação, só deixa de contribuir com aquele sinal.</p>
+
+        <h3>Termos técnicos: sigla não é sinônimo pro embedding</h3>
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-alert" />
+          </svg>
+          <p><span class="label">Por que misturar regra com embedding</span>Um dicionário pequeno e conservador de
+            termos técnicos conhecidos (Python, SQL, Power BI, AWS, Docker, BI...) com seus sinônimos e siglas
+            verifica presença literal em qualquer seção do currículo, e o resultado entra <strong>50/50</strong>
+            com o score semântico. Isso corrige dois erros do embedding sozinho: achar uma seção "parecida" com
+            uma ferramenta que não está realmente lá, e não reconhecer bem uma sigla (<code>BI</code> vs.
+            <code>Business Intelligence</code>). Fora do dicionário, continua sendo só embedding — de propósito,
+            para não virar uma lista infinita de regras.</p>
+        </div>
+      </section>
+
+      <section id="explicabilidade">
+        <h2><span class="num">06</span>Score por seção + checklist de requisitos</h2>
+        <p class="deck">Duas camadas de explicação, nenhuma delas um número solto.</p>
+
+        <p>Além do score geral, a descrição da vaga é comparada <strong>seção a seção</strong> do currículo
+          (resumo, experiência, formação, competências) — mostra qual parte pesou mais no resultado. E a vaga é
+          quebrada em requisitos (bullets de "obrigatórios" / "diferenciais"), cada um comparado contra a melhor
+          seção do currículo — vira um checklist requisito a requisito, não um score único e opaco.</p>
+
+        <h3>Exemplo real: vaga "Analista de Dados Pleno"</h3>
+        <p>O primeiro colocado do ranking (score geral 0,555) foi um candidato cuja vaga original no dataset era
+          "Desenvolvedor senior" — não "Analista de Dados". Isso é o ponto: o sistema compara conteúdo, não
+          categoria fixa, e um Data Engineer em transição de carreira pode ser mais aderente ao texto da vaga do
+          que alguém rotulado na categoria "certa".</p>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Seção do currículo</th>
+                <th class="num">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Experiência</td>
+                <td class="num">0,599</td>
+              </tr>
+              <tr>
+                <td>Resumo</td>
+                <td class="num">0,537</td>
+              </tr>
+              <tr>
+                <td>Cabeçalho</td>
+                <td class="num">0,481</td>
+              </tr>
+              <tr>
+                <td>Formação</td>
+                <td class="num">0,398</td>
+              </tr>
+              <tr>
+                <td>Competências</td>
+                <td class="num">0,352</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Requisito da vaga</th>
+                <th>Tipo</th>
+                <th class="num">Score</th>
+                <th>Melhor seção</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="wrap-cell">Experiência com Python (pandas)</span></td>
+                <td>obrigatório</td>
+                <td class="num">0,498</td>
+                <td>resumo</td>
+              </tr>
+              <tr>
+                <td><span class="wrap-cell">Experiência com SQL</span></td>
+                <td>obrigatório</td>
+                <td class="num">0,448</td>
+                <td>resumo</td>
+              </tr>
+              <tr>
+                <td><span class="wrap-cell">Experiência com People Analytics ou RH</span></td>
+                <td>diferencial</td>
+                <td class="num">0,426</td>
+                <td>experiência</td>
+              </tr>
+              <tr>
+                <td><span class="wrap-cell">Power BI ou ferramenta de BI similar</span></td>
+                <td>obrigatório</td>
+                <td class="num">0,364</td>
+                <td>experiência</td>
+              </tr>
+              <tr>
+                <td><span class="wrap-cell">Comunicação clara para público não técnico</span></td>
+                <td>obrigatório</td>
+                <td class="num">0,189</td>
+                <td>formação</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>O checklist usa embedding, não busca literal de palavra — por isso pega sinônimos ("Excel avançado"
+          bate com "domínio de planilhas eletrônicas"), mas também pode "achar" uma seção parecida sem o
+          requisito estar de fato atendido. Tratar como ranking relativo, não como selo binário de atende/não
+          atende.</p>
+      </section>
+
+      <section id="arquitetura">
+        <h2><span class="num">07</span>Por que DuckDB, não Postgres</h2>
+        <p>Para um protótipo local, DuckDB evita instalar e manter um servidor de banco separado. Ele já suporta
+          array nativo com <code>array_cosine_similarity</code>, então o ranking roda direto em SQL dentro do
+          próprio banco — a mesma lógica de uma query pgvector em produção.</p>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-check" />
+          </svg>
+          <p><span class="label">Decisão isolada, reversível</span>Se o projeto crescer (múltiplos usuários,
+            produção), a troca fica contida em <code>src/store.py</code> — pra Postgres+pgvector, sem mudar o
+            resto do pipeline (extração, seções e embeddings continuam iguais).</p>
+        </div>
+      </section>
+
+      <section id="app">
+        <h2><span class="num">08</span>O app e como rodar</h2>
+        <p class="deck">Streamlit por cima dos mesmos módulos usados nos notebooks de teste — uma única fonte de
+          verdade para o backend.</p>
+
+        <pre><code>python src/extract_curriculos.py   # le os PDFs, extrai texto
+python src/build_store.py          # gera os embeddings, grava no DuckDB
+streamlit run app.py               # abre o app</code></pre>
+
+        <ul class="checks">
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Limiar não some candidato.</strong> Quem fica abaixo da nota mínima do checklist não
+            desaparece — vai para um expander recolhido ("candidatos ocultos pelo limiar"), ainda visível se
+            quiser conferir.</li>
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Cadastro de candidato sem script.</strong> Uma aba própria recebe o PDF (ou o texto
+            colado direto), extrai, divide em seções, gera os embeddings e deixa o candidato disponível na busca
+            na mesma sessão.</li>
+          <li><svg aria-hidden="true">
+              <use href="#i-check" />
+            </svg><strong>Dois notebooks auxiliares.</strong> <code>playground_embeddings.ipynb</code> testa
+            embedding solto em qualquer par de frases; <code>teste_matching_vagas.ipynb</code> audita o pipeline
+            inteiro linha a linha, usando os mesmos módulos do app.</li>
+        </ul>
+      </section>
+
+      <section id="limitacoes">
+        <h2><span class="num">09</span>Limitações</h2>
+
+        <div class="callout">
+          <svg aria-hidden="true">
+            <use href="#i-alert" />
+          </svg>
+          <p><span class="label">Negação é mal capturada</span>Testei "tenho X" contra "não tenho X" para a mesma
+            vaga: a diferença de score foi de só <strong>0,03 a 0,08</strong> (escala 0,4–0,7) — enquanto um
+            currículo que simplesmente nunca menciona o assunto pontua abaixo de 0,15–0,47. Ou seja, negar um
+            requisito explicitamente ainda pontua <em>melhor</em> do que não falar sobre ele. É limitação
+            conhecida de embeddings densos em geral, não bug deste pipeline: o modelo capta tópico muito melhor
+            do que polaridade lógica. O risco maior é do lado da <strong>vaga</strong> — uma frase como "não
+            exigimos experiência prévia" virando item de checklist pode ser tratada como o requisito oposto do
+            que a vaga pede. Ainda não corrigido: por ora, a descrição da vaga precisa ser revisada manualmente
+            antes de colar.</p>
+        </div>
+
+        <ul>
+          <li><strong>PDF escaneado não extrai.</strong> <code>pdfplumber</code> não lê PDF sem camada de texto
+            selecionável; o app avisa e permite colar o texto manualmente como alternativa.</li>
+          <li><strong>Checklist semântico pode "achar parecido".</strong> Sem o dicionário de termos técnicos, o
+            embedding pode aproximar uma seção do currículo de um requisito sem ele estar de fato atendido —
+            tratar como indicativo, não como selo binário.</li>
+          <li><strong>Falta um currículo na base de teste original.</strong> O PDF de um dos 83 candidatos da
+            planilha nunca existiu na pasta — esse candidato nunca aparece em nenhum resultado. Documentado, não
+            corrigido.</li>
+          <li><strong>DuckDB permite um processo de escrita por vez.</strong> No Windows, abrir o app e um
+            notebook ao mesmo tempo sobre o mesmo arquivo trava um processo até o outro liberar a conexão.</li>
+          <li><strong>O score não avalia o candidato.</strong> Mede só aderência textual de conteúdo — potencial,
+            fit cultural e comportamental continuam sendo sinais separados, fora do escopo deste pipeline.</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
+
+    <br><span class="no-print">Este site usa Google Analytics para medir audiência. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Como o Google usa os dados</a>.</span>
+  </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var icon = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+
+      function prefersDark() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      // Reflect the *next* theme the button will switch to.
+      function paint(isDark) {
+        icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
+        label.textContent = isDark ? 'Claro' : 'Escuro';
+      }
+
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) { }
+      if (saved === 'dark' || saved === 'light') {
+        root.setAttribute('data-theme', saved);
+      }
+      paint(saved ? saved === 'dark' : prefersDark());
+
+      document.getElementById('themeToggle').addEventListener('click', function () {
+        var isDark = root.getAttribute('data-theme')
+          ? root.getAttribute('data-theme') === 'dark'
+          : prefersDark();
+        var next = isDark ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) { }
+        paint(next === 'dark');
+      });
+
+      document.getElementById('pdfBtn').addEventListener('click', function () {
+        // Sinaliza a intenção de salvar em PDF. Enviado aqui de forma
+        // autônoma porque este bloco roda antes da camada de comportamento.
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'baixar_pdf', { pagina: document.title });
+        }
+        window.print();
+      });
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+
+    // ------------------------------------------------------------------
+    //  Camada de comportamento -> dataLayer (consumida por gatilhos no GTM)
+    // ------------------------------------------------------------------
+    (function () {
+      function push(evento, dados) {
+        if (typeof window.gtag !== 'function') return;
+        dados = dados || {};
+        dados.pagina = document.title;
+        window.gtag('event', evento, dados);
+      }
+
+      var marcos = [25, 50, 75, 100], atingidos = {}, agendado = false;
+
+      function medirRolagem() {
+        agendado = false;
+        var rolavel = document.documentElement.scrollHeight - window.innerHeight;
+        if (rolavel < 200) return;
+        var pct = (window.scrollY / rolavel) * 100;
+        for (var i = 0; i < marcos.length; i++) {
+          if (pct >= marcos[i] - 0.5 && !atingidos[marcos[i]]) {
+            atingidos[marcos[i]] = true;
+            push('rolagem', { profundidade: marcos[i] });
+          }
+        }
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!agendado) { agendado = true; setTimeout(medirRolagem, 200); }
+      }, { passive: true });
+      medirRolagem();
+
+      if ('IntersectionObserver' in window) {
+        var observador = new IntersectionObserver(function (entradas) {
+          entradas.forEach(function (entrada) {
+            if (!entrada.isIntersecting) return;
+            observador.unobserve(entrada.target);
+            push('secao_vista', { secao: entrada.target.id });
+          });
+        }, { rootMargin: '-25% 0px -25% 0px', threshold: 0 });
+
+        Array.prototype.forEach.call(
+          document.querySelectorAll('section[id]'),
+          function (secao) { observador.observe(secao); }
+        );
+      }
+
+      document.addEventListener('click', function (ev) {
+        var alvo = ev.target;
+        if (!alvo || !alvo.closest) return;
+        var link = alvo.closest('a[href]');
+        if (!link) return;
+
+        var href = link.getAttribute('href') || '';
+
+        if (/^mailto:/i.test(href)) {
+          push('contato', { canal: 'email' });
+        } else if (/^tel:/i.test(href)) {
+          push('contato', { canal: 'telefone' });
+        } else if (/whatsapp\.com|wa\.me/i.test(href)) {
+          push('contato', { canal: 'whatsapp' });
+        } else if (/^https?:/i.test(href) && link.hostname !== location.hostname) {
+          push('clique_externo', {
+            destino: link.hostname,
+            url: link.href,
+            texto: (link.textContent || '').trim().slice(0, 60)
+          });
+        }
+      }, true);
+    })();
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+  <script>
+    (function () {
+      var pontos = [{"x": 5.861, "y": 6.35, "z": -2.927, "nome": "Luciana Moreira Campos", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.12, "y": 6.513, "z": -3.252, "nome": "Rafael Nunes Carvalho", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.251, "y": 6.567, "z": -3.27, "nome": "Amanda Ferreira Lopes", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.107, "y": 6.821, "z": -3.168, "nome": "Thiago Martins Rocha", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.522, "y": 6.846, "z": -3.215, "nome": "Priscila Gomes Tavares", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.504, "y": 6.356, "z": -3.38, "nome": "Bruna Salgado Menezes", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.202, "y": 6.88, "z": -3.526, "nome": "Diego Vasconcelos Pires", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 5.748, "y": 6.635, "z": -3.365, "nome": "Larissa Monteiro Freitas", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 6.498, "y": 5.562, "z": -1.723, "nome": "João Pedro Almeida Reis", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 7.838, "y": 4.164, "z": -0.539, "nome": "Natália Souza Ribeiro", "categoria": "Analista de contas a pagar", "tipo": "curriculo"}, {"x": 9.907, "y": 4.544, "z": 2.39, "nome": "Márcia Regina de Souza", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.72, "y": 4.678, "z": 2.289, "nome": "Diego Alves Pereira", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.718, "y": 4.423, "z": 2.23, "nome": "Patrícia Gomes Ribeiro", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.704, "y": 4.827, "z": 2.339, "nome": "Rafael Henrique Lima", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.562, "y": 4.568, "z": 2.383, "nome": "Sandra Cristina Moraes", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.263, "y": 4.77, "z": 2.287, "nome": "Camila Rocha Nascimento", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.388, "y": 4.313, "z": 2.294, "nome": "André Luiz Cardoso", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 8.929, "y": 4.583, "z": 2.123, "nome": "Beatriz Fernandes Oliveira", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.353, "y": 4.312, "z": 2.224, "nome": "Henrique Martins Teixeira", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 9.319, "y": 4.667, "z": 2.564, "nome": "Luciana Mendes Barros", "categoria": "Caixa de supermercado", "tipo": "curriculo"}, {"x": 6.17, "y": 2.191, "z": 0.501, "nome": "Alexandre Tavares Mendes", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.359, "y": 2.495, "z": 0.504, "nome": "Mariana Lopes Vasconcelos", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.352, "y": 2.427, "z": 0.578, "nome": "Ricardo Nogueira Pires", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.114, "y": 2.258, "z": 0.205, "nome": "Lucas Ferreira Coutinho", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.489, "y": 2.278, "z": 0.314, "nome": "Paulo Henrique Amaral", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.413, "y": 2.019, "z": 0.226, "nome": "Carolina Martins Prado", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.593, "y": 2.928, "z": 0.122, "nome": "Felipe Rocha Menezes", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.086, "y": 2.567, "z": 0.471, "nome": "Gabriel Souza Azevedo", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 6.718, "y": 5.05, "z": -1.309, "nome": "Ana Clara Ribeiro", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 7.058, "y": 6.459, "z": -3.297, "nome": "Marcelo Augusto Freitas", "categoria": "Desenvolvedor senior", "tipo": "curriculo"}, {"x": 5.719, "y": 6.634, "z": -2.903, "nome": "Roberto Almeida Siqueira", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 5.853, "y": 6.421, "z": -2.679, "nome": "Fernanda Costa Mello", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 5.745, "y": 6.801, "z": -2.814, "nome": "Marcelo Vieira Guimarães", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 5.755, "y": 6.606, "z": -2.545, "nome": "Juliana Barros de Andrade", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 5.91, "y": 7.007, "z": -2.976, "nome": "André Luiz Peixoto", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 5.968, "y": 6.563, "z": -2.379, "nome": "Camila Duarte Rezende", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 6.626, "y": 6.551, "z": -3.136, "nome": "Rafael Martins Lobo", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 5.783, "y": 6.06, "z": -2.398, "nome": "Beatriz Nascimento Freire", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 6.154, "y": 6.039, "z": -2.314, "nome": "Henrique Moura Bastos", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 8.829, "y": 4.173, "z": -3.315, "nome": "Patrícia Oliveira Campos", "categoria": "Gerente financeiro", "tipo": "curriculo"}, {"x": 8.119, "y": 3.949, "z": -0.843, "nome": "Renata Alves Brandão", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.835, "y": 4.19, "z": -0.869, "nome": "Gabriel Torres Mendonça", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.631, "y": 4.242, "z": -0.465, "nome": "Carolina Pires de Souza", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 8.347, "y": 4.054, "z": -0.471, "nome": "Felipe Araujo Martins", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.442, "y": 4.155, "z": -0.538, "nome": "Mariana Costa Ribeiro", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.65, "y": 4.066, "z": -0.874, "nome": "Lucas Henrique Vidal", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.491, "y": 4.338, "z": -0.556, "nome": "Ana Clara Oliveira", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.387, "y": 4.213, "z": -1.103, "nome": "Pedro Miguel Santana", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.074, "y": 4.717, "z": -1.058, "nome": "Beatriz Sampaio Leal", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 7.163, "y": 5.011, "z": -1.094, "nome": "Matheus Rocha Fernandes", "categoria": "Estagiário de marketing", "tipo": "curriculo"}, {"x": 9.122, "y": 4.207, "z": -3.158, "nome": "Helena Martins Albuquerque", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 9.108, "y": 4.131, "z": -2.864, "nome": "Marina Teles Nogueira", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 9.28, "y": 4.117, "z": -2.917, "nome": "Eduardo Paes Figueiredo", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 9.076, "y": 4.369, "z": -2.792, "nome": "Carolina Azevedo Lima", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 9.179, "y": 4.121, "z": -3.312, "nome": "Ricardo Alves Monteiro", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 8.887, "y": 4.549, "z": -3.016, "nome": "Luiza Ferraz Cardoso", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 8.922, "y": 4.506, "z": -3.065, "nome": "Daniel Ribeiro Souto", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 8.953, "y": 3.934, "z": -2.976, "nome": "Isabela Moraes Pinto", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 9.088, "y": 3.902, "z": -0.985, "nome": "Gustavo Leal Mendonça", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 6.782, "y": 6.118, "z": -3.198, "nome": "Márcia Regina Vasques", "categoria": "Diretor de RH", "tipo": "curriculo"}, {"x": 9.28, "y": 4.141, "z": 1.114, "nome": "Fernanda Lopes Martins", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 9.102, "y": 3.944, "z": 0.541, "nome": "Lucas Azevedo Rocha", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 9.369, "y": 4.284, "z": 1.532, "nome": "Priscila Almeida Nogueira", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 9.001, "y": 4.389, "z": 1.529, "nome": "Juliana Costa Freire", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 9.033, "y": 4.085, "z": 0.732, "nome": "Ricardo Mendes Tavares", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 8.939, "y": 4.725, "z": 1.754, "nome": "Ana Paula Ferreira Gomes", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 8.531, "y": 4.331, "z": 1.017, "nome": "Matheus Henrique Silva", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 8.905, "y": 4.537, "z": 1.737, "nome": "Marina Oliveira Campos", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 9.134, "y": 4.1, "z": 1.997, "nome": "Carlos Eduardo Santos", "categoria": "Vendedor de loja", "tipo": "curriculo"}, {"x": 9.052, "y": 3.927, "z": -0.59, "nome": "Eduardo Sampaio Moreira", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 8.73, "y": 3.538, "z": -0.628, "nome": "Mariana Castro Nunes", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 9.049, "y": 3.86, "z": -0.161, "nome": "Bruno Henrique Valença", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 9.019, "y": 3.667, "z": -0.5, "nome": "Renata Vieira Albuquerque", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 8.986, "y": 3.985, "z": 0.119, "nome": "Felipe Augusto Moura", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 8.705, "y": 3.774, "z": -0.836, "nome": "Camila Duarte Farias", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 8.489, "y": 3.971, "z": -0.659, "nome": "Gustavo Ribeiro Leal", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 8.687, "y": 3.632, "z": -0.358, "nome": "Isabela Martins Rocha", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 6.804, "y": 5.177, "z": -1.221, "nome": "Thiago Martins Queiroz", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 6.133, "y": 7.007, "z": -3.603, "nome": "Débora Cristina Almeida", "categoria": "Vendedor de software", "tipo": "curriculo"}, {"x": 6.626, "y": 2.686, "z": -0.193, "nome": "Vaga nova (exemplo)", "categoria": "Vaga nova (exemplo)", "tipo": "vaga"}];
+
+      var el = document.getElementById('embedding3d');
+      if (!el || typeof Plotly === 'undefined') return;
+
+      var cores = {
+        "Analista de contas a pagar": "#5B8C8A",
+        "Caixa de supermercado": "#C76B6B",
+        "Desenvolvedor senior": "#4F7CAC",
+        "Gerente financeiro": "#8E6C9A",
+        "Estagiário de marketing": "#D9A441",
+        "Diretor de RH": "#4FB0A5",
+        "Vendedor de loja": "#C76E9E",
+        "Vendedor de software": "#8FB84F",
+        "Vaga nova (exemplo)": "#E07A1F"
+      };
+      var ordem = Object.keys(cores);
+
+      var grupos = {};
+      pontos.forEach(function (p) {
+        (grupos[p.categoria] = grupos[p.categoria] || []).push(p);
+      });
+
+      var traces = ordem.filter(function (cat) { return grupos[cat]; }).map(function (cat) {
+        var pts = grupos[cat];
+        var ehVaga = cat === "Vaga nova (exemplo)";
+        return {
+          type: 'scatter3d',
+          mode: 'markers',
+          name: cat,
+          x: pts.map(function (p) { return p.x; }),
+          y: pts.map(function (p) { return p.y; }),
+          z: pts.map(function (p) { return p.z; }),
+          text: pts.map(function (p) { return p.nome; }),
+          hovertemplate: '%{text}<br>' + cat + '<extra></extra>',
+          marker: {
+            size: ehVaga ? 10 : 5,
+            symbol: ehVaga ? 'diamond' : 'circle',
+            color: cores[cat],
+            opacity: ehVaga ? 1 : 0.85,
+            line: { width: ehVaga ? 1.5 : 0.5, color: 'rgba(255,255,255,0.6)' }
+          }
+        };
+      });
+
+      var eixo = {
+        showticklabels: false,
+        title: '',
+        showspikes: false,
+        gridcolor: 'rgba(130,140,155,0.25)',
+        backgroundcolor: 'rgba(130,140,155,0.04)',
+        zerolinecolor: 'rgba(130,140,155,0.25)'
+      };
+
+      Plotly.newPlot(el, traces, {
+        scene: {
+          xaxis: eixo,
+          yaxis: eixo,
+          zaxis: eixo,
+          camera: { eye: { x: 1.4, y: 1.4, z: 1.1 } }
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        font: { color: '#83909f', size: 11, family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" },
+        legend: { x: 0, y: 1, bgcolor: 'rgba(0,0,0,0)', font: { size: 10.5 } },
+        margin: { l: 0, r: 0, t: 10, b: 0 }
+      }, {
+        displayModeBar: false,
+        responsive: true
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
