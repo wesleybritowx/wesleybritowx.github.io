@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,17 +13,17 @@
     gtag('js', new Date());
     gtag('config', 'G-N3N5JWG3XB');
   </script>
-  <title>Relatório Automático de R&amp;S com IA — Wesley Brito</title>
+  <title>Automated Recruiting Report with AI — Wesley Brito</title>
   <meta name="description"
-    content="Pipeline em Python que roda no GitHub Actions, lê a base de R&amp;S no Google Sheets, calcula KPIs, gera gráficos, escreve a análise com a API do Claude e envia dois relatórios em PDF — semanal e mensal — por e-mail." />
+    content="Python pipeline that runs on GitHub Actions, reads the recruiting data from Google Sheets, computes KPIs, builds charts, writes the analysis with the Claude API and emails two PDF reports — weekly and monthly." />
   <meta name="author" content="Wesley Brito" />
   <link rel="alternate" hreflang="pt-BR" href="relatorio.html" />
   <link rel="alternate" hreflang="en" href="relatorio.en.html" />
 
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Relatório Automático de R&S com Análise de IA" />
+  <meta property="og:title" content="Automated Recruiting Report with AI Analysis" />
   <meta property="og:description"
-    content="ETL agendado no GitHub Actions, KPIs de recrutamento, gráficos e análise executiva escrita pela API do Claude, entregue em PDF por e-mail." />
+    content="ETL scheduled on GitHub Actions, recruiting KPIs, charts and an executive analysis written by the Claude API, delivered as a PDF by email." />
 
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
@@ -1026,47 +1026,47 @@
   </svg>
 
   <div class="toolbar">
-    <a class="btn" href="index.html">
+    <a class="btn" href="index.en.html">
       <svg aria-hidden="true">
         <use href="#i-back" />
       </svg>
-      Portfólio
+      Portfolio
     </a>
     <span class="spacer"></span>
-    <div class="lang" role="group" aria-label="Idioma / Language">
-      <span class="on" aria-current="true">PT</span><a href="relatorio.en.html" hreflang="en" lang="en">EN</a>
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <a href="relatorio.html" hreflang="pt-BR" lang="pt-BR">PT</a><span class="on" aria-current="true">EN</span>
     </div>
-    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+    <button class="btn" id="themeToggle" type="button" aria-label="Toggle light/dark theme">
       <svg id="themeIcon" aria-hidden="true">
         <use href="#i-moon" />
       </svg>
-      <span id="themeLabel">Escuro</span>
+      <span id="themeLabel">Dark</span>
     </button>
     <button class="btn" id="pdfBtn" type="button">
       <svg aria-hidden="true">
         <use href="#i-download" />
       </svg>
-      Baixar PDF
+      Download PDF
     </button>
   </div>
 
   <div class="wrap">
 
     <header class="hero">
-      <span class="eyebrow">Automação &amp; IA aplicada</span>
-      <h1>Relatório Automático de R&amp;S com Análise de IA</h1>
-      <p class="lede">Um pipeline em Python, agendado no <strong>GitHub Actions</strong>, que lê a base de
-        recrutamento publicada no <strong>Google Sheets</strong>, calcula os indicadores, monta os gráficos, pede
-        à <strong>API do Claude</strong> uma análise escrita comparando os períodos e entrega dois PDFs por
-        e-mail — <strong>semanal</strong> operacional e <strong>mensal</strong> executivo. Nenhuma intervenção
-        manual entre a base e a caixa de entrada.
+      <span class="eyebrow">Automation &amp; applied AI</span>
+      <h1>Automated Recruiting Report with AI Analysis</h1>
+      <p class="lede">A Python pipeline, scheduled on <strong>GitHub Actions</strong>, that reads the recruiting
+        data published on <strong>Google Sheets</strong>, computes the indicators, builds the charts, asks the
+        <strong>Claude API</strong> for a written analysis comparing periods and delivers two PDFs by email — an
+        operational <strong>weekly</strong> and an executive <strong>monthly</strong>. No manual step between the
+        data and the inbox.
       </p>
       <div class="stack">
         <span class="badge">Python</span>
         <span class="badge">Pandas</span>
         <span class="badge">GitHub Actions</span>
         <span class="badge">Google Sheets API</span>
-        <span class="badge">API Anthropic (Claude)</span>
+        <span class="badge">Anthropic API (Claude)</span>
         <span class="badge">Jinja2</span>
         <span class="badge">WeasyPrint</span>
         <span class="badge">Matplotlib</span>
@@ -1077,374 +1077,379 @@
     <main>
 
       <section id="visao">
-        <h2>Em resumo</h2>
-        <p class="deck">O que o pipeline entrega a cada execução.</p>
+        <h2>At a glance</h2>
+        <p class="deck">What the pipeline delivers on every run.</p>
         <div class="metrics">
           <div class="tile">
             <span class="val">2</span>
-            <span class="key">Cadências</span>
-            <span class="hint">semanal e mensal</span>
+            <span class="key">Cadences</span>
+            <span class="hint">weekly and monthly</span>
           </div>
           <div class="tile">
             <span class="val">4</span>
-            <span class="key">Abas no Google Sheets</span>
-            <span class="hint">vagas, candidatos, etapas, controle</span>
+            <span class="key">Google Sheets tabs</span>
+            <span class="hint">jobs, candidates, stages, control</span>
           </div>
           <div class="tile">
             <span class="val">8</span>
-            <span class="key">KPIs mensais</span>
-            <span class="hint">+ funil, SLA, origens</span>
+            <span class="key">Monthly KPIs</span>
+            <span class="hint">+ funnel, SLA, sources</span>
           </div>
           <div class="tile">
             <span class="val">0</span>
-            <span class="key">Passos manuais</span>
-            <span class="hint">da base ao e-mail</span>
+            <span class="key">Manual steps</span>
+            <span class="hint">from data to email</span>
           </div>
         </div>
       </section>
 
       <section class="toc">
-        <h2>Roteiro</h2>
+        <h2>Roadmap</h2>
         <ol>
-          <li><a href="#problema">O problema</a></li>
-          <li><a href="#arquitetura">Arquitetura do pipeline</a></li>
-          <li><a href="#actions">Automação no GitHub Actions</a></li>
-          <li><a href="#metricas">O que é medido</a></li>
-          <li><a href="#ia">A camada de IA</a></li>
-          <li><a href="#saida">Exemplo de saída</a></li>
-          <li><a href="#decisoes">Decisões de projeto</a></li>
+          <li><a href="#problema">The problem</a></li>
+          <li><a href="#arquitetura">Pipeline architecture</a></li>
+          <li><a href="#actions">Automation on GitHub Actions</a></li>
+          <li><a href="#metricas">What is measured</a></li>
+          <li><a href="#ia">The AI layer</a></li>
+          <li><a href="#saida">Sample output</a></li>
+          <li><a href="#decisoes">Design decisions</a></li>
         </ol>
       </section>
 
       <section id="problema">
-        <h2><span class="num">01</span>O problema</h2>
-        <p>Acompanhar recrutamento exige duas leituras diferentes, em ritmos diferentes. A operação precisa saber,
-          toda semana, <em>o que travou</em> — quais vagas estouraram o SLA, em que etapa os candidatos estão
-          parados. A liderança precisa, todo mês, de <em>uma leitura consolidada</em>: o funil converteu melhor
-          ou pior, os tempos caíram, de onde vieram os candidatos que avançaram.</p>
-        <p>Montar isso à mão significa abrir a planilha, recortar os períodos, recalcular as comparações, gerar os
-          gráficos, escrever o texto e distribuir — repetindo tudo na semana seguinte. É trabalho recorrente,
-          previsível e propenso a erro de recorte de data. Exatamente o tipo de tarefa que deve virar pipeline.</p>
+        <h2><span class="num">01</span>The problem</h2>
+        <p>Tracking recruiting requires two different readings, at different paces. Operations needs to know,
+          every week, <em>what is stuck</em> — which jobs blew the SLA, at which stage candidates are
+          parked. Leadership needs, every month, <em>a consolidated reading</em>: did the funnel convert better
+          or worse, did times go down, where did the candidates who advanced come from.</p>
+        <p>Building this by hand means opening the spreadsheet, slicing the periods, recomputing the comparisons,
+          generating the charts, writing the text and distributing it — then repeating everything next week. It
+          is recurring, predictable work, prone to date-slicing errors. Exactly the kind of task that should
+          become a pipeline.</p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">O objetivo</span>Entregar ao cliente <strong>duas coisas de uma vez</strong>: a
-            base de R&amp;S sempre atualizada no Google Sheets, para quem quiser fatiar os dados, e dois
-            relatórios prontos para leitura — com números, gráficos e <strong>uma análise escrita</strong> — sem
-            ninguém tocar em nada entre a fonte e a entrega.</p>
+          <p><span class="label">The goal</span>Deliver <strong>two things at once</strong> to the client: the
+            recruiting data always up to date on Google Sheets, for anyone who wants to slice it, and two
+            ready-to-read reports — with numbers, charts and <strong>a written analysis</strong> — with nobody
+            touching anything between source and delivery.</p>
         </div>
       </section>
 
       <section id="arquitetura">
-        <h2><span class="num">02</span>Arquitetura do pipeline</h2>
-        <p class="deck">Cada módulo tem uma responsabilidade só, o que deixa o fluxo testável por partes.</p>
+        <h2><span class="num">02</span>Pipeline architecture</h2>
+        <p class="deck">Each module has a single responsibility, which keeps the flow testable in parts.</p>
 
         <div class="source">
-          <span class="step">Origem · automação separada</span>
-          <h4>Coleta e publicação no Google Sheets</h4>
-          <p>Um pipeline anterior, independente deste, extrai os dados de R&amp;S e mantém a planilha no Google
-            Sheets sempre atualizada. Ela é, ao mesmo tempo, a <strong>fonte deste relatório</strong> e a
-            <strong>base de dados que o cliente acessa direto</strong> — quem quiser conferir um número ou fatiar
-            de outro jeito não depende de pedir nada a ninguém.
+          <span class="step">Source · separate automation</span>
+          <h4>Collection and publishing to Google Sheets</h4>
+          <p>An earlier pipeline, independent of this one, extracts the recruiting data and keeps the Google
+            Sheets spreadsheet always up to date. It is both the <strong>source of this report</strong> and the
+            <strong>database the client accesses directly</strong> — anyone who wants to check a number or slice
+            it another way does not depend on asking anyone.
           </p>
         </div>
-        <div class="source-arrow">4 abas: vagas, candidatos, etapas e controle</div>
+        <div class="source-arrow">4 tabs: jobs, candidates, stages and control</div>
 
         <div class="flow">
           <div class="stage">
-            <span class="step">01 · Entrada</span>
-            <h4>Coleta</h4>
+            <span class="step">01 · Input</span>
+            <h4>Collection</h4>
             <ul>
-              <li>Leitura via Google Sheets API</li>
-              <li>Resolução da data de referência</li>
-              <li>Normalização de tipos e datas</li>
+              <li>Read via Google Sheets API</li>
+              <li>Reference date resolution</li>
+              <li>Type and date normalization</li>
             </ul>
           </div>
           <div class="stage">
-            <span class="step">02 · Transformação</span>
-            <h4>Períodos e métricas</h4>
+            <span class="step">02 · Transformation</span>
+            <h4>Periods and metrics</h4>
             <ul>
-              <li>Recorte semanal e mensal</li>
-              <li>KPIs, funil, SLA, origens</li>
-              <li>Comparação com o período anterior</li>
+              <li>Weekly and monthly slicing</li>
+              <li>KPIs, funnel, SLA, sources</li>
+              <li>Comparison with the previous period</li>
             </ul>
           </div>
           <div class="stage">
-            <span class="step">03 · Interpretação</span>
-            <h4>Gráficos e IA</h4>
+            <span class="step">03 · Interpretation</span>
+            <h4>Charts and AI</h4>
             <ul>
-              <li>Gráficos em Matplotlib</li>
-              <li>Análise escrita pelo Claude</li>
-              <li>Cache e fallback determinístico</li>
+              <li>Matplotlib charts</li>
+              <li>Analysis written by Claude</li>
+              <li>Cache and deterministic fallback</li>
             </ul>
           </div>
           <div class="stage">
-            <span class="step">04 · Saída</span>
-            <h4>Renderização</h4>
+            <span class="step">04 · Output</span>
+            <h4>Rendering</h4>
             <ul>
               <li>HTML via Jinja2</li>
               <li>PDF via WeasyPrint</li>
-              <li>Envio por e-mail</li>
+              <li>Email delivery</li>
             </ul>
           </div>
         </div>
 
-        <p>A separação importa por um motivo prático: os indicadores de vaga (TTH, TTF, TTA, SLA) <strong>já vêm
-            calculados na origem</strong> e são apenas consumidos, nunca recalculados. Isso evita que o relatório
-          e o sistema de origem divirjam — um erro clássico quando cada consumidor refaz a própria conta.</p>
+        <p>The separation matters for a practical reason: the job indicators (TTH, TTF, TTA, SLA) <strong>already
+            come calculated at the source</strong> and are only consumed, never recomputed. This prevents the
+          report and the source system from diverging — a classic error when each consumer redoes its own
+          math.</p>
       </section>
 
       <section id="actions">
-        <h2><span class="num">03</span>Automação no GitHub Actions</h2>
-        <p class="deck">O ETL não roda na minha máquina. Roda sozinho, no agendamento.</p>
+        <h2><span class="num">03</span>Automation on GitHub Actions</h2>
+        <p class="deck">The ETL does not run on my machine. It runs on its own, on schedule.</p>
 
         <ol>
-          <li><strong>Gatilho agendado</strong> (<code>schedule</code> com cron) dispara a cadência certa —
-            semanal e mensal têm janelas e destinatários diferentes. O <code>workflow_dispatch</code> fica
-            disponível para execução sob demanda.</li>
-          <li><strong>Ambiente reprodutível</strong>: checkout, setup do Python na versão fixada e instalação a
-            partir do <code>requirements.txt</code>.</li>
-          <li><strong>Credenciais via <em>secrets</em></strong> — a chave da API e as credenciais de e-mail nunca
-            entram no repositório; são injetadas como variáveis de ambiente no job.</li>
-          <li><strong>Execução do pipeline</strong>, que gera o PDF da cadência correspondente.</li>
-          <li><strong>Entrega</strong>: o PDF vai por e-mail aos destinatários e fica guardado como artefato da
-            execução, o que dá histórico e permite reprocessar.</li>
+          <li><strong>Scheduled trigger</strong> (<code>schedule</code> with cron) fires the right cadence —
+            weekly and monthly have different windows and recipients. <code>workflow_dispatch</code> remains
+            available for on-demand runs.</li>
+          <li><strong>Reproducible environment</strong>: checkout, Python setup at a pinned version and install
+            from <code>requirements.txt</code>.</li>
+          <li><strong>Credentials via <em>secrets</em></strong> — the API key and email credentials never enter
+            the repository; they are injected as environment variables in the job.</li>
+          <li><strong>Pipeline execution</strong>, which generates the PDF for the matching cadence.</li>
+          <li><strong>Delivery</strong>: the PDF goes by email to the recipients and is stored as a run
+            artifact, which gives history and allows reprocessing.</li>
         </ol>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Por que Actions</span>Não exige servidor, tem agendamento nativo, guarda o log de
-            cada execução e versiona o próprio agendamento junto com o código. Para um relatório que roda algumas
-            vezes por mês, é a menor infraestrutura que resolve o problema.</p>
+          <p><span class="label">Why Actions</span>It needs no server, has native scheduling, keeps the log of
+            every run and versions the schedule itself alongside the code. For a report that runs a few times a
+            month, it is the smallest infrastructure that solves the problem.</p>
         </div>
       </section>
 
       <section id="metricas">
-        <h2><span class="num">04</span>O que é medido</h2>
-        <p class="deck">O vocabulário de recrutamento que o relatório consolida.</p>
+        <h2><span class="num">04</span>What is measured</h2>
+        <p class="deck">The recruiting vocabulary the report consolidates.</p>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Indicador</th>
-                <th>O que responde</th>
+                <th>Indicator</th>
+                <th>What it answers</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>TTH</strong></td>
-                <td><span class="wrap-cell"><em>Time to hire</em> — quanto tempo leva da candidatura até a
-                    contratação.</span></td>
+                <td><span class="wrap-cell"><em>Time to hire</em> — how long from application to
+                    hire.</span></td>
               </tr>
               <tr>
                 <td><strong>TTF</strong></td>
-                <td><span class="wrap-cell"><em>Time to fill</em> — quanto tempo a vaga leva para ser
-                    preenchida, contado desde a abertura.</span></td>
+                <td><span class="wrap-cell"><em>Time to fill</em> — how long the job takes to be filled,
+                    counted from opening.</span></td>
               </tr>
               <tr>
                 <td><strong>TTA</strong></td>
-                <td><span class="wrap-cell"><em>Time to accept</em> — tempo entre a proposta e o aceite.</span>
+                <td><span class="wrap-cell"><em>Time to accept</em> — time between offer and acceptance.</span>
                 </td>
               </tr>
               <tr>
                 <td><strong>SLA</strong></td>
-                <td><span class="wrap-cell">A vaga está dentro do prazo acordado? É o alerta que abre o relatório
-                    semanal.</span></td>
+                <td><span class="wrap-cell">Is the job within the agreed deadline? It is the alert that opens the
+                    weekly report.</span></td>
               </tr>
               <tr>
-                <td><strong>Funil</strong></td>
-                <td><span class="wrap-cell">Inscritos → triados → em processo → aprovados → contratados, com a
-                    conversão de cada etapa.</span></td>
+                <td><strong>Funnel</strong></td>
+                <td><span class="wrap-cell">Applied → screened → in process → approved → hired, with the
+                    conversion of each stage.</span></td>
               </tr>
               <tr>
-                <td><strong>Origens</strong></td>
-                <td><span class="wrap-cell">De onde vêm os candidatos e — o que importa mais — qual a taxa de
-                    avanço de cada canal.</span></td>
+                <td><strong>Sources</strong></td>
+                <td><span class="wrap-cell">Where candidates come from and — what matters more — the advancement
+                    rate of each channel.</span></td>
               </tr>
               <tr>
-                <td><strong>Qualidade do pool</strong></td>
-                <td><span class="wrap-cell">Média das avaliações por dimensão (fit cultural, raciocínio,
-                    motivacional…).</span></td>
+                <td><strong>Pool quality</strong></td>
+                <td><span class="wrap-cell">Average scores by dimension (cultural fit, reasoning,
+                    motivational…).</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>Toda contagem do período vem acompanhada da <strong>variação contra o período anterior</strong> — a
-          semana passada no semanal, o mês fechado anterior no mensal. Um número sozinho não diz se melhorou.</p>
+        <p>Every count in the period comes with the <strong>change versus the previous period</strong> — last week
+          in the weekly, the previous closed month in the monthly. A number alone does not say whether things
+          improved.</p>
       </section>
 
       <section id="ia">
-        <h2><span class="num">05</span>A camada de IA</h2>
-        <p class="deck">O Claude não olha os gráficos: ele recebe os números já calculados e escreve a leitura.</p>
+        <h2><span class="num">05</span>The AI layer</h2>
+        <p class="deck">Claude does not look at the charts: it receives the already-computed numbers and writes the
+          reading.</p>
 
-        <p>Essa é a decisão central da camada de IA. Mandar imagens para o modelo interpretar introduz um erro
-          desnecessário — os números já existem, calculados de forma determinística. O modelo recebe <strong>o
-            conjunto de métricas em texto</strong> e faz o que faz bem: priorizar o que importa, ligar um número
-          ao outro e escrever em linguagem de negócio.</p>
+        <p>This is the central decision of the AI layer. Sending images to the model to interpret introduces
+          unnecessary error — the numbers already exist, computed deterministically. The model receives <strong>the
+            set of metrics as text</strong> and does what it does well: prioritize what matters, connect one
+          number to another and write in business language.</p>
 
-        <h3>Fluxo resiliente em três camadas</h3>
+        <h3>A resilient three-layer flow</h3>
         <ol>
-          <li><strong>Cache</strong> — a análise é indexada por um <em>hash</em> do conjunto de métricas. Se os
-            números não mudaram, o texto é reaproveitado: nada de custo nem de variação de redação a cada
-            execução.</li>
-          <li><strong>Claude</strong> — em caso de <em>miss</em>, a API é chamada com o prompt da cadência.</li>
-          <li><strong>Fallback determinístico</strong> — se a API estiver indisponível ou sem chave, um gerador
-            baseado em regras escreve o resumo. <strong>O relatório nunca deixa de sair por causa da IA.</strong>
+          <li><strong>Cache</strong> — the analysis is indexed by a <em>hash</em> of the metric set. If the
+            numbers have not changed, the text is reused: no cost and no variation in wording on each
+            run.</li>
+          <li><strong>Claude</strong> — on a <em>miss</em>, the API is called with the cadence's prompt.</li>
+          <li><strong>Deterministic fallback</strong> — if the API is unavailable or there is no key, a
+            rule-based generator writes the summary. <strong>The report never fails to go out because of
+              the AI.</strong>
           </li>
         </ol>
 
-        <h3>Prompts diferentes para leitores diferentes</h3>
-        <p>O semanal pede um texto <strong>curto e operacional</strong>, que termina em ação: quem cobrar, qual
-          vaga destravar, o que fazer ainda nesta semana. O mensal pede um texto <strong>executivo</strong>:
-          contexto do mês, onde está o gargalo estrutural e recomendações priorizadas. Mesmo pipeline, mesmo
-          modelo, instruções distintas.</p>
+        <h3>Different prompts for different readers</h3>
+        <p>The weekly asks for a <strong>short, operational</strong> text that ends in action: who to chase,
+          which job to unblock, what to do this week. The monthly asks for an <strong>executive</strong> text:
+          context for the month, where the structural bottleneck is and prioritized recommendations. Same
+          pipeline, same model, different instructions.</p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Guarda-corpo</span>Destaques como "pior SLA por senioridade" ignoram amostras
-            muito pequenas (<code>n &lt; 5</code>). Sem isso, uma única vaga atrasada viraria a manchete do
-            relatório.</p>
+          <p><span class="label">Guardrail</span>Highlights such as "worst SLA by seniority" ignore very small
+            samples (<code>n &lt; 5</code>). Without that, a single late job would become the report's
+            headline.</p>
         </div>
       </section>
 
       <section id="saida" class="viz">
-        <h2><span class="num">06</span>Exemplo de saída</h2>
-        <p class="deck">Um fechamento mensal, reproduzido aqui em HTML.</p>
+        <h2><span class="num">06</span>Sample output</h2>
+        <p class="deck">A monthly close, reproduced here in HTML.</p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Dados de demonstração</span>Os números abaixo vêm da base de teste usada no
-            desenvolvimento, de uma empresa fictícia. Nomes de pessoas, identificação de clientes e a marca do
-            relatório original foram removidos.</p>
+          <p><span class="label">Demo data</span>The numbers below come from the test dataset used during
+            development, from a fictional company. People's names, client identification and the original
+            report's branding were removed.</p>
         </div>
 
-        <h3>Indicadores do mês</h3>
+        <h3>Month indicators</h3>
         <div class="metrics" style="margin-bottom:20px">
           <div class="tile">
             <span class="val">21</span>
-            <span class="key">Novas vagas</span>
-            <span class="delta up">+90,9%</span>
+            <span class="key">New jobs</span>
+            <span class="delta up">+90.9%</span>
           </div>
           <div class="tile">
-            <span class="val">1.135</span>
-            <span class="key">Novos candidatos</span>
-            <span class="delta up">+75,7%</span>
+            <span class="val">1,135</span>
+            <span class="key">New candidates</span>
+            <span class="delta up">+75.7%</span>
           </div>
           <div class="tile">
             <span class="val">14</span>
-            <span class="key">Contratações</span>
-            <span class="delta up">+250,0%</span>
+            <span class="key">Hires</span>
+            <span class="delta up">+250.0%</span>
           </div>
           <div class="tile">
-            <span class="val">26 dias</span>
-            <span class="key">TTH médio</span>
+            <span class="val">26 days</span>
+            <span class="key">Average TTH</span>
             <span class="delta">—</span>
           </div>
         </div>
 
         <div class="chart">
-          <p class="chart-title">Funil de candidatos</p>
-          <p class="chart-sub">Inscritos no mês e quanto avançou em cada etapa.</p>
+          <p class="chart-title">Candidate funnel</p>
+          <p class="chart-sub">Applicants in the month and how many advanced at each stage.</p>
           <div class="bars">
             <div class="bar-row">
-              <span class="bl">Inscritos</span>
+              <span class="bl">Applied</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:100%;background:var(--ord-1)"></div>
               </div>
-              <span class="bar-val">1.135 <span class="sec">· 100%</span></span>
+              <span class="bar-val">1,135 <span class="sec">· 100%</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Triados</span>
+              <span class="bl">Screened</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:13.7%;background:var(--ord-2)"></div>
               </div>
-              <span class="bar-val">156 <span class="sec">· 13,7%</span></span>
+              <span class="bar-val">156 <span class="sec">· 13.7%</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Em processo</span>
+              <span class="bl">In process</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:6.2%;background:var(--ord-3)"></div>
               </div>
-              <span class="bar-val">70 <span class="sec">· 6,2%</span></span>
+              <span class="bar-val">70 <span class="sec">· 6.2%</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Aprovados</span>
+              <span class="bl">Approved</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:1.5%;background:var(--ord-4)"></div>
               </div>
-              <span class="bar-val">17 <span class="sec">· 1,5%</span></span>
+              <span class="bar-val">17 <span class="sec">· 1.5%</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Contratados</span>
+              <span class="bl">Hired</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:1.1%;background:var(--ord-5)"></div>
               </div>
-              <span class="bar-val">13 <span class="sec">· 1,1%</span></span>
+              <span class="bar-val">13 <span class="sec">· 1.1%</span></span>
             </div>
           </div>
         </div>
 
         <div class="chart">
-          <p class="chart-title">Vagas fora do SLA, por senioridade</p>
-          <p class="chart-sub">Percentual fora do prazo acordado. 31 de 55 vagas no total (56%).</p>
+          <p class="chart-title">Jobs outside SLA, by seniority</p>
+          <p class="chart-sub">Percentage outside the agreed deadline. 31 of 55 jobs in total (56%).</p>
           <div class="bars">
             <div class="bar-row">
-              <span class="bl">Estagiário</span>
+              <span class="bl">Intern</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:100%;background:var(--st-critical)"></div>
               </div>
               <span class="bar-val">100% <span class="sec">(n=1)</span>
                 <span class="chip critical"><svg aria-hidden="true">
-                    <use href="#i-alert" /></svg>crítico</span></span>
+                    <use href="#i-alert" /></svg>critical</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Sênior</span>
+              <span class="bl">Senior</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:82%;background:var(--st-critical)"></div>
               </div>
               <span class="bar-val">82% <span class="sec">(n=11)</span>
                 <span class="chip critical"><svg aria-hidden="true">
-                    <use href="#i-alert" /></svg>crítico</span></span>
+                    <use href="#i-alert" /></svg>critical</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Assistente</span>
+              <span class="bl">Assistant</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:50%;background:var(--st-serious)"></div>
               </div>
               <span class="bar-val">50% <span class="sec">(n=12)</span>
                 <span class="chip serious"><svg aria-hidden="true">
-                    <use href="#i-warn" /></svg>atenção</span></span>
+                    <use href="#i-warn" /></svg>warning</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Sem senioridade</span>
+              <span class="bl">No seniority</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:50%;background:var(--st-serious)"></div>
               </div>
               <span class="bar-val">50% <span class="sec">(n=20)</span>
                 <span class="chip serious"><svg aria-hidden="true">
-                    <use href="#i-warn" /></svg>atenção</span></span>
+                    <use href="#i-warn" /></svg>warning</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Júnior</span>
+              <span class="bl">Junior</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:50%;background:var(--st-serious)"></div>
               </div>
               <span class="bar-val">50% <span class="sec">(n=8)</span>
                 <span class="chip serious"><svg aria-hidden="true">
-                    <use href="#i-warn" /></svg>atenção</span></span>
+                    <use href="#i-warn" /></svg>warning</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Pleno</span>
+              <span class="bl">Mid-level</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:33%;background:var(--st-good)"></div>
               </div>
@@ -1455,111 +1460,111 @@
           </div>
           <div class="legend">
             <span><svg width="13" height="13" style="color:var(--st-critical)" aria-hidden="true">
-                <use href="#i-alert" /></svg>crítico — 60% ou mais fora do prazo</span>
+                <use href="#i-alert" /></svg>critical — 60% or more outside the deadline</span>
             <span><svg width="13" height="13" style="color:var(--st-serious)" aria-hidden="true">
-                <use href="#i-warn" /></svg>atenção — 40% a 59%</span>
+                <use href="#i-warn" /></svg>warning — 40% to 59%</span>
             <span><svg width="13" height="13" style="color:var(--st-good)" aria-hidden="true">
-                <use href="#i-check" /></svg>ok — abaixo de 40%</span>
+                <use href="#i-check" /></svg>ok — below 40%</span>
           </div>
         </div>
 
         <div class="chart">
-          <p class="chart-title">Candidatos por origem</p>
-          <p class="chart-sub">Volume do canal e, ao lado, a taxa de avanço no funil — volume alto não significa
-            canal bom.</p>
+          <p class="chart-title">Candidates by source</p>
+          <p class="chart-sub">Channel volume and, beside it, the funnel advancement rate — high volume does not
+            mean a good channel.</p>
           <div class="bars">
             <div class="bar-row">
               <span class="bl">LinkedIn</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:100%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">824 <span class="sec">· 12% avançam</span></span>
+              <span class="bar-val">824 <span class="sec">· 12% advance</span></span>
             </div>
             <div class="bar-row">
               <span class="bl">Indeed</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:18.9%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">156 <span class="sec">· 11% avançam</span></span>
+              <span class="bar-val">156 <span class="sec">· 11% advance</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Outros</span>
+              <span class="bl">Other</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:6.7%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">55 <span class="sec">· 9% avançam</span></span>
+              <span class="bar-val">55 <span class="sec">· 9% advance</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Adicionado manualmente</span>
+              <span class="bl">Added manually</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:2.4%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">20 <span class="sec">· 100% avançam</span></span>
+              <span class="bar-val">20 <span class="sec">· 100% advance</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Portal de vagas</span>
+              <span class="bl">Job board</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:2.1%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">17 <span class="sec">· 6% avançam</span></span>
+              <span class="bar-val">17 <span class="sec">· 6% advance</span></span>
             </div>
             <div class="bar-row">
-              <span class="bl">Site da empresa</span>
+              <span class="bl">Company website</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:1.8%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">15 <span class="sec">· 0% avançam</span></span>
+              <span class="bar-val">15 <span class="sec">· 0% advance</span></span>
             </div>
             <div class="bar-row">
               <span class="bl">Google for Jobs</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:1.2%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">10 <span class="sec">· 10% avançam</span></span>
+              <span class="bar-val">10 <span class="sec">· 10% advance</span></span>
             </div>
             <div class="bar-row">
               <span class="bl">Instagram</span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:1%;background:var(--series-1)"></div>
               </div>
-              <span class="bar-val">8 <span class="sec">· 0% avançam</span></span>
+              <span class="bar-val">8 <span class="sec">· 0% advance</span></span>
             </div>
           </div>
         </div>
 
-        <h3>Tempo médio por senioridade</h3>
+        <h3>Average time by seniority</h3>
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Senioridade</th>
-                <th class="num">TTH (dias)</th>
-                <th class="num">TTF (dias)</th>
+                <th>Seniority</th>
+                <th class="num">TTH (days)</th>
+                <th class="num">TTF (days)</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Assistente</td>
+                <td>Assistant</td>
                 <td class="num">34</td>
                 <td class="num">39</td>
               </tr>
               <tr>
-                <td>Sem senioridade</td>
+                <td>No seniority</td>
                 <td class="num">25</td>
                 <td class="num">29</td>
               </tr>
               <tr>
-                <td>Sênior</td>
+                <td>Senior</td>
                 <td class="num">18</td>
                 <td class="num">22</td>
               </tr>
               <tr>
-                <td>Júnior</td>
+                <td>Junior</td>
                 <td class="num">16</td>
                 <td class="num">31</td>
               </tr>
               <tr>
-                <td>Pleno</td>
+                <td>Mid-level</td>
                 <td class="num">15</td>
                 <td class="num">21</td>
               </tr>
@@ -1567,74 +1572,79 @@
           </table>
         </div>
 
-        <h3>A análise escrita pelo modelo</h3>
+        <h3>The analysis written by the model</h3>
         <div class="ai-quote">
           <span class="tag"><svg aria-hidden="true">
-              <use href="#i-sparkle" /></svg>Análise executiva · claude-sonnet-5</span>
-          <p>"Apesar do crescimento em volume, o funil revela gargalos expressivos. Do total de 1.135 inscritos,
-            apenas 156 (13,7%) avançaram para triagem, e a maior perda proporcional do processo ocorre exatamente
-            nessa etapa, confirmada como o principal ponto de estrangulamento. […] A senioridade Sênior apresenta
-            o pior SLA, ainda que seus tempos absolutos (TTH 18 e TTF 22 dias) sejam menores que os de Assistente
-            (34 e 39 dias), sugerindo descompasso entre expectativa de prazo e complexidade real do processo."</p>
-          <p style="margin-bottom:0">"Recomendam-se três ações prioritárias. Primeiro, revisar e otimizar os
-            critérios e recursos da etapa de Triados, principal gargalo do funil […]. Segundo, investigar as
-            causas do baixo SLA para vagas Sênior, ajustando prazos contratuais ou reforçando dedicação de
-            recrutadores especializados […]."</p>
+              <use href="#i-sparkle" /></svg>Executive analysis · claude-sonnet-5</span>
+          <p>"Despite the growth in volume, the funnel reveals significant bottlenecks. Of 1,135 applicants, only
+            156 (13.7%) advanced to screening, and the largest proportional loss in the process occurs exactly at
+            that stage, confirmed as the main chokepoint. […] The Senior seniority shows the worst SLA, even
+            though its absolute times (TTH 18 and TTF 22 days) are lower than those of Assistant (34 and 39
+            days), suggesting a mismatch between deadline expectation and the real complexity of the
+            process."</p>
+          <p style="margin-bottom:0">"Three priority actions are recommended. First, review and optimize the
+            criteria and resources of the Screened stage, the funnel's main bottleneck […]. Second, investigate
+            the causes of the low SLA for Senior jobs, adjusting contractual deadlines or reinforcing the
+            dedication of specialized recruiters […]."</p>
         </div>
-        <p style="margin-top:14px">Vale reparar no que o texto faz: cruza <em>duas</em> métricas que estão em
-          seções diferentes do relatório — o SLA por senioridade e os tempos absolutos — e aponta a contradição
-          entre elas. É o tipo de leitura que um gráfico sozinho não entrega.</p>
+        <p style="font-size:.86rem;color:var(--text-faint);margin-top:8px">Translated from the Portuguese original
+          generated by the pipeline.</p>
+        <p style="margin-top:14px">Notice what the text does: it crosses <em>two</em> metrics that sit in
+          different sections of the report — SLA by seniority and absolute times — and points out the
+          contradiction between them. It is the kind of reading a chart alone does not deliver.</p>
       </section>
 
       <section id="decisoes">
-        <h2><span class="num">07</span>Decisões de projeto</h2>
+        <h2><span class="num">07</span>Design decisions</h2>
 
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Coleta e relatório são automações separadas.</strong> A planilha no Google Sheets é o
-            contrato entre as duas: uma escreve, a outra lê. Cada lado evolui sem quebrar o outro — e a base fica
-            aberta ao cliente como entrega própria, não como subproduto.</li>
+            </svg><strong>Collection and reporting are separate automations.</strong> The Google Sheets
+            spreadsheet is the contract between the two: one writes, the other reads. Each side evolves without
+            breaking the other — and the data stays open to the client as a deliverable of its own, not a
+            by-product.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>A IA nunca bloqueia a entrega.</strong> Cache, depois API, depois fallback por regras. O
-            PDF sai mesmo sem chave de API.</li>
+            </svg><strong>AI never blocks delivery.</strong> Cache, then API, then rule-based fallback. The PDF
+            goes out even without an API key.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Números calculados em Python, texto escrito pelo modelo.</strong> Cada camada faz o que
-            faz melhor; o modelo não faz aritmética.</li>
+            </svg><strong>Numbers computed in Python, text written by the model.</strong> Each layer does what
+            it does best; the model does not do arithmetic.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Cache por hash das métricas.</strong> Reexecutar com os mesmos dados não gasta chamada
-            nem muda a redação.</li>
+            </svg><strong>Cache by metrics hash.</strong> Re-running with the same data spends no call and does
+            not change the wording.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Paleta validada para daltonismo</strong>, com o vermelho reservado para SLA e alertas —
-            nunca como cor decorativa de série.</li>
+            </svg><strong>Colorblind-validated palette</strong>, with red reserved for SLA and alerts — never a
+            decorative series color.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Amostras pequenas não viram manchete</strong> (<code>n &lt; 5</code> fora dos
-            destaques).</li>
+            </svg><strong>Small samples do not become headlines</strong> (<code>n &lt; 5</code> excluded from
+            highlights).</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Indicadores consumidos da origem</strong>, não recalculados — relatório e sistema não
-            divergem.</li>
+            </svg><strong>Indicators consumed from the source</strong>, not recomputed — report and system do
+            not diverge.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Dois motores de PDF.</strong> WeasyPrint por padrão, Playwright como alternativa quando
-            o runtime GTK3 não está disponível.</li>
+            </svg><strong>Two PDF engines.</strong> WeasyPrint by default, Playwright as an alternative when the
+            GTK3 runtime is unavailable.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Segredos fora do repositório</strong>, injetados como <em>secrets</em> do GitHub
-            Actions.</li>
+            </svg><strong>Secrets outside the repository</strong>, injected as GitHub Actions
+            <em>secrets</em>.</li>
         </ul>
 
-        <h3>Próximos passos</h3>
+        <h3>Next steps</h3>
         <ul>
-          <li>Alertas por Slack quando o SLA passar de um limite, sem esperar o ciclo do relatório.</li>
-          <li>Série histórica dos KPIs para que a análise compare com a tendência, não só com o período anterior.
+          <li>Slack alerts when SLA crosses a threshold, without waiting for the report cycle.</li>
+          <li>A historical series of KPIs so the analysis compares against the trend, not just the previous
+            period.
           </li>
-          <li>Testes de regressão sobre as métricas, com uma base sintética de referência.</li>
+          <li>Regression tests on the metrics, with a reference synthetic dataset.</li>
         </ul>
       </section>
 
@@ -1642,9 +1652,9 @@
   </div>
 
   <footer>
-    <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
-  
-    <br><span class="no-print">Este site usa Google Analytics para medir audiência. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Como o Google usa os dados</a>.</span>
+    <a href="index.en.html">← Back to portfolio</a> · &copy; <span id="year">2026</span> Wesley Brito
+
+    <br><span class="no-print">This site uses Google Analytics to measure traffic. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses data</a>.</span>
   </footer>
 
   <script>
@@ -1660,7 +1670,7 @@
       // Reflect the *next* theme the button will switch to.
       function paint(isDark) {
         icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
-        label.textContent = isDark ? 'Claro' : 'Escuro';
+        label.textContent = isDark ? 'Light' : 'Dark';
       }
 
       var saved = null;

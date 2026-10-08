@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,17 +13,17 @@
     gtag('js', new Date());
     gtag('config', 'G-N3N5JWG3XB');
   </script>
-  <title>Classificador de Notícias em API — Wesley Brito</title>
+  <title>News Classifier as an API — Wesley Brito</title>
   <meta name="description"
-    content="Case de NLP ponta a ponta: classificar a categoria de notícias em português, do EDA à API em Docker. TF-IDF + LinearSVC em produção (F1-macro 0,80, 0,7 ms) com BERTimbau sob demanda." />
+    content="End-to-end NLP case: classifying the category of Portuguese-language news, from EDA to an API in Docker. TF-IDF + LinearSVC in production (macro-F1 0.80, 0.7 ms) with BERTimbau on demand." />
   <meta name="author" content="Wesley Brito" />
   <link rel="alternate" hreflang="pt-BR" href="classificador.html" />
   <link rel="alternate" hreflang="en" href="classificador.en.html" />
 
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Classificador de Notícias em API — do EDA ao Docker" />
+  <meta property="og:title" content="News Classifier as an API — from EDA to Docker" />
   <meta property="og:description"
-    content="TF-IDF + LinearSVC servido por FastAPI (F1-macro 0,80, 0,7 ms/req), com BERTimbau (0,86) disponível sob demanda no mesmo contêiner." />
+    content="TF-IDF + LinearSVC served by FastAPI (macro-F1 0.80, 0.7 ms/request), with BERTimbau (0.86) available on demand in the same container." />
 
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
@@ -920,39 +920,39 @@
   </svg>
 
   <div class="toolbar">
-    <a class="btn" href="index.html">
+    <a class="btn" href="index.en.html">
       <svg aria-hidden="true">
         <use href="#i-back" />
       </svg>
-      Portfólio
+      Portfolio
     </a>
     <span class="spacer"></span>
-    <div class="lang" role="group" aria-label="Idioma / Language">
-      <span class="on" aria-current="true">PT</span><a href="classificador.en.html" hreflang="en" lang="en">EN</a>
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <a href="classificador.html" hreflang="pt-BR" lang="pt-BR">PT</a><span class="on" aria-current="true">EN</span>
     </div>
-    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+    <button class="btn" id="themeToggle" type="button" aria-label="Toggle light/dark theme">
       <svg id="themeIcon" aria-hidden="true">
         <use href="#i-moon" />
       </svg>
-      <span id="themeLabel">Escuro</span>
+      <span id="themeLabel">Dark</span>
     </button>
     <button class="btn" id="pdfBtn" type="button">
       <svg aria-hidden="true">
         <use href="#i-download" />
       </svg>
-      Baixar PDF
+      Download PDF
     </button>
   </div>
 
   <div class="wrap">
 
     <header class="hero">
-      <span class="eyebrow">NLP &amp; Produtização</span>
-      <h1>Classificador de Notícias servido por API</h1>
-      <p class="lede">Classificar a categoria de uma notícia em português a partir do título — do EDA à API em
-        contêiner. O trabalho interessante não foi o modelo: foi <strong>descobrir que o alvo não servia como
-          estava</strong>, <strong>flagrar um vazamento que inflava a métrica</strong> e escolher, com número na
-        mão, servir o modelo mais fraco.
+      <span class="eyebrow">NLP &amp; Productization</span>
+      <h1>News Classifier Served by an API</h1>
+      <p class="lede">Classify the category of a Portuguese-language news article from its headline — from EDA to
+        an API in a container. The interesting work was not the model: it was <strong>discovering that the
+          target was not usable as it was</strong>, <strong>catching a leak that inflated the metric</strong>
+        and choosing, with numbers in hand, to serve the weaker model.
       </p>
       <div class="stack">
         <span class="badge">Python</span>
@@ -970,14 +970,14 @@
           <svg aria-hidden="true">
             <use href="#i-link" />
           </svg>
-          Modelo SVC no Hugging Face
+          SVC model on Hugging Face
         </a>
         <a class="btn" href="https://huggingface.co/wesleybritowx/bertimbau-folha-categorias" target="_blank"
           rel="noopener">
           <svg aria-hidden="true">
             <use href="#i-link" />
           </svg>
-          BERTimbau no Hugging Face
+          BERTimbau on Hugging Face
         </a>
       </div>
     </header>
@@ -985,146 +985,150 @@
     <main>
 
       <section id="resultado">
-        <h2>Resultado</h2>
-        <p class="deck">Holdout estratificado de 32.824 notícias, 12 classes, métrica F1-macro.</p>
+        <h2>Result</h2>
+        <p class="deck">Stratified holdout of 32,824 articles, 12 classes, macro-F1 metric.</p>
         <div class="metrics">
           <div class="tile">
-            <span class="val">0,800</span>
-            <span class="key">F1-macro em produção</span>
+            <span class="val">0.800</span>
+            <span class="key">Production macro-F1</span>
             <span class="hint">TF-IDF + LinearSVC</span>
           </div>
           <div class="tile">
-            <span class="val">0,68 ms</span>
-            <span class="key">Latência por request</span>
-            <span class="hint">em CPU</span>
+            <span class="val">0.68 ms</span>
+            <span class="key">Latency per request</span>
+            <span class="hint">on CPU</span>
           </div>
           <div class="tile">
-            <span class="val">0,858</span>
-            <span class="key">F1-macro do BERTimbau</span>
-            <span class="hint">servido sob demanda</span>
+            <span class="val">0.858</span>
+            <span class="key">BERTimbau macro-F1</span>
+            <span class="hint">served on demand</span>
           </div>
           <div class="tile">
-            <span class="val">167 mil</span>
-            <span class="key">Notícias</span>
+            <span class="val">167k</span>
+            <span class="key">Articles</span>
             <span class="hint">Folha de S.Paulo, 2015–2017</span>
           </div>
         </div>
       </section>
 
       <section class="toc">
-        <h2>Roteiro</h2>
+        <h2>Roadmap</h2>
         <ol>
-          <li><a href="#problema">O problema</a></li>
-          <li><a href="#eda">O alvo não servia como estava</a></li>
-          <li><a href="#taxonomia">De 48 categorias para 12</a></li>
-          <li><a href="#vazamento">O vazamento nos coeficientes</a></li>
-          <li><a href="#modelos">Modelos e decisão de produção</a></li>
-          <li><a href="#api">A API</a></li>
-          <li><a href="#docker">Docker e reprodutibilidade</a></li>
-          <li><a href="#limitacoes">Limitações</a></li>
+          <li><a href="#problema">The problem</a></li>
+          <li><a href="#eda">The target was not usable as it was</a></li>
+          <li><a href="#taxonomia">From 48 categories to 12</a></li>
+          <li><a href="#vazamento">The leak in the coefficients</a></li>
+          <li><a href="#modelos">Models and production decision</a></li>
+          <li><a href="#api">The API</a></li>
+          <li><a href="#docker">Docker and reproducibility</a></li>
+          <li><a href="#limitacoes">Limitations</a></li>
         </ol>
       </section>
 
       <section id="problema">
-        <h2><span class="num">01</span>O problema</h2>
-        <p>Case técnico de Cientista de Dados: construir um <strong>produto de dados ponta a ponta</strong> que
-          classifique a categoria de uma notícia a partir do título, entregue via API. A base é o dataset público
+        <h2><span class="num">01</span>The problem</h2>
+        <p>A Data Scientist technical case: build an <strong>end-to-end data product</strong> that classifies the
+          category of a news article from its headline, delivered via API. The data is the public dataset
           <a href="https://www.kaggle.com/datasets/marlesson/news-of-the-site-folhauol" target="_blank"
-            rel="noopener">news-of-the-site-folhauol</a> — <strong>167.053 notícias</strong> da Folha de S.Paulo
-          entre jan/2015 e out/2017, com título, texto, data e categoria.
+            rel="noopener">news-of-the-site-folhauol</a> — <strong>167,053 articles</strong> from Folha de
+          S.Paulo between Jan/2015 and Oct/2017, with headline, text, date and category.
         </p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">A regra de ouro do case</span>"Melhor algo funcional com resultado ruim do que um
-            modelo ótimo sem infraestrutura." Isso definiu a ordem do trabalho: fechar o fluxo inteiro com um
-            baseline simples <em>antes</em> de otimizar qualquer modelo.</p>
+          <p><span class="label">The case's golden rule</span>"Better something functional with a poor result than
+            a great model with no infrastructure." This set the order of the work: close the whole flow with a
+            simple baseline <em>before</em> optimizing any model.</p>
         </div>
 
-        <h3>Uma ambiguidade no enunciado, resolvida na API</h3>
-        <p>O objetivo dizia classificar "as notícias" — o que favorece usar o corpo do texto — mas a lista de
-          variáveis citava só o título. Em vez de escolher uma leitura, o contrato da API serve as duas:
-          <code>title</code> obrigatório e <code>text</code> opcional, concatenados. Se o texto não vier, o modelo
-          recebe só o título e degrada de forma controlada.
+        <h3>An ambiguity in the brief, resolved in the API</h3>
+        <p>The goal said to classify "the news" — which favors using the article body — but the variable list
+          mentioned only the headline. Instead of picking one reading, the API contract serves both:
+          <code>title</code> required and <code>text</code> optional, concatenated. If the text is not sent, the
+          model receives only the headline and degrades in a controlled way.
         </p>
       </section>
 
       <section id="eda">
-        <h2><span class="num">02</span>O alvo não servia como estava</h2>
-        <p class="deck">Duas descobertas do EDA inviabilizaram usar as 48 categorias originais diretamente.</p>
+        <h2><span class="num">02</span>The target was not usable as it was</h2>
+        <p class="deck">Two EDA findings made it unviable to use the original 48 categories directly.</p>
 
-        <h3>Desbalanceamento de 22.022×</h3>
-        <p>A maior categoria (<code>poder</code>) tem <strong>22.022</strong> notícias. A menor
-          (<code>musica</code>) tem <strong>uma</strong>. As sete maiores concentram cerca de 80% da base. Classes
-          com 1 a 3 exemplos não treinam e não avaliam — qualquer F1-macro calculado sobre elas é ruído.</p>
-
-        <h3>Metade das categorias não são temas</h3>
-        <p>Rótulos como <code>colunas</code>, <code>opiniao</code>, <code>paineldoleitor</code> e
-          <code>especial</code> refletem a <strong>organização editorial do jornal</strong>, não o assunto da
-          notícia. Uma coluna pode falar de política, futebol ou economia — treinar um classificador temático
-          contra esse rótulo é ensinar ruído.
+        <h3>22,022× imbalance</h3>
+        <p>The largest category (<code>poder</code>) has <strong>22,022</strong> articles. The smallest
+          (<code>musica</code>) has <strong>one</strong>. The seven largest hold about 80% of the data. Classes
+          with 1 to 3 examples can be neither trained nor evaluated — any macro-F1 computed over them is noise.
         </p>
 
-        <h3>Higiene antes do split</h3>
+        <h3>Half the categories are not topics</h3>
+        <p>Labels such as <code>colunas</code>, <code>opiniao</code>, <code>paineldoleitor</code> and
+          <code>especial</code> reflect the <strong>newspaper's editorial organization</strong>, not the subject
+          of the article. A column can be about politics, football or economics — training a topic classifier
+          against that label teaches noise.
+        </p>
+
+        <h3>Hygiene before the split</h3>
         <ul>
-          <li><strong>1,8% de títulos duplicados</strong> (2.934 notícias) removidos <em>antes</em> da divisão
-            treino/teste. Deixar para depois vazaria exemplos idênticos de um lado para o outro.</li>
-          <li><code>subcategory</code> descartada como alvo — <strong>82,3% nula</strong>.</li>
-          <li>Split estratificado: <strong>131.295</strong> treino e <strong>32.824</strong> teste.</li>
+          <li><strong>1.8% duplicate headlines</strong> (2,934 articles) removed <em>before</em> the
+            train/test split. Leaving it for later would leak identical examples from one side to the other.
+          </li>
+          <li><code>subcategory</code> dropped as a target — <strong>82.3% null</strong>.</li>
+          <li>Stratified split: <strong>131,295</strong> train and <strong>32,824</strong> test.</li>
         </ul>
       </section>
 
       <section id="taxonomia">
-        <h2><span class="num">03</span>De 48 categorias para 12</h2>
-        <p class="deck">Uma decisão derivada do EDA, não uma conveniência.</p>
+        <h2><span class="num">03</span>From 48 categories to 12</h2>
+        <p class="deck">A decision derived from the EDA, not a convenience.</p>
 
-        <p>Consolidei as 48 categorias originais em <strong>12 macrocategorias temáticas</strong>. O ponto
-          importante é que isso <em>não troca o problema</em>: o alvo continua sendo a categoria da notícia,
-          apenas normalizada numa taxonomia coerente. O mapa 48→12 fica versionado em
-          <code>category_map.json</code>, o que torna a decisão transparente e reversível.</p>
+        <p>I consolidated the 48 original categories into <strong>12 topical macro-categories</strong>. The
+          important point is that this <em>does not change the problem</em>: the target is still the article's
+          category, just normalized into a coherent taxonomy. The 48→12 map is versioned in
+          <code>category_map.json</code>, which makes the decision transparent and reversible.</p>
 
         <div class="metrics" style="margin-bottom:18px">
           <div class="tile">
-            <span class="val">22.022×</span>
-            <span class="key">Desbalanceamento antes</span>
-            <span class="hint">poder 22.022 · musica 1</span>
+            <span class="val">22,022×</span>
+            <span class="key">Imbalance before</span>
+            <span class="hint">poder 22,022 · musica 1</span>
           </div>
           <div class="tile">
             <span class="val">~28×</span>
-            <span class="key">Depois</span>
-            <span class="hint">Opinião 30.158 · Carreira 1.057</span>
+            <span class="key">After</span>
+            <span class="hint">Opinion 30,158 · Career 1,057</span>
           </div>
         </div>
 
-        <p>Três agrupamentos merecem explicação, porque saíram da <strong>análise de erros do baseline</strong> e
-          não de intuição:</p>
+        <p>Three groupings deserve explanation, because they came from the baseline's <strong>error
+            analysis</strong>, not from intuition:</p>
         <ul>
-          <li><code>opiniao</code> virou uma classe <strong>Opinião</strong> própria, em vez de cair em Política.
-            Opinião é editorial, não tema político — e a mudança reduziu a maior confusão do modelo.</li>
-          <li><code>ciencia</code> + <code>tec</code> + <code>treinamentocienciaesaude</code> viraram
-            <strong>Ciência e Tecnologia</strong>: classes pequenas e vizinhas que, juntas, formam uma classe
-            saudável de 3.613 exemplos.
+          <li><code>opiniao</code> became its own <strong>Opinion</strong> class, instead of falling into
+            Politics. Opinion is editorial, not a political topic — and the change reduced the model's biggest
+            confusion.</li>
+          <li><code>ciencia</code> + <code>tec</code> + <code>treinamentocienciaesaude</code> became
+            <strong>Science and Technology</strong>: small neighboring classes that, together, form a healthy
+            class of 3,613 examples.
           </li>
-          <li>A cauda não-temática (<code>especial</code>, <code>arquivo</code>, <code>institucional</code>) foi
-            para um balde <strong>Outros</strong> — que, previsivelmente, virou a pior classe do modelo por não
-            ter coesão. Manter o balde explícito é melhor que espalhá-lo pelas outras.</li>
+          <li>The non-topical tail (<code>especial</code>, <code>arquivo</code>, <code>institucional</code>)
+            went into an <strong>Others</strong> bucket — which, predictably, became the model's worst class for
+            lacking cohesion. Keeping the bucket explicit is better than spreading it across the other
+            classes.</li>
         </ul>
       </section>
 
       <section id="vazamento">
-        <h2><span class="num">04</span>O vazamento nos coeficientes</h2>
-        <p class="deck">O achado mais importante do projeto — e ele só apareceu porque fui olhar o que o modelo
-          tinha aprendido.</p>
+        <h2><span class="num">04</span>The leak in the coefficients</h2>
+        <p class="deck">The project's most important finding — and it only appeared because I went to look at what
+          the model had learned.</p>
 
-        <p>Com o modelo treinado e F1-macro em <strong>0,807</strong>, inspecionei os coeficientes do LinearSVC
-          para entender quais termos pesavam em cada classe. O que encontrei não eram temas.</p>
+        <p>With the model trained and macro-F1 at <strong>0.807</strong>, I inspected the LinearSVC coefficients
+          to understand which terms weighed in each class. What I found were not topics.</p>
 
         <div class="compare">
           <div class="pane">
-            <span class="tagline">Antes · Economia</span>
-            <h4>Termos que o modelo usava</h4>
+            <span class="tagline">Before · Economy</span>
+            <h4>Terms the model used</h4>
             <div class="terms">
               <span>paulo migliacci</span>
               <span>tradução paulo</span>
@@ -1134,18 +1138,18 @@
               <span>datafolha</span>
               <span>http folha</span>
             </div>
-            <p>Créditos de tradução, auto-referências da marca e fragmentos de URL. Nada disso é economia.</p>
+            <p>Translation credits, brand self-references and URL fragments. None of that is economics.</p>
           </div>
           <div class="pane after">
-            <span class="tagline">Depois · Economia</span>
-            <h4>Termos após a limpeza</h4>
+            <span class="tagline">After · Economy</span>
+            <h4>Terms after cleaning</h4>
             <div class="terms">
               <span>caminhoneiros</span>
               <span>ibge</span>
               <span>contribuinte</span>
               <span>aneel</span>
             </div>
-            <p>Vocabulário temático, que generaliza para notícias que o modelo nunca viu.</p>
+            <p>Topical vocabulary, which generalizes to articles the model has never seen.</p>
           </div>
         </div>
 
@@ -1153,151 +1157,151 @@
           <svg aria-hidden="true">
             <use href="#i-alert" />
           </svg>
-          <p><span class="label">Por que o TF-IDF cai nessa</span>Boilerplate editorial é
-            <strong>raro e previsível</strong> — aparece pouco no corpus, mas quase sempre na mesma seção. Termo
-            raro ganha IDF alto, e o modelo encontra um atalho perfeito. O problema é que treino e teste
-            compartilham o mesmo boilerplate: a métrica <em>sobe</em> enquanto a capacidade de generalizar
-            <em>cai</em>. Sem inspecionar os coeficientes, o número teria passado como bom.
+          <p><span class="label">Why TF-IDF falls for this</span>Editorial boilerplate is <strong>rare and
+              predictable</strong> — it appears little in the corpus, but almost always in the same section. A
+            rare term gets a high IDF, and the model finds a perfect shortcut. The problem is that train and
+            test share the same boilerplate: the metric <em>rises</em> while the ability to generalize
+            <em>falls</em>. Without inspecting the coefficients, the number would have passed as good.
           </p>
         </div>
 
-        <h3>Duas mitigações medidas, uma escolhida</h3>
+        <h3>Two measured mitigations, one chosen</h3>
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Abordagem</th>
-                <th class="num">F1-macro</th>
-                <th class="num">Custo</th>
-                <th>Efeito colateral</th>
+                <th>Approach</th>
+                <th class="num">Macro-F1</th>
+                <th class="num">Cost</th>
+                <th>Side effect</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Sem mitigação <span style="color:var(--text-faint)">(contaminado)</span></td>
-                <td class="num">0,807</td>
+                <td>No mitigation <span style="color:var(--text-faint)">(contaminated)</span></td>
+                <td class="num">0.807</td>
                 <td class="num">—</td>
-                <td><span class="wrap-cell">Métrica inflada por atalhos</span></td>
+                <td><span class="wrap-cell">Metric inflated by shortcuts</span></td>
               </tr>
               <tr class="winner">
-                <td>Blocklist + limpeza de URL e créditos</td>
-                <td class="num">0,800</td>
-                <td class="num">−0,007</td>
-                <td><span class="wrap-cell">Zera o boilerplate no top-40 dos coeficientes</span></td>
+                <td>Blocklist + URL and credits cleanup</td>
+                <td class="num">0.800</td>
+                <td class="num">−0.007</td>
+                <td><span class="wrap-cell">Zeroes out boilerplate in the top-40 coefficients</span></td>
               </tr>
               <tr>
-                <td>Truncar no <em>lead</em> (400 caracteres)</td>
-                <td class="num">0,745</td>
-                <td class="num">−0,062</td>
-                <td><span class="wrap-cell">Também zera, e deixa o vocabulário 6× menor</span></td>
+                <td>Truncate to the <em>lead</em> (400 characters)</td>
+                <td class="num">0.745</td>
+                <td class="num">−0.062</td>
+                <td><span class="wrap-cell">Also zeroes it out, and makes the vocabulary 6× smaller</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>Escolhi a blocklist: sete milésimos de F1 é um preço barato por um número honesto. A truncagem no lead
-          resolve igual, mas custa 62 milésimos — fica guardada como alavanca de deploy, para o caso de o tamanho
-          do vocabulário virar restrição.</p>
+        <p>I chose the blocklist: seven thousandths of F1 is a cheap price for an honest number. Truncating to
+          the lead solves it equally, but costs 62 thousandths — it is kept as a deployment lever, in case
+          vocabulary size becomes a constraint.</p>
 
         <div class="callout" style="margin-bottom:0">
           <svg aria-hidden="true">
             <use href="#i-check" />
           </svg>
-          <p><span class="label">Fonte única da verdade</span>A limpeza vive em
-            <code>src/preprocessing.py</code> e é chamada tanto pelo treino quanto pela API. Se ela existisse só
-            no notebook de treino, a API receberia texto processado de outro jeito — o clássico
-            <em>train/serve skew</em>, em que o modelo em produção rende menos que no papel e ninguém entende
-            por quê.
+          <p><span class="label">Single source of truth</span>The cleaning lives in
+            <code>src/preprocessing.py</code> and is called by both training and the API. If it existed only in
+            the training notebook, the API would receive text processed differently — the classic
+            <em>train/serve skew</em>, where the model in production performs worse than on paper and nobody
+            understands why.
           </p>
         </div>
       </section>
 
       <section id="modelos" class="viz">
-        <h2><span class="num">05</span>Modelos e decisão de produção</h2>
-        <p class="deck">Mesmo split, mesma métrica, três experimentos.</p>
+        <h2><span class="num">05</span>Models and production decision</h2>
+        <p class="deck">Same split, same metric, three experiments.</p>
 
         <div class="chart">
-          <p class="chart-title">F1-macro no holdout</p>
-          <p class="chart-sub">32.824 notícias, 12 macrocategorias.</p>
+          <p class="chart-title">Macro-F1 on the holdout</p>
+          <p class="chart-sub">32,824 articles, 12 macro-categories.</p>
           <div class="bars">
             <div class="bar-row">
-              <span class="bl">TF-IDF + LinearSVC<em>só título</em></span>
+              <span class="bl">TF-IDF + LinearSVC<em>title only</em></span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:66.8%"></div>
               </div>
-              <span class="bar-val">0,668</span>
+              <span class="bar-val">0.668</span>
             </div>
             <div class="bar-row">
-              <span class="bl">TF-IDF + LinearSVC<em>título + texto — produção</em></span>
+              <span class="bl">TF-IDF + LinearSVC<em>title + text — production</em></span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:80.0%"></div>
               </div>
-              <span class="bar-val">0,800</span>
+              <span class="bar-val">0.800</span>
             </div>
             <div class="bar-row">
-              <span class="bl">BERTimbau<em>fine-tune, título + texto</em></span>
+              <span class="bl">BERTimbau<em>fine-tuned, title + text</em></span>
               <div class="bar-track">
                 <div class="bar-fill" style="width:85.8%"></div>
               </div>
-              <span class="bar-val">0,858</span>
+              <span class="bar-val">0.858</span>
             </div>
           </div>
         </div>
 
-        <p>Também testei LogisticRegression, MultinomialNB e MLPClassifier. O MLP ficou em 0,585 no cenário
-          título-only, <em>abaixo</em> dos lineares e mais lento — descartado. O LinearSVC com
-          <code>class_weight="balanced"</code> venceu na validação cruzada. Os hiperparâmetros de
-          pré-processamento foram tratados como <strong>hiperparâmetros de verdade</strong>, via GridSearchCV, e
-          não como verdades fixas: remover stopwords ajudou no cenário título+texto
-          (<code>min_df=5</code>) e <em>atrapalhou</em> no título-only (<code>min_df=2</code>), porque título
-          curto não tem palavra sobrando.</p>
+        <p>I also tested LogisticRegression, MultinomialNB and MLPClassifier. The MLP reached 0.585 in the
+          title-only scenario, <em>below</em> the linear models and slower — discarded. LinearSVC with
+          <code>class_weight="balanced"</code> won in cross-validation. Preprocessing hyperparameters were
+          treated as <strong>real hyperparameters</strong>, via GridSearchCV, and not as fixed truths: removing
+          stopwords helped in the title+text scenario (<code>min_df=5</code>) and <em>hurt</em> in title-only
+          (<code>min_df=2</code>), because a short headline has no words to spare.</p>
 
-        <h3>O BERT ganha. E mesmo assim não é o padrão.</h3>
+        <h3>BERT wins. And still it is not the default.</h3>
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Modelo</th>
-                <th class="num">F1-macro</th>
-                <th class="num">Latência/req</th>
-                <th class="num">Tamanho</th>
-                <th class="num">Dependências</th>
+                <th>Model</th>
+                <th class="num">Macro-F1</th>
+                <th class="num">Latency/req</th>
+                <th class="num">Size</th>
+                <th class="num">Dependencies</th>
               </tr>
             </thead>
             <tbody>
               <tr class="winner">
-                <td>TF-IDF + LinearSVC <span style="opacity:.75">(padrão)</span></td>
-                <td class="num">0,800</td>
-                <td class="num">0,68 ms</td>
+                <td>TF-IDF + LinearSVC <span style="opacity:.75">(default)</span></td>
+                <td class="num">0.800</td>
+                <td class="num">0.68 ms</td>
                 <td class="num">132 MB</td>
                 <td class="num">scikit-learn</td>
               </tr>
               <tr>
-                <td>BERTimbau <span style="color:var(--text-faint)">(sob demanda)</span></td>
-                <td class="num">0,858</td>
+                <td>BERTimbau <span style="color:var(--text-faint)">(on demand)</span></td>
+                <td class="num">0.858</td>
                 <td class="num">100–300 ms</td>
                 <td class="num">440 MB</td>
-                <td class="num">~2,5 GB</td>
+                <td class="num">~2.5 GB</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>O BERTimbau entrega <strong>+5,75 pontos</strong> de F1-macro. Custa, por isso, cerca de
-          <strong>300× mais latência</strong> e <strong>20× mais peso em dependências</strong>. Para uma API de
-          classificação de notícias, a ordem de decisão que fixei antes de ver os números — qualidade → latência →
-          tamanho — leva ao LinearSVC.
+        <p>BERTimbau delivers <strong>+5.75 points</strong> of macro-F1. It costs, in exchange, about
+          <strong>300× more latency</strong> and <strong>20× more dependency weight</strong>. For a news
+          classification API, the decision order I fixed before seeing the numbers — quality → latency → size —
+          leads to LinearSVC.
         </p>
 
-        <p>Mas descartar o BERT também seria desperdiçar o trabalho. A API serve <strong>os dois no mesmo
-            contêiner</strong>: <code>svc</code> por padrão, <code>bert</code> quando o chamador prioriza
-          acurácia e aceita o custo. A escolha certa vem de fábrica, sem tirar a opção de quem precisa da outra.
+        <p>But discarding BERT would also waste the work. The API serves <strong>both in the same
+            container</strong>: <code>svc</code> by default, <code>bert</code> when the caller prioritizes
+          accuracy and accepts the cost. The right choice comes out of the box, without taking the option away
+          from whoever needs the other.
         </p>
       </section>
 
       <section id="api">
-        <h2><span class="num">06</span>A API</h2>
-        <p class="deck">FastAPI com <code>GET /health</code>, <code>POST /predict</code> e Swagger em
+        <h2><span class="num">06</span>The API</h2>
+        <p class="deck">FastAPI with <code>GET /health</code>, <code>POST /predict</code> and Swagger at
           <code>/docs</code>.
         </p>
 
@@ -1321,86 +1325,90 @@
   ]</b>
 }</code></pre>
 
-        <h3>Explicabilidade sem biblioteca</h3>
-        <p>O campo <code>palavras_influentes</code> mostra o que pesou na decisão. Como o modelo é
-          <strong>linear</strong>, a contribuição de cada termo é <code>tfidf × coeficiente</code> — um valor
-          <strong>exato</strong>, não uma aproximação. É um caso em que LIME ou SHAP seriam trabalho a mais para
-          entregar menos precisão. Vale como argumento a favor do modelo simples: ele explica a própria decisão
-          de graça.
+        <p style="font-size:.86rem;color:var(--text-faint)">Field names and category labels are returned in
+          Portuguese, as in the source dataset.</p>
+
+        <h3>Explainability without a library</h3>
+        <p>The <code>palavras_influentes</code> field shows what weighed in the decision. Since the model is
+          <strong>linear</strong>, each term's contribution is <code>tfidf × coefficient</code> — an
+          <strong>exact</strong> value, not an approximation. It is a case where LIME or SHAP would be extra work
+          for less precision. It works as an argument in favor of the simple model: it explains its own decision
+          for free.
         </p>
 
-        <h3>Detalhes que evitam surpresa</h3>
+        <h3>Details that avoid surprises</h3>
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Confiança é score, não probabilidade.</strong> O LinearSVC não tem
-            <code>predict_proba</code>; o valor é o softmax da <code>decision_function</code> e está documentado
-            no schema como score relativo — não como probabilidade calibrada.
+            </svg><strong>Confidence is a score, not a probability.</strong> LinearSVC has no
+            <code>predict_proba</code>; the value is the softmax of the <code>decision_function</code> and is
+            documented in the schema as a relative score — not a calibrated probability.
           </li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Validação no schema, não no endpoint.</strong> Um <code>field_validator</code> do
-            Pydantic exige título com pelo menos 3 palavras e devolve <strong>HTTP 422</strong> com mensagem
-            clara. Por viver no schema, a regra aparece sozinha no Swagger.</li>
+            </svg><strong>Validation in the schema, not the endpoint.</strong> A Pydantic
+            <code>field_validator</code> requires a headline of at least 3 words and returns <strong>HTTP
+              422</strong> with a clear message. Because it lives in the schema, the rule shows up in Swagger on
+            its own.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>BERT em <em>lazy-load</em>.</strong> Só carrega na primeira chamada que o solicita, e
-            usa GPU se houver. Quem nunca pedir <code>bert</code> não paga o custo de tê-lo no contêiner.</li>
+            </svg><strong>BERT with <em>lazy loading</em>.</strong> It only loads on the first call that asks
+            for it, and uses a GPU if available. Anyone who never requests <code>bert</code> does not pay the
+            cost of having it in the container.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Degradação explícita sem <code>text</code>.</strong> O F1 de 0,80 vale quando o corpo é
-            enviado; só com o título, o desempenho cai para o patamar de 0,67. Está documentado, em vez de
-            virar uma surpresa em produção.</li>
+            </svg><strong>Explicit degradation without <code>text</code>.</strong> The 0.80 F1 holds when the
+            body is sent; with the headline only, performance drops to the 0.67 range. It is documented, rather
+            than becoming a production surprise.</li>
         </ul>
       </section>
 
       <section id="docker">
-        <h2><span class="num">07</span>Docker e reprodutibilidade</h2>
+        <h2><span class="num">07</span>Docker and reproducibility</h2>
 
-        <pre><code>docker compose up -d     # sobe a API
+        <pre><code>docker compose up -d     # starts the API
 # http://127.0.0.1:8000/docs</code></pre>
 
-        <p>Em clone limpo, <strong>sem pré-requisito nenhum</strong>: não precisa treinar nada nem baixar os
-          500 MB do dataset. Os dois modelos são publicados no
+        <p>On a clean clone, with <strong>no prerequisites at all</strong>: no need to train anything or
+          download the 500 MB dataset. Both models are published on the
           <a href="https://huggingface.co/wesleybritowx/svc-folha-categorias" target="_blank"
-            rel="noopener">Hugging Face Hub</a> e baixados durante o <em>build</em>, ficando no cache da imagem —
-          então não há download em tempo de execução.</p>
+            rel="noopener">Hugging Face Hub</a> and downloaded during the <em>build</em>, staying in the image
+          cache — so there is no download at runtime.</p>
 
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Nenhum peso versionado no Git.</strong> O SVC tem 132 MB e o BERT 440 MB — acima do
-            limite de 100 MB do GitHub. Vivem no Hub; o repositório guarda só código.</li>
+            </svg><strong>No weights versioned in Git.</strong> The SVC is 132 MB and BERT is 440 MB — above
+            GitHub's 100 MB limit. They live on the Hub; the repository holds only code.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Torch na variante <code>+cpu</code>.</strong> A build CUDA puxaria cerca de 2 GB
-            desnecessários. Em host com GPU e o toolkit da NVIDIA, o BERT usa a placa mesmo assim.</li>
+            </svg><strong>Torch in the <code>+cpu</code> variant.</strong> The CUDA build would pull in about 2
+            GB unnecessarily. On a host with a GPU and the NVIDIA toolkit, BERT uses the card anyway.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Modelo regenerável por código.</strong> <code>python src/train.py</code> reconstrói o
-            artefato de produção do zero — o <code>.joblib</code> não precisa existir para o projeto ser
-            reproduzível.</li>
+            </svg><strong>Model regenerable from code.</strong> <code>python src/train.py</code> rebuilds the
+            production artifact from scratch — the <code>.joblib</code> does not need to exist for the project
+            to be reproducible.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Healthcheck</strong> marca o contêiner como saudável quando o baseline termina de
-            carregar, em cerca de 5 segundos.</li>
+            </svg><strong>Healthcheck</strong> marks the container as healthy when the baseline finishes
+            loading, in about 5 seconds.</li>
         </ul>
       </section>
 
       <section id="limitacoes">
-        <h2><span class="num">08</span>Limitações</h2>
+        <h2><span class="num">08</span>Limitations</h2>
         <ul>
-          <li><strong>O rótulo é a editoria da Folha</strong>, com todo o viés editorial que isso carrega. O
-            modelo aprende a taxonomia de <em>um</em> jornal, não uma verdade universal sobre categorias de
-            notícia.</li>
-          <li><strong>Base de 2015 a 2017.</strong> Vocabulário político, econômico e tecnológico envelhece
-            rápido; num uso real, o modelo precisaria de retreino periódico e monitoramento de deriva.</li>
-          <li><strong>A classe <em>Outros</em> é um balde</strong> e continua sendo a pior do modelo. Não tem
-            coesão temática — por construção.</li>
-          <li><strong>A confiança não é calibrada.</strong> Serve para ordenar, não para tomar decisão com
-            limiar. Calibrar exigiria <code>CalibratedClassifierCV</code> ou equivalente.</li>
-          <li><strong>Resta boilerplate não catalogado.</strong> A blocklist zerou o que apareceu no top-40 dos
-            coeficientes; não há garantia de que não exista mais nada abaixo disso.</li>
+          <li><strong>The label is Folha's section</strong>, with all the editorial bias that carries. The model
+            learns <em>one</em> newspaper's taxonomy, not a universal truth about news categories.</li>
+          <li><strong>Data from 2015 to 2017.</strong> Political, economic and technological vocabulary ages
+            fast; in real use, the model would need periodic retraining and drift monitoring.</li>
+          <li><strong>The <em>Others</em> class is a bucket</strong> and remains the model's worst. It has no
+            topical cohesion — by construction.</li>
+          <li><strong>Confidence is not calibrated.</strong> It serves to rank, not to make threshold-based
+            decisions. Calibrating would require <code>CalibratedClassifierCV</code> or equivalent.</li>
+          <li><strong>Uncatalogued boilerplate remains.</strong> The blocklist zeroed out what appeared in the
+            top-40 coefficients; there is no guarantee that nothing else exists below that.</li>
         </ul>
       </section>
 
@@ -1408,9 +1416,9 @@
   </div>
 
   <footer>
-    <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
-  
-    <br><span class="no-print">Este site usa Google Analytics para medir audiência. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Como o Google usa os dados</a>.</span>
+    <a href="index.en.html">← Back to portfolio</a> · &copy; <span id="year">2026</span> Wesley Brito
+
+    <br><span class="no-print">This site uses Google Analytics to measure traffic. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses data</a>.</span>
   </footer>
 
   <script>
@@ -1426,7 +1434,7 @@
       // Reflect the *next* theme the button will switch to.
       function paint(isDark) {
         icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
-        label.textContent = isDark ? 'Claro' : 'Escuro';
+        label.textContent = isDark ? 'Light' : 'Dark';
       }
 
       var saved = null;

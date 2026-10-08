@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,17 +13,17 @@
     gtag('js', new Date());
     gtag('config', 'G-N3N5JWG3XB');
   </script>
-  <title>Análise Diagnóstica de Turnover — Wesley Brito</title>
+  <title>Diagnostic Turnover Analysis — Wesley Brito</title>
   <meta name="description"
-    content="Case de People Analytics: medir o impacto do Fit Cultural sobre a retenção usando períodos de admissão fechados e um grupo de controle interno, eliminando o viés de exposição." />
+    content="People Analytics case: measuring the impact of Cultural Fit on retention using closed hiring windows and an internal control group, eliminating exposure bias." />
   <meta name="author" content="Wesley Brito" />
   <link rel="alternate" hreflang="pt-BR" href="turnover.html" />
   <link rel="alternate" hreflang="en" href="turnover.en.html" />
 
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Análise Diagnóstica de Turnover — impacto do Fit Cultural na retenção" />
+  <meta property="og:title" content="Diagnostic Turnover Analysis — impact of Cultural Fit on retention" />
   <meta property="og:description"
-    content="Períodos fechados e grupo de controle interno para isolar o efeito do Fit Cultural sobre o desligamento em 12 meses." />
+    content="Closed windows and an internal control group to isolate the effect of Cultural Fit on 12-month attrition." />
   <meta property="og:image" content="img/turnover/desligamento-retencao.png" />
 
   <link rel="icon"
@@ -750,27 +750,27 @@
   </svg>
 
   <div class="toolbar">
-    <a class="btn" href="index.html">
+    <a class="btn" href="index.en.html">
       <svg aria-hidden="true">
         <use href="#i-back" />
       </svg>
-      Portfólio
+      Portfolio
     </a>
     <span class="spacer"></span>
-    <div class="lang" role="group" aria-label="Idioma / Language">
-      <span class="on" aria-current="true">PT</span><a href="turnover.en.html" hreflang="en" lang="en">EN</a>
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <a href="turnover.html" hreflang="pt-BR" lang="pt-BR">PT</a><span class="on" aria-current="true">EN</span>
     </div>
-    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+    <button class="btn" id="themeToggle" type="button" aria-label="Toggle light/dark theme">
       <svg id="themeIcon" aria-hidden="true">
         <use href="#i-moon" />
       </svg>
-      <span id="themeLabel">Escuro</span>
+      <span id="themeLabel">Dark</span>
     </button>
     <button class="btn" id="pdfBtn" type="button">
       <svg aria-hidden="true">
         <use href="#i-download" />
       </svg>
-      Baixar PDF
+      Download PDF
     </button>
   </div>
 
@@ -778,48 +778,48 @@
 
     <header class="hero">
       <span class="eyebrow">People Analytics</span>
-      <h1>Análise Diagnóstica de Turnover</h1>
-      <p class="lede">O Fit Cultural adotado no processo seletivo realmente segura as pessoas na empresa? A
-        pergunta é fácil de fazer e fácil de responder errado. A comparação óbvia — quem entrou "antes" contra
-        quem entrou "depois" — está <strong>viciada por construção</strong>. Este case é sobre montar o
-        recorte que torna a comparação honesta, e só então olhar para o resultado.
+      <h1>Diagnostic Turnover Analysis</h1>
+      <p class="lede">Does the Cultural Fit assessment adopted in the hiring process really keep people at the
+        company? The question is easy to ask and easy to answer wrongly. The obvious comparison — those who
+        joined "before" versus "after" — is <strong>biased by construction</strong>. This case is about building
+        the cut that makes the comparison honest, and only then looking at the result.
       </p>
       <div class="stack">
         <span class="badge">Python</span>
         <span class="badge">Pandas</span>
         <span class="badge">Plotly</span>
         <span class="badge">People Analytics</span>
-        <span class="badge">Análise diagnóstica</span>
-        <span class="badge">Grupo de controle</span>
-        <span class="badge">Análise de coorte</span>
+        <span class="badge">Diagnostic analysis</span>
+        <span class="badge">Control group</span>
+        <span class="badge">Cohort analysis</span>
       </div>
     </header>
 
     <main>
 
       <section id="resultado">
-        <h2>Resultado</h2>
-        <p class="deck">Desligamento nos 12 primeiros meses de contrato, em janelas de admissão equivalentes.</p>
+        <h2>Result</h2>
+        <p class="deck">Attrition in the first 12 months of employment, over equivalent hiring windows.</p>
         <div class="metrics">
           <div class="tile">
-            <span class="val">69,6%</span>
-            <span class="key">Sem Fit</span>
-            <span class="hint">admitidos abr/24 – abr/25</span>
+            <span class="val">69.6%</span>
+            <span class="key">Without Fit</span>
+            <span class="hint">hired Apr/24 – Apr/25</span>
           </div>
           <div class="tile">
-            <span class="val">24,6%</span>
-            <span class="key">Com Fit</span>
-            <span class="hint">admitidos mai/25 – mai/26</span>
+            <span class="val">24.6%</span>
+            <span class="key">With Fit</span>
+            <span class="hint">hired May/25 – May/26</span>
           </div>
           <div class="tile">
-            <span class="val">40,1%</span>
-            <span class="key">Controle interno</span>
-            <span class="hint">mesmo período, sem avaliação</span>
+            <span class="val">40.1%</span>
+            <span class="key">Internal control</span>
+            <span class="hint">same period, not assessed</span>
           </div>
           <div class="tile">
-            <span class="val">14,2%</span>
-            <span class="key">Pedido de demissão</span>
-            <span class="hint">Com Fit, contra 36,9% Sem Fit</span>
+            <span class="val">14.2%</span>
+            <span class="key">Voluntary resignation</span>
+            <span class="hint">With Fit, vs. 36.9% Without Fit</span>
           </div>
         </div>
 
@@ -827,317 +827,321 @@
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Confidencialidade</span>O cliente não é identificado. Esta página descreve o
-            método e os resultados agregados; nomes, unidades e recortes que permitiriam identificar a empresa
-            foram removidos.</p>
+          <p><span class="label">Confidentiality</span>The client is not identified. This page describes the
+            method and aggregate results; names, units and cuts that could identify the company have been
+            removed.</p>
         </div>
       </section>
 
       <section class="toc">
-        <h2>Roteiro</h2>
+        <h2>Roadmap</h2>
         <ol>
-          <li><a href="#contexto">Contexto e objetivo</a></li>
-          <li><a href="#vies">O viés que invalida a comparação óbvia</a></li>
-          <li><a href="#grupos">Os três grupos</a></li>
-          <li><a href="#metrica">A métrica</a></li>
-          <li><a href="#achados">Achados</a></li>
-          <li><a href="#motivos">Por que as pessoas saem</a></li>
-          <li><a href="#limitacoes">Limitações e recomendações</a></li>
+          <li><a href="#contexto">Context and goal</a></li>
+          <li><a href="#vies">The bias that invalidates the obvious comparison</a></li>
+          <li><a href="#grupos">The three groups</a></li>
+          <li><a href="#metrica">The metric</a></li>
+          <li><a href="#achados">Findings</a></li>
+          <li><a href="#motivos">Why people leave</a></li>
+          <li><a href="#limitacoes">Limitations and recommendations</a></li>
         </ol>
       </section>
 
       <section id="contexto">
-        <h2><span class="num">01</span>Contexto e objetivo</h2>
-        <p>Em <strong>maio de 2025</strong>, a empresa passou a usar uma avaliação de <strong>Fit Cultural</strong>
-          como critério complementar nas contratações. A ferramenta mede o alinhamento do candidato com o perfil
-          cultural da empresa e gera um score que <em>orienta</em>, sem substituir, a decisão do recrutador.</p>
-        <p>Um ano depois veio a pergunta natural: isso melhorou a retenção? O objetivo da análise foi quantificar
-          o impacto sobre os <strong>12 primeiros meses de contrato</strong> — a janela em que a rotatividade se
-          concentra e em que o alinhamento cultural teria mais chance de aparecer.</p>
-        <p>A base cobre <strong>abr/2024 a mai/2026</strong>, com mais de <strong>16 mil admissões</strong>
-          distribuídas entre os grupos comparados.</p>
+        <h2><span class="num">01</span>Context and goal</h2>
+        <p>In <strong>May 2025</strong>, the company started using a <strong>Cultural Fit</strong> assessment as
+          a complementary hiring criterion. The tool measures a candidate's alignment with the company's
+          cultural profile and produces a score that <em>informs</em>, without replacing, the recruiter's
+          decision.</p>
+        <p>A year later came the natural question: did this improve retention? The goal of the analysis was to
+          quantify the impact on the <strong>first 12 months of employment</strong> — the window in which
+          turnover concentrates and where cultural alignment would most likely show up.</p>
+        <p>The data covers <strong>Apr/2024 to May/2026</strong>, with over <strong>16,000 hires</strong>
+          distributed across the compared groups.</p>
       </section>
 
       <section id="vies">
-        <h2><span class="num">02</span>O viés que invalida a comparação óbvia</h2>
-        <p class="deck">Esta é a decisão que sustenta toda a análise.</p>
+        <h2><span class="num">02</span>The bias that invalidates the obvious comparison</h2>
+        <p class="deck">This is the decision that underpins the whole analysis.</p>
 
-        <p>O caminho natural seria comparar <em>Pré</em> (todos os colaboradores admitidos antes de mai/2025) com
-          <em>Pós</em> (todos os admitidos depois). Esse recorte é enganoso, e o motivo é simples: o grupo Pré
-          acumula gente com 1, 5 ou 10 anos de casa, enquanto o grupo Pós tem <strong>no máximo 13 meses</strong>
-          de empresa.
+        <p>The natural path would be to compare <em>Pre</em> (everyone hired before May/2025) with
+          <em>Post</em> (everyone hired afterwards). That cut is misleading, and the reason is simple: the Pre
+          group accumulates people with 1, 5 or 10 years of tenure, while the Post group has <strong>at most 13
+            months</strong> at the company.
         </p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Viés de exposição</span>Quem está há mais tempo na empresa teve mais tempo para
-            se desligar. Comparar grupos com tempos de observação diferentes mede a diferença de exposição, não o
-            efeito da intervenção — e sempre favorece o grupo mais novo.</p>
+          <p><span class="label">Exposure bias</span>Whoever has been at the company longer has had more time
+            to leave. Comparing groups with different observation times measures the difference in exposure, not
+            the effect of the intervention — and it always favors the newer group.</p>
         </div>
 
-        <p>A correção: restringir <strong>os dois lados</strong> a janelas de admissão fechadas de 13 meses, de
-          modo que o tempo máximo de observação seja idêntico. Assim, quando os números divergem, a divergência
-          não vem do relógio.</p>
+        <p>The fix: restrict <strong>both sides</strong> to closed 13-month hiring windows, so the maximum
+          observation time is identical. That way, when the numbers diverge, the divergence does not come from
+          the clock.</p>
 
         <figure>
           <img src="img/turnover/composicao-grupos.png"
-            alt="Barras empilhadas com o total de admitidos de cada grupo, separando ativos e desligados"
+            alt="Stacked bars with total hires in each group, split into active and terminated"
             loading="lazy" />
-          <figcaption>Composição dos três grupos em períodos fechados — ativos e desligados sobre o total de
-            admitidos.</figcaption>
+          <figcaption>Composition of the three groups over closed windows — active and terminated out of total
+            hires.</figcaption>
         </figure>
       </section>
 
       <section id="grupos">
-        <h2><span class="num">03</span>Os três grupos</h2>
-        <p class="deck">Dois grupos responderiam a pergunta pela metade. O terceiro é o que separa efeito de
-          coincidência.</p>
+        <h2><span class="num">03</span>The three groups</h2>
+        <p class="deck">Two groups would answer the question only halfway. The third is what separates effect
+          from coincidence.</p>
 
         <div class="groups">
           <div class="group">
-            <span class="tagline">Referência</span>
-            <h4>Sem Fit</h4>
-            <span class="win">admitidos abr/24 – abr/25 · 8.388 pessoas</span>
-            <p>O score é ignorado mesmo quando existe, porque o processo seletivo ainda não o usava como
-              critério.</p>
+            <span class="tagline">Reference</span>
+            <h4>Without Fit</h4>
+            <span class="win">hired Apr/24 – Apr/25 · 8,388 people</span>
+            <p>The score is ignored even when it exists, because the hiring process did not yet use it as a
+              criterion.</p>
           </div>
           <div class="group treated">
-            <span class="tagline">Tratamento</span>
-            <h4>Com Fit</h4>
-            <span class="win">admitidos mai/25 – mai/26 · 2.670 pessoas</span>
-            <p>Candidatos avaliados pelo Fit Cultural e contratados já sob o novo critério.</p>
+            <span class="tagline">Treatment</span>
+            <h4>With Fit</h4>
+            <span class="win">hired May/25 – May/26 · 2,670 people</span>
+            <p>Candidates assessed with Cultural Fit and hired already under the new criterion.</p>
           </div>
           <div class="group">
-            <span class="tagline">Controle interno</span>
-            <h4>Sem nota</h4>
-            <span class="win">admitidos mai/25 – mai/26 · 5.753 pessoas</span>
-            <p>Mesmo período pós-implantação, mas sem score — a cobertura não era total. Isola o efeito do Fit do
-              efeito do próprio período.</p>
+            <span class="tagline">Internal control</span>
+            <h4>No score</h4>
+            <span class="win">hired May/25 – May/26 · 5,753 people</span>
+            <p>Same post-rollout period, but with no score — coverage was not complete. Isolates the effect of
+              Fit from the effect of the period itself.</p>
           </div>
         </div>
 
-        <p>O terceiro grupo é o mais importante do desenho. Sem ele, qualquer melhora poderia ser atribuída a
-          outra coisa que mudou em 2025 — mercado de trabalho, política salarial, mudança na operação. Como esse
-          grupo viveu <strong>exatamente o mesmo período</strong> e a única diferença é não ter passado pela
-          avaliação, ele responde: "e se nada tivesse mudado no processo seletivo?"</p>
+        <p>The third group is the most important part of the design. Without it, any improvement could be
+          attributed to something else that changed in 2025 — labor market, salary policy, operational changes.
+          Since this group lived through <strong>exactly the same period</strong> and the only difference is not
+          having gone through the assessment, it answers: "what if nothing had changed in the hiring
+          process?"</p>
       </section>
 
       <section id="metrica">
-        <h2><span class="num">04</span>A métrica</h2>
+        <h2><span class="num">04</span>The metric</h2>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Desligamento em 12 meses</span>Para cada pessoa: houve desligamento dentro de
-            <strong>365 dias da admissão</strong> e dentro da janela observada do grupo? Quem não aparece como
-            desligado nessa janela conta como <strong>retido</strong> naquela safra.
-            <br><code>taxa = desligados em 12m ÷ total de admitidos no grupo</code>
+          <p><span class="label">12-month attrition</span>For each person: did termination happen within
+            <strong>365 days of hire</strong> and within the group's observed window? Anyone not shown as
+            terminated in that window counts as <strong>retained</strong> for that cohort.
+            <br><code>rate = terminated within 12m ÷ total hires in the group</code>
           </p>
         </div>
 
-        <p>O denominador é o <strong>total de admitidos no período do grupo</strong> — não o headcount ativo.
-          Essa escolha garante que grupos de tamanhos muito diferentes (8.388 contra 2.670 pessoas) continuem
-          comparáveis: a taxa não depende de quantos sobraram.</p>
+        <p>The denominator is the <strong>total hires in the group's period</strong> — not the active
+          headcount. This choice keeps groups of very different sizes (8,388 vs. 2,670 people) comparable: the
+          rate does not depend on how many remain.</p>
 
-        <h3>A regra da janela e o que ela implica</h3>
-        <p>Como o desligamento só é contado <em>dentro da janela do grupo</em>, quem foi admitido perto do fim de
-          uma janela teve pouco tempo de observação e entra como retido, mesmo que venha a sair pouco depois.
-          Isso é <strong>censura à direita</strong> — e é a razão de fundo para as janelas terem a mesma duração
-          nos três grupos.</p>
+        <h3>The window rule and what it implies</h3>
+        <p>Since termination is only counted <em>within the group's window</em>, anyone hired near the end of a
+          window had little observation time and counts as retained, even if they leave shortly after. This is
+          <strong>right censoring</strong> — and it is the underlying reason the windows have the same length in
+          all three groups.</p>
 
         <div class="callout" style="margin-bottom:0">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Por que isso não quebra a comparação</span>Com janelas de 13 meses em todos os
-            grupos, o efeito é <strong>simétrico</strong>: cada grupo tem a mesma proporção de gente
-            pouco observada, na mesma posição da janela. O viés não favorece nenhum lado. O que ele afeta é o
-            <em>nível</em> das taxas — todas subestimam o desligamento verdadeiro em 12 meses — e não a
-            <em>diferença</em> entre elas, que é o objeto da análise.
+          <p><span class="label">Why this does not break the comparison</span>With 13-month windows in every
+            group, the effect is <strong>symmetric</strong>: each group has the same share of people with little
+            observation time, at the same position in the window. The bias favors neither side. What it affects
+            is the <em>level</em> of the rates — all of them underestimate true 12-month attrition — and not the
+            <em>difference</em> between them, which is the subject of the analysis.
           </p>
         </div>
       </section>
 
       <section id="achados">
-        <h2><span class="num">05</span>Achados</h2>
+        <h2><span class="num">05</span>Findings</h2>
 
         <figure>
           <img src="img/turnover/desligamento-retencao.png"
-            alt="Barras da taxa de desligamento e da taxa de retenção em 12 meses para os três grupos"
+            alt="Bars of 12-month attrition rate and retention rate for the three groups"
             loading="lazy" />
-          <figcaption>Desligamento e retenção em 12 meses, por grupo.</figcaption>
+          <figcaption>12-month attrition and retention, by group.</figcaption>
         </figure>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Grupo</th>
-                <th class="num">Admitidos</th>
-                <th class="num">Desligados 12m</th>
-                <th class="num">Taxa</th>
-                <th class="num">IC 95%</th>
+                <th>Group</th>
+                <th class="num">Hires</th>
+                <th class="num">Terminated 12m</th>
+                <th class="num">Rate</th>
+                <th class="num">95% CI</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Sem Fit <span style="color:var(--text-faint)">(abr/24 – abr/25)</span></td>
-                <td class="num">8.388</td>
-                <td class="num">5.838</td>
-                <td class="num">69,6%</td>
-                <td class="num">68,6 – 70,6%</td>
+                <td>Without Fit <span style="color:var(--text-faint)">(Apr/24 – Apr/25)</span></td>
+                <td class="num">8,388</td>
+                <td class="num">5,838</td>
+                <td class="num">69.6%</td>
+                <td class="num">68.6 – 70.6%</td>
               </tr>
               <tr class="winner">
-                <td>Com Fit <span style="opacity:.75">(mai/25 – mai/26)</span></td>
-                <td class="num">2.670</td>
+                <td>With Fit <span style="opacity:.75">(May/25 – May/26)</span></td>
+                <td class="num">2,670</td>
                 <td class="num">657</td>
-                <td class="num">24,6%</td>
-                <td class="num">23,0 – 26,3%</td>
+                <td class="num">24.6%</td>
+                <td class="num">23.0 – 26.3%</td>
               </tr>
               <tr>
-                <td>Sem nota <span style="color:var(--text-faint)">(mai/25 – mai/26)</span></td>
-                <td class="num">5.753</td>
-                <td class="num">2.307</td>
-                <td class="num">40,1%</td>
-                <td class="num">38,8 – 41,4%</td>
+                <td>No score <span style="color:var(--text-faint)">(May/25 – May/26)</span></td>
+                <td class="num">5,753</td>
+                <td class="num">2,307</td>
+                <td class="num">40.1%</td>
+                <td class="num">38.8 – 41.4%</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>Com amostras nessa ordem de grandeza, os intervalos de confiança ficam estreitos — no máximo
-          ±1,6 p.p. Vale registrar por que os intervalos aparecem aqui e o p-valor não: com milhares de
-          observações, <em>qualquer</em> diferença sai significativa, então o teste de hipótese não distingue
-          nada. O intervalo responde a pergunta útil, que é de quanto é a diferença e com que precisão.</p>
+        <p>With samples of this size, the confidence intervals are narrow — at most ±1.6 p.p. It is worth noting
+          why intervals appear here and the p-value does not: with thousands of observations, <em>any</em>
+          difference comes out significant, so the hypothesis test distinguishes nothing. The interval answers
+          the useful question: how large is the difference and with what precision.</p>
 
-        <h3>Decompondo os 45 pontos</h3>
-        <p>Contra o grupo Sem Fit, a queda é de <strong>45,0 p.p.</strong> (69,6% → 24,6%). É o número de
-          manchete, mas ele compara períodos diferentes — e o controle interno permite separar o que é efeito da
-          ferramenta do que é efeito do período:</p>
+        <h3>Decomposing the 45 points</h3>
+        <p>Versus the Without Fit group, the drop is <strong>45.0 p.p.</strong> (69.6% → 24.6%). That is the
+          headline number, but it compares different periods — and the internal control lets us separate what is
+          the effect of the tool from what is the effect of the period:</p>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Contraste</th>
-                <th class="num">Diferença</th>
-                <th class="num">IC 95%</th>
-                <th class="num">Risco relativo</th>
+                <th>Contrast</th>
+                <th class="num">Difference</th>
+                <th class="num">95% CI</th>
+                <th class="num">Relative risk</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><span class="wrap-cell">Efeito do <strong>período</strong><br>
-                    <span style="color:var(--text-faint);font-size:.86em">Sem nota vs Sem Fit</span></span></td>
-                <td class="num">−29,5 p.p.</td>
-                <td class="num">−31,1 a −27,9</td>
-                <td class="num">0,58</td>
+                <td><span class="wrap-cell">Effect of the <strong>period</strong><br>
+                    <span style="color:var(--text-faint);font-size:.86em">No score vs. Without Fit</span></span>
+                </td>
+                <td class="num">−29.5 p.p.</td>
+                <td class="num">−31.1 to −27.9</td>
+                <td class="num">0.58</td>
               </tr>
               <tr class="winner">
-                <td><span class="wrap-cell">Efeito do <strong>Fit Cultural</strong><br>
-                    <span style="opacity:.75;font-size:.86em">Com Fit vs Sem nota, mesmo período</span></span>
+                <td><span class="wrap-cell">Effect of <strong>Cultural Fit</strong><br>
+                    <span style="opacity:.75;font-size:.86em">With Fit vs. No score, same period</span></span>
                 </td>
-                <td class="num">−15,5 p.p.</td>
-                <td class="num">−17,5 a −13,4</td>
-                <td class="num">0,61</td>
+                <td class="num">−15.5 p.p.</td>
+                <td class="num">−17.5 to −13.4</td>
+                <td class="num">0.61</td>
               </tr>
               <tr>
-                <td><span class="wrap-cell"><strong>Total observado</strong><br>
-                    <span style="color:var(--text-faint);font-size:.86em">Com Fit vs Sem Fit</span></span></td>
-                <td class="num">−45,0 p.p.</td>
-                <td class="num">−46,9 a −43,1</td>
-                <td class="num">0,35</td>
+                <td><span class="wrap-cell"><strong>Total observed</strong><br>
+                    <span style="color:var(--text-faint);font-size:.86em">With Fit vs. Without Fit</span></span>
+                </td>
+                <td class="num">−45.0 p.p.</td>
+                <td class="num">−46.9 to −43.1</td>
+                <td class="num">0.35</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>A conta fecha: <code>29,5 + 15,5 = 45,0</code>. E a leitura incômoda é que <strong>o período explica
-            quase o dobro da ferramenta</strong>. Alguma coisa mudou em 2025 — mercado, política salarial,
-          operação — que já derrubaria o turnover de qualquer jeito. Atribuir os 45 pontos ao Fit Cultural seria
-          inflar o resultado em cerca de três vezes.</p>
+        <p>The math adds up: <code>29.5 + 15.5 = 45.0</code>. And the uncomfortable reading is that <strong>the
+            period explains almost double what the tool does</strong>. Something changed in 2025 — market,
+          salary policy, operations — that would have pushed turnover down anyway. Attributing all 45 points to
+          Cultural Fit would inflate the result roughly threefold.</p>
 
-        <p>O que sobra para a ferramenta, ainda assim, é sólido: <strong>15,5 p.p.</strong> com intervalo
-          inteiramente negativo (−17,5 a −13,4), um <strong>risco 39% menor</strong> de desligamento em 12 meses
-          entre pessoas que viveram o mesmo contexto e se separam só por terem passado pela avaliação. Em termos
-          operacionais, é <strong>1 saída evitada a cada ~6,5 contratações</strong> feitas com Fit.</p>
+        <p>What is left for the tool is still solid: <strong>15.5 p.p.</strong> with an interval entirely
+          negative (−17.5 to −13.4), a <strong>39% lower risk</strong> of attrition within 12 months among
+          people who lived through the same context and differ only by having gone through the assessment. In
+          operational terms, that is <strong>1 avoided exit for every ~6.5 hires</strong> made with Fit.</p>
 
-        <h3>Quando as pessoas saem</h3>
+        <h3>When people leave</h3>
         <figure>
           <img src="img/turnover/curva-evasao.png"
-            alt="Curvas acumuladas de desligamento ao longo dos 12 meses após a admissão, para os três grupos"
+            alt="Cumulative attrition curves over the 12 months after hire, for the three groups"
             loading="lazy" />
-          <figcaption>Evasão acumulada mês a mês. A curva mais baixa retém mais; a inclinação inicial revela
-            risco de saída precoce.</figcaption>
+          <figcaption>Cumulative attrition month by month. The lower curve retains more; the initial slope
+            reveals the risk of early exit.</figcaption>
         </figure>
 
         <figure>
           <img src="img/turnover/distribuicao-saidas.png"
-            alt="Barras agrupadas com o percentual do grupo que sai em cada mês após a admissão" loading="lazy" />
-          <figcaption>Percentual do grupo que sai em cada mês pós-admissão.</figcaption>
+            alt="Grouped bars with the percentage of the group that leaves in each month after hire"
+            loading="lazy" />
+          <figcaption>Percentage of the group that leaves in each month after hire.</figcaption>
         </figure>
 
-        <p>As duas visões contam a mesma história por ângulos diferentes: a evasão se concentra nos
-          <strong>primeiros três meses</strong> em todos os grupos. No grupo Sem Fit, o pico do 2º mês sozinho
-          leva 13,9% de toda a coorte. No grupo Com Fit o mesmo pico é de 4,7%. A diferença não está só no total
-          — está em <em>quando</em> as pessoas desistem, o que aponta diretamente para o onboarding.
+        <p>The two views tell the same story from different angles: attrition concentrates in the <strong>first
+            three months</strong> in every group. In the Without Fit group, the month-2 peak alone takes 13.9% of
+          the entire cohort. In the With Fit group, the same peak is 4.7%. The difference is not only in the
+          total — it is in <em>when</em> people give up, which points directly to onboarding.
         </p>
       </section>
 
       <section id="motivos">
-        <h2><span class="num">06</span>Por que as pessoas saem</h2>
-        <p class="deck">Contar quantos saíram não basta. O motivo é o que liga o resultado à causa.</p>
+        <h2><span class="num">06</span>Why people leave</h2>
+        <p class="deck">Counting how many left is not enough. The reason is what links the result to the cause.
+        </p>
 
-        <p>Os desligamentos se dividem em dois tipos: os de <strong>iniciativa da empresa</strong> (demissão com
-          ou sem justa causa, término de contrato) e as <strong>saídas voluntárias</strong> — o pedido de
-          demissão.</p>
+        <p>Terminations split into two types: those at the <strong>company's initiative</strong> (dismissal with
+          or without cause, end of contract) and <strong>voluntary exits</strong> — resignation.</p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">O teste decisivo</span>O Fit Cultural atua sobre a decisão <em>do
-              colaborador</em>: quem se identifica com o ambiente tem menos motivo para pedir para sair. Se a
-            ferramenta funciona, o efeito tem que aparecer no <strong>pedido de demissão</strong> — não numa queda
-            genérica do total.</p>
+          <p><span class="label">The decisive test</span>Cultural Fit acts on the <em>employee's</em> decision:
+            someone who identifies with the environment has less reason to ask to leave. If the tool works, the
+            effect must show up in <strong>resignations</strong> — not in a generic drop in the total.</p>
         </div>
 
         <figure>
           <img src="img/turnover/pedido-demissao.png"
-            alt="Barras da taxa de pedido de demissão nos 12 primeiros meses, por grupo" loading="lazy" />
-          <figcaption>Taxa de pedido de demissão em 12 meses, sobre o total de admitidos de cada grupo.</figcaption>
+            alt="Bars of resignation rate in the first 12 months, by group" loading="lazy" />
+          <figcaption>Resignation rate within 12 months, over total hires in each group.</figcaption>
         </figure>
 
-        <p>Na comparação de manchete o resultado é forte: <strong>14,2%</strong> [13,0 – 15,6] no grupo Com Fit
-          contra <strong>36,9%</strong> [35,9 – 37,9] no Sem Fit. Mas o teste que interessa é de novo o
-          <strong>de dentro do período</strong>, contra o controle interno em <strong>19,2%</strong>
-          [18,2 – 20,2] — e aí a margem cai para <strong>4,9 p.p.</strong> [3,2 – 6,6].
+        <p>In the headline comparison the result is strong: <strong>14.2%</strong> [13.0 – 15.6] in the With Fit
+          group versus <strong>36.9%</strong> [35.9 – 37.9] in Without Fit. But the test that matters is again
+          the <strong>within-period</strong> one, against the internal control at <strong>19.2%</strong>
+          [18.2 – 20.2] — and there the margin drops to <strong>4.9 p.p.</strong> [3.2 – 6.6].
         </p>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Efeito do Fit no mesmo período</th>
-                <th class="num">Diferença</th>
-                <th class="num">Risco relativo</th>
-                <th class="num">Redução</th>
+                <th>Effect of Fit in the same period</th>
+                <th class="num">Difference</th>
+                <th class="num">Relative risk</th>
+                <th class="num">Reduction</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Desligamento total em 12m</td>
-                <td class="num">−15,5 p.p.</td>
-                <td class="num">0,61 <span style="color:var(--text-faint)">[0,57–0,66]</span></td>
+                <td>Total attrition within 12m</td>
+                <td class="num">−15.5 p.p.</td>
+                <td class="num">0.61 <span style="color:var(--text-faint)">[0.57–0.66]</span></td>
                 <td class="num">39%</td>
               </tr>
               <tr>
-                <td>Pedido de demissão em 12m</td>
-                <td class="num">−4,9 p.p.</td>
-                <td class="num">0,74 <span style="color:var(--text-faint)">[0,67–0,83]</span></td>
+                <td>Resignation within 12m</td>
+                <td class="num">−4.9 p.p.</td>
+                <td class="num">0.74 <span style="color:var(--text-faint)">[0.67–0.83]</span></td>
                 <td class="num">26%</td>
               </tr>
             </tbody>
@@ -1148,96 +1152,96 @@
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">A hipótese não se confirma inteiramente</span>Se o Fit Cultural agisse
-            <em>sobretudo</em> sobre a saída voluntária, a redução relativa deveria ser <strong>maior</strong> no
-            pedido de demissão do que no desligamento total. É o contrário: 26% contra 39%, com intervalos que
-            mal se tocam. A vantagem do grupo avaliado existe e é consistente, mas está distribuída por todos os
-            motivos de saída, não concentrada no canal que a teoria previa.
+          <p><span class="label">The hypothesis is not fully confirmed</span>If Cultural Fit acted
+            <em>mainly</em> on voluntary exits, the relative reduction should be <strong>larger</strong> for
+            resignations than for total attrition. It is the opposite: 26% vs. 39%, with intervals that barely
+            touch. The assessed group's advantage exists and is consistent, but it is spread across all exit
+            reasons, not concentrated in the channel the theory predicted.
           </p>
         </div>
 
-        <p>Isso não invalida o resultado — reduzir o desligamento em 12 meses em 39% continua sendo o achado
-          principal. Mas muda a explicação: o efeito não parece ser puramente de alinhamento cultural. Uma
-          hipótese alternativa é que passar pela avaliação esteja correlacionado com outra coisa — o tipo de
-          vaga, o recrutador, o canal de origem, o rigor do processo naquele fluxo. Separar isso exige controlar
-          por essas variáveis, o que fica como próximo passo.</p>
+        <p>This does not invalidate the result — cutting 12-month attrition by 39% remains the main finding. But
+          it changes the explanation: the effect does not seem to be purely about cultural alignment. An
+          alternative hypothesis is that going through the assessment is correlated with something else — the
+          type of role, the recruiter, the source channel, the rigor of the process in that flow. Separating
+          that requires controlling for those variables, which is left as a next step.</p>
 
         <figure>
           <img src="img/turnover/motivos-desligamento.png"
-            alt="Barras agrupadas com o volume de desligamentos por motivo em cada grupo" loading="lazy" />
-          <figcaption>Volume de desligamentos por motivo, apenas para saídas dentro dos 365 dias.</figcaption>
+            alt="Grouped bars with the volume of terminations by reason in each group" loading="lazy" />
+          <figcaption>Volume of terminations by reason, only for exits within 365 days.</figcaption>
         </figure>
 
-        <p>Os percentuais são calculados sobre o <strong>total de admitidos</strong> do grupo, não sobre os
-          desligados. Sobre os desligados, um grupo que retém mais teria automaticamente percentuais maiores em
-          cada motivo — a comparação ficaria sem sentido.</p>
+        <p>Percentages are computed over the group's <strong>total hires</strong>, not over the terminated.
+          Over the terminated, a group that retains more would automatically show larger percentages for each
+          reason — the comparison would be meaningless.</p>
       </section>
 
       <section id="limitacoes">
-        <h2><span class="num">07</span>Limitações e recomendações</h2>
+        <h2><span class="num">07</span>Limitations and recommendations</h2>
 
-        <h3>O que esta análise não prova</h3>
+        <h3>What this analysis does not prove</h3>
         <ul>
-          <li><strong>As taxas subestimam o desligamento real, nos três grupos.</strong> Quem entra no fim de
-            qualquer uma das janelas tem pouco tempo observado e conta como retido — inclusive no grupo Sem Fit,
-            onde alguém admitido em mar/2025 que saiu em jun/2025 caiu fora da janela abr/24–abr/25. Como o
-            efeito é simétrico, ele não distorce a comparação entre os grupos, mas os valores absolutos são um
-            <strong>piso</strong>, não a taxa verdadeira de 12 meses.</li>
-          <li><strong>Grupos não controlados por cargo, faixa etária ou região</strong> — variáveis que também
-            movem a rotatividade e que não foram isoladas.</li>
-          <li><strong>Não é um experimento.</strong> A atribuição ao grupo Com Fit não foi aleatória: quem foi
-            avaliado pode diferir sistematicamente de quem não foi. O controle interno reduz esse risco, mas não
-            o elimina.</li>
-          <li><strong>Cobertura parcial da ferramenta</strong> no período pós-implantação — 2.670 avaliados
-            contra 5.753 não avaliados.</li>
-          <li><strong>Qualidade do último mês.</strong> A base recebida traz um volume de desligamentos
-            anormalmente baixo no mês final, provavelmente por fechamento incompleto. Por isso a análise se apoia
-            nas taxas por coorte e não na série mensal.</li>
+          <li><strong>The rates underestimate true attrition, in all three groups.</strong> Anyone hired near
+            the end of either window has little observed time and counts as retained — including in the Without
+            Fit group, where someone hired in Mar/2025 who left in Jun/2025 fell outside the Apr/24–Apr/25
+            window. Since the effect is symmetric, it does not distort the comparison between groups, but the
+            absolute values are a <strong>floor</strong>, not the true 12-month rate.</li>
+          <li><strong>Groups not controlled for role, age bracket or region</strong> — variables that also drive
+            turnover and were not isolated.</li>
+          <li><strong>Not an experiment.</strong> Assignment to the With Fit group was not random: those who
+            were assessed may differ systematically from those who were not. The internal control reduces this
+            risk but does not eliminate it.</li>
+          <li><strong>Partial tool coverage</strong> in the post-rollout period — 2,670 assessed against 5,753
+            not assessed.</li>
+          <li><strong>Last-month quality.</strong> The received data shows an abnormally low volume of
+            terminations in the final month, probably due to an incomplete close. That is why the analysis relies
+            on cohort rates and not on the monthly series.</li>
         </ul>
 
-        <p>O caminho natural para tratar a censura de frente é a <strong>análise de sobrevivência</strong>
-          (Kaplan-Meier, e um modelo de Cox para ajustar por cargo e região). Ela usa cada pessoa pelo tempo que
-          de fato foi observada, em vez de classificá-la como retida por falta de janela — o que devolveria as
-          taxas em nível, não só a diferença entre grupos.</p>
+        <p>The natural way to tackle censoring head-on is <strong>survival analysis</strong> (Kaplan-Meier, and
+          a Cox model to adjust for role and region). It uses each person for the time they were actually
+          observed, instead of classifying them as retained for lack of a window — which would return the rates
+          at their true level, not just the difference between groups.</p>
 
-        <h3>Recomendações entregues</h3>
+        <h3>Recommendations delivered</h3>
         <ol>
-          <li><strong>Ampliar a cobertura da avaliação.</strong> O grupo sem nota, com mais que o dobro do
-            tamanho do avaliado, mostra que a maior parte das contratações ainda não passa pelo Fit — o que
-            limita o alcance do efeito.</li>
-          <li><strong>Priorizar as áreas de maior turnover</strong>, concentrando a avaliação onde o diferencial
-            de retenção foi maior.</li>
-          <li><strong>Atacar o onboarding precoce.</strong> A curva de evasão mostra que o risco se concentra nos
-            primeiros 90 dias; rituais de acompanhamento nesse período rendem mais do que ajustes na triagem.
+          <li><strong>Expand the assessment's coverage.</strong> The no-score group, more than double the size
+            of the assessed one, shows that most hires still do not go through Fit — which limits the reach of
+            the effect.</li>
+          <li><strong>Prioritize the highest-turnover areas</strong>, concentrating the assessment where the
+            retention differential was largest.</li>
+          <li><strong>Tackle early onboarding.</strong> The attrition curve shows risk concentrated in the
+            first 90 days; follow-up rituals in that period pay off more than screening adjustments.
           </li>
-          <li><strong>Testar o score como preditor individual</strong>, e não só como marcador de grupo. Se a
-            correlação entre faixa de score e retenção se confirmar, faixas mínimas viram critério de triagem
-            para cargos com histórico de evasão precoce.</li>
-          <li><strong>Reavaliar em 6 meses.</strong> Com 18 meses de dados pós-implantação, as estimativas ficam
-            mais estáveis e a análise por faixa de score ganha volume para conclusões mais firmes.</li>
+          <li><strong>Test the score as an individual predictor</strong>, not just a group marker. If the
+            correlation between score band and retention is confirmed, minimum bands become a screening criterion
+            for roles with a history of early attrition.</li>
+          <li><strong>Re-assess in 6 months.</strong> With 18 months of post-rollout data, the estimates become
+            more stable and the score-band analysis gains the volume for firmer conclusions.</li>
         </ol>
 
-        <h3>O que a análise entrega bem</h3>
+        <h3>What the analysis does well</h3>
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Comparação sem viés de exposição</strong> — janelas de admissão fechadas e de mesma
-            duração nos três grupos, o que também torna a censura no fim da janela simétrica entre eles.</li>
+            </svg><strong>Comparison free of exposure bias</strong> — closed hiring windows of the same length
+            in all three groups, which also makes censoring at the end of the window symmetric across them.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Grupo de controle no mesmo período</strong>, que separa o efeito da ferramenta do
-            efeito do contexto.</li>
+            </svg><strong>Control group in the same period</strong>, which separates the effect of the tool from
+            the effect of context.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Hipótese testável antes de olhar o dado</strong> — o efeito tinha que aparecer no
-            pedido de demissão, e apareceu.</li>
+            </svg><strong>Hypothesis stated before looking at the data</strong> — the effect had to show up in
+            resignations, and it did.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Denominadores explícitos</strong>, escolhidos para manter grupos de tamanhos diferentes
-            comparáveis.</li>
+            </svg><strong>Explicit denominators</strong>, chosen to keep groups of different sizes
+            comparable.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Limitações declaradas</strong> junto com o resultado, não em nota de rodapé.</li>
+            </svg><strong>Limitations declared</strong> alongside the result, not in a footnote.</li>
         </ul>
       </section>
 
@@ -1245,9 +1249,9 @@
   </div>
 
   <footer>
-    <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
-  
-    <br><span class="no-print">Este site usa Google Analytics para medir audiência. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Como o Google usa os dados</a>.</span>
+    <a href="index.en.html">← Back to portfolio</a> · &copy; <span id="year">2026</span> Wesley Brito
+
+    <br><span class="no-print">This site uses Google Analytics to measure traffic. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses data</a>.</span>
   </footer>
 
   <script>
@@ -1263,7 +1267,7 @@
       // Reflect the *next* theme the button will switch to.
       function paint(isDark) {
         icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
-        label.textContent = isDark ? 'Claro' : 'Escuro';
+        label.textContent = isDark ? 'Light' : 'Dark';
       }
 
       var saved = null;

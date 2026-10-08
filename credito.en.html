@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,17 +13,17 @@
     gtag('js', new Date());
     gtag('config', 'G-N3N5JWG3XB');
   </script>
-  <title>Previsão de Inadimplência — Wesley Brito</title>
+  <title>Default Prediction — Wesley Brito</title>
   <meta name="description"
-    content="Case de risco de crédito: modelo LightGBM que estima a probabilidade de inadimplência de cobranças mensais, com histórico point-in-time e validação out-of-time. AUC 0,933 · KS 0,737 · Brier 0,035." />
+    content="Credit risk case: a LightGBM model that estimates the probability of default on monthly invoices, with point-in-time history and out-of-time validation. AUC 0.933 · KS 0.737 · Brier 0.035." />
   <meta name="author" content="Wesley Brito" />
   <link rel="alternate" hreflang="pt-BR" href="credito.html" />
   <link rel="alternate" hreflang="en" href="credito.en.html" />
 
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Previsão de Inadimplência — Case de Risco de Crédito" />
+  <meta property="og:title" content="Default Prediction — Credit Risk Case" />
   <meta property="og:description"
-    content="LightGBM com features point-in-time e validação out-of-time. AUC 0,933 · Gini 0,866 · KS 0,737 · Brier 0,035." />
+    content="LightGBM with point-in-time features and out-of-time validation. AUC 0.933 · Gini 0.866 · KS 0.737 · Brier 0.035." />
   <meta property="og:image" content="img/credito/roc-ks.png" />
 
   <link rel="icon"
@@ -726,40 +726,39 @@
   </svg>
 
   <div class="toolbar">
-    <a class="btn" href="index.html">
+    <a class="btn" href="index.en.html">
       <svg aria-hidden="true">
         <use href="#i-back" />
       </svg>
-      Portfólio
+      Portfolio
     </a>
     <span class="spacer"></span>
-    <div class="lang" role="group" aria-label="Idioma / Language">
-      <span class="on" aria-current="true">PT</span><a href="credito.en.html" hreflang="en" lang="en">EN</a>
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <a href="credito.html" hreflang="pt-BR" lang="pt-BR">PT</a><span class="on" aria-current="true">EN</span>
     </div>
-    <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
+    <button class="btn" id="themeToggle" type="button" aria-label="Toggle light/dark theme">
       <svg id="themeIcon" aria-hidden="true">
         <use href="#i-moon" />
       </svg>
-      <span id="themeLabel">Escuro</span>
+      <span id="themeLabel">Dark</span>
     </button>
     <button class="btn" id="pdfBtn" type="button">
       <svg aria-hidden="true">
         <use href="#i-download" />
       </svg>
-      Baixar PDF
+      Download PDF
     </button>
   </div>
 
   <div class="wrap">
 
     <header class="hero">
-      <span class="eyebrow">Case de Risco de Crédito</span>
-      <h1>Previsão de Inadimplência</h1>
-      <p class="lede">Estimar a <strong>probabilidade</strong> de que cada cobrança mensal seja paga com 5 dias ou
-        mais de atraso, a partir do histórico de pagamentos e do perfil dos clientes, para orientar ações
-        proativas de cobrança. O desafio real não é o algoritmo: é construir variáveis de histórico
-        <strong>sem vazar o futuro</strong> e entregar uma probabilidade <strong>calibrada</strong>, não um
-        rótulo.
+      <span class="eyebrow">Credit Risk Case</span>
+      <h1>Default Prediction</h1>
+      <p class="lede">Estimate the <strong>probability</strong> that each monthly invoice is paid 5 or more days
+        late, from payment history and customer profile, to guide proactive collection actions. The real
+        challenge is not the algorithm: it is building history features <strong>without leaking the
+          future</strong> and delivering a <strong>calibrated</strong> probability, not a label.
       </p>
       <div class="stack">
         <span class="badge">Python</span>
@@ -767,126 +766,128 @@
         <span class="badge">scikit-learn</span>
         <span class="badge">Pandas</span>
         <span class="badge">Matplotlib</span>
-        <span class="badge">Features point-in-time</span>
-        <span class="badge">Validação out-of-time</span>
+        <span class="badge">Point-in-time features</span>
+        <span class="badge">Out-of-time validation</span>
       </div>
     </header>
 
     <main>
 
       <section id="resultado">
-        <h2>Resultado</h2>
-        <p class="deck">Validação out-of-time — 6 meses inteiramente fora do treino (2021-01 a 2021-06).</p>
+        <h2>Result</h2>
+        <p class="deck">Out-of-time validation — 6 months entirely outside the training window (2021-01 to
+          2021-06).</p>
         <div class="metrics">
           <div class="tile">
-            <span class="val">0,933</span>
-            <span class="key">AUC-ROC</span>
-            <span class="hint">poder de ordenação</span>
+            <span class="val">0.933</span>
+            <span class="key">ROC AUC</span>
+            <span class="hint">ranking power</span>
           </div>
           <div class="tile">
-            <span class="val">0,866</span>
+            <span class="val">0.866</span>
             <span class="key">Gini</span>
-            <span class="hint">+0,128 sobre o baseline</span>
+            <span class="hint">+0.128 over baseline</span>
           </div>
           <div class="tile">
-            <span class="val">0,737</span>
+            <span class="val">0.737</span>
             <span class="key">KS</span>
-            <span class="hint">separação bons × maus</span>
+            <span class="hint">good × bad separation</span>
           </div>
           <div class="tile">
-            <span class="val">0,035</span>
+            <span class="val">0.035</span>
             <span class="key">Brier</span>
-            <span class="hint">qualidade da probabilidade</span>
+            <span class="hint">probability quality</span>
           </div>
         </div>
       </section>
 
       <section class="toc">
-        <h2>Roteiro</h2>
+        <h2>Roadmap</h2>
         <ol>
-          <li><a href="#contexto">Contexto e objetivo</a></li>
-          <li><a href="#dados">Os dados</a></li>
-          <li><a href="#target">Construção do target</a></li>
-          <li><a href="#eda">Análise exploratória</a></li>
-          <li><a href="#features">Engenharia de variáveis</a></li>
-          <li><a href="#validacao">Estratégia de validação</a></li>
-          <li><a href="#modelos">Baseline e modelo principal</a></li>
-          <li><a href="#avaliacao">Avaliação e calibração</a></li>
-          <li><a href="#robustez">Robustez e ablação</a></li>
-          <li><a href="#entrega">Modelo final e entrega</a></li>
-          <li><a href="#conclusoes">Conclusões e limitações</a></li>
+          <li><a href="#contexto">Context and goal</a></li>
+          <li><a href="#dados">The data</a></li>
+          <li><a href="#target">Building the target</a></li>
+          <li><a href="#eda">Exploratory analysis</a></li>
+          <li><a href="#features">Feature engineering</a></li>
+          <li><a href="#validacao">Validation strategy</a></li>
+          <li><a href="#modelos">Baseline and main model</a></li>
+          <li><a href="#avaliacao">Evaluation and calibration</a></li>
+          <li><a href="#robustez">Robustness and ablation</a></li>
+          <li><a href="#entrega">Final model and delivery</a></li>
+          <li><a href="#conclusoes">Conclusions and limitations</a></li>
         </ol>
       </section>
 
       <section id="contexto">
-        <h2><span class="num">01</span>Contexto e objetivo</h2>
-        <p>Uma instituição financeira roda, mês a mês, um sistema de cobrança. O objetivo é estimar com
-          antecedência a probabilidade de que cada cobrança seja paga com atraso, para orientar ações proativas e
-          reduzir a inadimplência.</p>
+        <h2><span class="num">01</span>Context and goal</h2>
+        <p>A financial institution runs a collections system month after month. The goal is to estimate in
+          advance the probability that each invoice will be paid late, to guide proactive actions and reduce
+          default.</p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Regra de negócio</span>Um pagamento é considerado <strong>inadimplente</strong>
-            quando é realizado com <strong>5 dias ou mais de atraso</strong> em relação à data de vencimento.</p>
+          <p><span class="label">Business rule</span>A payment is considered <strong>in default</strong> when it
+            is made <strong>5 or more days after</strong> the due date.</p>
         </div>
 
-        <h3>Três princípios que guiaram todas as decisões</h3>
+        <h3>Three principles that guided every decision</h3>
         <ol>
-          <li><strong>Fidelidade ao ambiente de produção.</strong> O sistema roda periodicamente e só conhece o
-            passado. Por isso toda variável de histórico é <em>point-in-time</em> e a validação é
-            <em>out-of-time</em> — treino no passado, teste no futuro.
+          <li><strong>Fidelity to the production environment.</strong> The system runs periodically and only
+            knows the past. So every history feature is <em>point-in-time</em> and validation is
+            <em>out-of-time</em> — train on the past, test on the future.
           </li>
-          <li><strong>A saída é uma probabilidade, não um rótulo.</strong> Isso muda escolhas técnicas: não
-            rebalanceei as classes, otimizei por uma regra de score própria (log-loss) e auditei a calibração.
+          <li><strong>The output is a probability, not a label.</strong> This changes technical choices: I did
+            not rebalance the classes, I optimized a proper scoring rule (log-loss) and audited calibration.
           </li>
-          <li><strong>Simplicidade justificada.</strong> Um baseline interpretável serve de referência — o modelo
-            final só se justifica se superá-lo com folga.</li>
+          <li><strong>Justified simplicity.</strong> An interpretable baseline is the reference — the final
+            model is only justified if it beats it by a wide margin.</li>
         </ol>
       </section>
 
       <section id="dados">
-        <h2><span class="num">02</span>Os dados</h2>
-        <p class="deck">Quatro tabelas relacionadas por <code>ID_CLIENTE</code> e <code>SAFRA_REF</code> (mês de
-          referência), em <code>latin-1</code> com separador <code>;</code> — ler com o encoding errado
-          corromperia as categorias.</p>
+        <h2><span class="num">02</span>The data</h2>
+        <p class="deck">Four tables related by <code>ID_CLIENTE</code> and <code>SAFRA_REF</code> (reference
+          month), in <code>latin-1</code> with a <code>;</code> separator — reading with the wrong encoding
+          would corrupt the categories.</p>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Base</th>
-                <th class="num">Linhas</th>
-                <th>Grão</th>
-                <th>Papel</th>
+                <th>Table</th>
+                <th class="num">Rows</th>
+                <th>Grain</th>
+                <th>Role</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><code>base_cadastral</code></td>
-                <td class="num">1.315</td>
-                <td>1 por cliente</td>
-                <td><span class="wrap-cell">Atributos estáticos: porte, segmento, CEP, DDD</span></td>
+                <td class="num">1,315</td>
+                <td>1 per customer</td>
+                <td><span class="wrap-cell">Static attributes: size, segment, ZIP code, area code</span></td>
               </tr>
               <tr>
                 <td><code>base_info</code></td>
-                <td class="num">24.401</td>
-                <td>cliente × safra</td>
-                <td><span class="wrap-cell">Renda e nº de funcionários mensais</span></td>
+                <td class="num">24,401</td>
+                <td>customer × cohort</td>
+                <td><span class="wrap-cell">Monthly income and number of employees</span></td>
               </tr>
               <tr>
                 <td><code>base_pagamentos_dev</code></td>
-                <td class="num">77.414</td>
-                <td>cobrança</td>
-                <td><span class="wrap-cell">Histórico <strong>com</strong> data de pagamento → gera o
+                <td class="num">77,414</td>
+                <td>invoice</td>
+                <td><span class="wrap-cell">History <strong>with</strong> payment date → generates the
                     target</span></td>
               </tr>
               <tr>
                 <td><code>base_pagamentos_teste</code></td>
-                <td class="num">12.275</td>
-                <td>cobrança</td>
-                <td><span class="wrap-cell">Cobranças recentes <strong>sem</strong> pagamento → prever</span></td>
+                <td class="num">12,275</td>
+                <td>invoice</td>
+                <td><span class="wrap-cell">Recent invoices <strong>without</strong> payment → to predict</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -896,28 +897,28 @@
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">O teste é o futuro</span>O desenvolvimento cobre <strong>2018-08 a
-              2021-06</strong> (35 safras); o teste é <strong>2021-07 a 2021-11</strong> (5 safras), inteiramente
-            posterior. Isso é um <em>forecast</em> real — e é exatamente por isso que a validação precisa ser
-            temporal, nunca um split aleatório. 98,1% dos clientes de teste já aparecem no desenvolvimento.</p>
+          <p><span class="label">The test set is the future</span>Development covers <strong>2018-08 to
+              2021-06</strong> (35 cohorts); the test set is <strong>2021-07 to 2021-11</strong> (5 cohorts),
+            entirely later. This is a real <em>forecast</em> — which is exactly why validation must be
+            temporal, never a random split. 98.1% of test customers already appear in development.</p>
         </div>
 
-        <h3>Tratamento de ausentes</h3>
-        <p>Nem todo nulo é dado faltante. <code>FLAG_PF</code> tem 95% de ausência, mas pelo dicionário a
-          ausência <em>significa</em> pessoa jurídica — vira <code>0</code>/<code>1</code>. Já
-          <code>RENDA_MES_ANTERIOR</code> (2,9%), <code>NO_FUNCIONARIOS</code> (5,1%) e
-          <code>VALOR_A_PAGAR</code> (1,5%) têm nulos reais: em vez de imputar com média ou moda, deixei como
-          <code>NaN</code> — o LightGBM aprende nativamente o melhor lado do split, o que costuma ser mais
-          informativo. Categóricas com nulo (<code>SEGMENTO</code> 6,3%, <code>DDD</code> 18%,
-          <code>PORTE</code> 3,1%, <code>DOMINIO_EMAIL</code> 2,3%) ganham a própria categoria "ausente": a falta
-          de cadastro pode, por si só, carregar sinal.
+        <h3>Handling missing values</h3>
+        <p>Not every null is missing data. <code>FLAG_PF</code> is 95% missing, but per the data dictionary the
+          absence <em>means</em> a legal entity — it becomes <code>0</code>/<code>1</code>. On the other hand,
+          <code>RENDA_MES_ANTERIOR</code> (2.9%), <code>NO_FUNCIONARIOS</code> (5.1%) and
+          <code>VALOR_A_PAGAR</code> (1.5%) have genuine nulls: instead of imputing with the mean or mode, I
+          left them as <code>NaN</code> — LightGBM natively learns the best side of the split, which is usually
+          more informative. Categoricals with nulls (<code>SEGMENTO</code> 6.3%, <code>DDD</code> 18%,
+          <code>PORTE</code> 3.1%, <code>DOMINIO_EMAIL</code> 2.3%) get their own "missing" category: missing
+          registration data may itself carry signal.
         </p>
       </section>
 
       <section id="target">
-        <h2><span class="num">03</span>Construção do target</h2>
-        <p class="deck">O passo mais crítico do case. O target só existe na base de desenvolvimento — a única com
-          <code>DATA_PAGAMENTO</code>.
+        <h2><span class="num">03</span>Building the target</h2>
+        <p class="deck">The most critical step of the case. The target only exists in the development table — the
+          only one with <code>DATA_PAGAMENTO</code>.
         </p>
 
         <div class="callout">
@@ -925,193 +926,196 @@
             <use href="#i-info" />
           </svg>
           <p><code>ATRASO_DIAS = DATA_PAGAMENTO − DATA_VENCIMENTO</code><br>
-            <code>TARGET = 1 se ATRASO_DIAS ≥ 5, senão 0</code>
+            <code>TARGET = 1 if ATRASO_DIAS ≥ 5, else 0</code>
           </p>
         </div>
 
         <figure>
           <img src="img/credito/distribuicao-atraso.png"
-            alt="Histograma dos dias de atraso, com linha vertical marcando o corte de 5 dias" loading="lazy" />
-          <figcaption>A maioria paga no prazo; a cauda à direita do corte de 5 dias define os inadimplentes.
+            alt="Histogram of days late, with a vertical line marking the 5-day cutoff" loading="lazy" />
+          <figcaption>Most invoices are paid on time; the tail to the right of the 5-day cutoff defines the
+            defaulters.
           </figcaption>
         </figure>
 
-        <p><strong>Taxa base: 7,02%</strong> — 5.436 cobranças inadimplentes contra 71.978 em dia. Um
-          desbalanceamento moderado, tratado sem reamostragem (ver seção 07).</p>
+        <p><strong>Base rate: 7.02%</strong> — 5,436 defaulted invoices against 71,978 on time. A moderate
+          imbalance, handled without resampling (see section 07).</p>
       </section>
 
       <section id="eda">
-        <h2><span class="num">04</span>Análise exploratória</h2>
-        <p class="deck">Entender o comportamento do target no tempo e por perfil, para guiar a engenharia de
-          variáveis.</p>
+        <h2><span class="num">04</span>Exploratory analysis</h2>
+        <p class="deck">Understand how the target behaves over time and by profile, to guide feature
+          engineering.</p>
 
         <figure>
-          <img src="img/credito/inadimplencia-safra.png" alt="Série temporal da taxa de inadimplência por safra"
+          <img src="img/credito/inadimplencia-safra.png" alt="Time series of the default rate by cohort"
             loading="lazy" />
-          <figcaption>Taxa de inadimplência por safra, de 2018-08 a 2021-06.</figcaption>
+          <figcaption>Default rate by cohort, from 2018-08 to 2021-06.</figcaption>
         </figure>
 
-        <p>Há um <strong>pico claro em fev–mar/2020</strong>, no início da pandemia. É um choque macroeconômico
-          pontual — um alerta para não confiar cegamente em variáveis de calendário e um reforço de que a
-          validação tem que ser temporal.</p>
+        <p>There is a <strong>clear spike in Feb–Mar/2020</strong>, at the start of the pandemic. It is a
+          one-off macroeconomic shock — a warning not to blindly trust calendar variables and a reinforcement
+          that validation has to be temporal.</p>
 
         <div class="fig-grid">
           <figure>
             <img src="img/credito/inadimplencia-perfil.png"
-              alt="Barras de taxa de inadimplência por porte e por segmento industrial" loading="lazy" />
-            <figcaption>Inadimplência por porte e por segmento industrial.</figcaption>
+              alt="Bars of default rate by company size and by industry segment" loading="lazy" />
+            <figcaption>Default by company size and by industry segment.</figcaption>
           </figure>
           <figure>
             <img src="img/credito/valor-prazo.png"
-              alt="Taxa de inadimplência por octil de valor a pagar e de prazo" loading="lazy" />
-            <figcaption>Efeito do valor da cobrança e do prazo emissão→vencimento.</figcaption>
+              alt="Default rate by octile of amount due and of term" loading="lazy" />
+            <figcaption>Effect of invoice amount and of issue→due term.</figcaption>
           </figure>
         </div>
       </section>
 
       <section id="features">
-        <h2><span class="num">05</span>Engenharia de variáveis</h2>
-        <p class="deck">Quatro blocos de variáveis. O de histórico comportamental é o mais poderoso — e o mais
-          perigoso.</p>
+        <h2><span class="num">05</span>Feature engineering</h2>
+        <p class="deck">Four blocks of features. The behavioral history block is the most powerful — and the most
+          dangerous.</p>
 
         <ol>
-          <li><strong>Variáveis da própria cobrança</strong> — valor, taxa, prazo emissão→vencimento, mês de
-            vencimento. Conhecidas na emissão, sem risco de vazamento.</li>
-          <li><strong>Enriquecimento cadastral</strong> — porte como variável <em>ordinal</em> (ordem econômica
-            natural), tempo de casa do cliente na data da cobrança, CEP e DDD como categóricas.</li>
-          <li><strong>Enriquecimento mensal</strong> — join por <code>(ID_CLIENTE, SAFRA_REF)</code>. Pelo
-            dicionário, renda e nº de funcionários se referem ao fim do mês anterior, então já são conhecidos no
-            início da safra corrente e podem ser usados sem vazamento. Daí derivei duas razões financeiras:
-            comprometimento de renda (<code>VALOR/RENDA</code>) e produtividade
+          <li><strong>Features of the invoice itself</strong> — amount, fee, issue→due term, due month. Known at
+            issuance, no leakage risk.</li>
+          <li><strong>Registration enrichment</strong> — company size as an <em>ordinal</em> variable (natural
+            economic order), customer tenure on the invoice date, ZIP code and area code as categoricals.</li>
+          <li><strong>Monthly enrichment</strong> — join on <code>(ID_CLIENTE, SAFRA_REF)</code>. Per the
+            dictionary, income and number of employees refer to the end of the previous month, so they are
+            already known at the start of the current cohort and can be used without leakage. From them I
+            derived two financial ratios: income burden (<code>VALOR/RENDA</code>) and productivity
             (<code>RENDA/FUNCIONÁRIOS</code>).</li>
-          <li><strong>Histórico comportamental point-in-time</strong> — o passo anti-vazamento, detalhado abaixo.
+          <li><strong>Point-in-time behavioral history</strong> — the anti-leakage step, detailed below.
           </li>
         </ol>
 
-        <h3>O passo anti-vazamento</h3>
-        <p>A intuição de crédito é que <strong>o melhor preditor de atraso futuro é o comportamento
-            passado</strong>. Para cada cobrança quero saber quantas o cliente já teve, sua taxa histórica de
-          inadimplência, atraso médio e máximo — usando <strong>somente safras estritamente anteriores</strong>.
-          Calculado de forma ingênua, olhando toda a base, esse bloco vaza o target do futuro e infla o
-          resultado. A construção vetorizada e segura:</p>
+        <h3>The anti-leakage step</h3>
+        <p>The credit intuition is that <strong>the best predictor of future delay is past
+            behavior</strong>. For each invoice I want to know how many the customer has already had, their
+          historical default rate, and average and maximum delay — using <strong>only strictly earlier
+            cohorts</strong>. Computed naively, looking at the whole table, this block leaks the future target
+          and inflates the result. The vectorized, safe construction:</p>
 
         <ol>
-          <li>Resumir o histórico por <code>(cliente, safra)</code>.</li>
-          <li>Somar acumuladamente no tempo e <strong>subtrair a própria safra</strong>
-            (<code>cumsum − valor_da_safra</code>), obtendo o acumulado estritamente anterior.</li>
-          <li>Mapear de volta para as cobranças por <code>(cliente, safra)</code>.</li>
+          <li>Summarize history by <code>(customer, cohort)</code>.</li>
+          <li>Accumulate over time and <strong>subtract the cohort's own value</strong>
+            (<code>cumsum − cohort_value</code>), obtaining the strictly prior cumulative figure.</li>
+          <li>Map back to the invoices by <code>(customer, cohort)</code>.</li>
         </ol>
 
-        <p>Para a base de teste — cujas safras são todas posteriores ao desenvolvimento — o histórico é o total
-          acumulado do cliente em todo o desenvolvimento, que é justamente o que estaria disponível em produção.
+        <p>For the test table — whose cohorts are all later than development — the history is the customer's
+          total accumulated across the whole development set, which is exactly what would be available in
+          production.
         </p>
 
-        <h3>Auditoria de vazamento</h3>
+        <h3>Leakage audit</h3>
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Primeiras safras com histórico não-nulo: 0,0%.</strong> Nenhum cliente tem histórico na
-            sua primeira aparição — como deve ser.</li>
+            </svg><strong>First cohorts with non-null history: 0.0%.</strong> No customer has history at their
+            first appearance — as it should be.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>corr(<code>HIST_TAXA_INADIMPLENCIA</code>, <code>TARGET</code>) = 0,471.</strong>
-            Preditiva, não perfeita. Uma correlação próxima de 1 seria a assinatura de vazamento.</li>
+            </svg><strong>corr(<code>HIST_TAXA_INADIMPLENCIA</code>, <code>TARGET</code>) = 0.471.</strong>
+            Predictive, not perfect. A correlation close to 1 would be the signature of leakage.</li>
         </ul>
 
-        <p style="margin-top:14px">Base de modelagem final: <strong>77.414 × 32</strong> no desenvolvimento e
-          <strong>12.275 × 29</strong> no teste, com todas as linhas de teste preservadas. Razões com denominador
-          zero viram ausentes.
+        <p style="margin-top:14px">Final modeling table: <strong>77,414 × 32</strong> in development and
+          <strong>12,275 × 29</strong> in test, with all test rows preserved. Ratios with a zero denominator
+          become missing.
         </p>
       </section>
 
       <section id="validacao">
-        <h2><span class="num">06</span>Estratégia de validação</h2>
-        <p class="deck">Out-of-time, espelhando exatamente o cenário de produção.</p>
+        <h2><span class="num">06</span>Validation strategy</h2>
+        <p class="deck">Out-of-time, mirroring the production scenario exactly.</p>
 
-        <p>Como o teste é o futuro do desenvolvimento, um <code>train_test_split</code> aleatório mentiria:
-          misturaria meses, vazaria padrões temporais e superestimaria o desempenho. Reproduzi o cenário real:
+        <p>Since the test set is the future of development, a random <code>train_test_split</code> would lie:
+          it would mix months, leak temporal patterns and overestimate performance. I reproduced the real
+          scenario:
         </p>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Partição</th>
-                <th>Safras</th>
-                <th class="num">Linhas</th>
-                <th class="num">Taxa de inadimplência</th>
+                <th>Partition</th>
+                <th>Cohorts</th>
+                <th class="num">Rows</th>
+                <th class="num">Default rate</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Treino</td>
+                <td>Train</td>
                 <td>2018-08 → 2020-12</td>
-                <td class="num">63.147</td>
-                <td class="num">7,19%</td>
+                <td class="num">63,147</td>
+                <td class="num">7.19%</td>
               </tr>
               <tr>
-                <td>Validação (OOT)</td>
+                <td>Validation (OOT)</td>
                 <td>2021-01 → 2021-06</td>
-                <td class="num">14.267</td>
-                <td class="num">6,29%</td>
+                <td class="num">14,267</td>
+                <td class="num">6.29%</td>
               </tr>
               <tr>
-                <td>Teste (entrega)</td>
+                <td>Test (delivery)</td>
                 <td>2021-07 → 2021-11</td>
-                <td class="num">12.275</td>
-                <td class="num">sem rótulo</td>
+                <td class="num">12,275</td>
+                <td class="num">unlabeled</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>Os 6 meses de validação espelham o horizonte do teste. A validação OOT serve tanto para comparar
-          modelos quanto para escolher o número de árvores por <em>early stopping</em>. O modelo final é depois
-          re-treinado em toda a base de desenvolvimento.</p>
+        <p>The 6 validation months mirror the test horizon. The OOT validation is used both to compare models
+          and to choose the number of trees via <em>early stopping</em>. The final model is then retrained on
+          the whole development set.</p>
       </section>
 
       <section id="modelos">
-        <h2><span class="num">07</span>Baseline e modelo principal</h2>
+        <h2><span class="num">07</span>Baseline and main model</h2>
 
-        <h3>Baseline interpretável — Regressão Logística</h3>
-        <p>Referência obrigatória: um modelo linear, transparente e fácil de explicar. Como não trata
-          <code>NaN</code> nem categóricas nativamente, montei um pipeline com imputação, padronização e
-          <em>one-hot</em> (categorias raras agrupadas), usando <code>class_weight="balanced"</code> apenas
-          internamente para o modelo aprender a minoria.
+        <h3>Interpretable baseline — Logistic Regression</h3>
+        <p>A mandatory reference: a linear model, transparent and easy to explain. Since it handles neither
+          <code>NaN</code> nor categoricals natively, I built a pipeline with imputation, scaling and
+          <em>one-hot</em> encoding (rare categories grouped), using <code>class_weight="balanced"</code> only
+          internally so the model learns the minority class.
         </p>
 
-        <h3>Modelo principal — LightGBM</h3>
-        <p>Escolhido porque trata <code>NaN</code> e categóricas nativamente — sem imputação arbitrária nem
-          explosão de one-hot em <code>CEP_2_DIG</code> e <code>DDD</code>, que têm alta cardinalidade — e porque
-          captura não-linearidades e interações que a regressão logística não vê. É o padrão de mercado para
-          dados tabulares de crédito.</p>
+        <h3>Main model — LightGBM</h3>
+        <p>Chosen because it handles <code>NaN</code> and categoricals natively — no arbitrary imputation and no
+          one-hot explosion on <code>CEP_2_DIG</code> and <code>DDD</code>, which have high cardinality — and
+          because it captures non-linearities and interactions that logistic regression cannot see. It is the
+          market standard for tabular credit data.</p>
 
-        <p>Três decisões coerentes com o objetivo de estimar uma <strong>probabilidade</strong>:</p>
+        <p>Three decisions consistent with the goal of estimating a <strong>probability</strong>:</p>
         <ol>
-          <li><strong>Sem rebalanceamento.</strong> Under/oversampling distorce a probabilidade prevista —
-            justamente a saída pedida. Mantive a taxa natural de ~7%; a regularização leve
-            (<code>min_child_samples</code>, <code>subsample</code>, <code>reg_*</code>) cuida do desbalanceamento
-            sem viés.</li>
-          <li><strong>Early stopping por <code>binary_logloss</code></strong>, não por AUC. A AUC só mede
-            ordenação e ignora calibração; a log-loss é uma regra de score própria que premia probabilidades bem
-            calibradas. Resultado: <strong>569 árvores</strong>.</li>
-          <li><strong>Sem recalibração posterior</strong> — a probabilidade crua já se mostrou calibrada (seção
-            08), então não adicionei complexidade sem ganho.</li>
+          <li><strong>No rebalancing.</strong> Under/oversampling distorts the predicted probability — exactly
+            the requested output. I kept the natural ~7% rate; light regularization
+            (<code>min_child_samples</code>, <code>subsample</code>, <code>reg_*</code>) handles the imbalance
+            without bias.</li>
+          <li><strong>Early stopping on <code>binary_logloss</code></strong>, not AUC. AUC only measures
+            ranking and ignores calibration; log-loss is a proper scoring rule that rewards well-calibrated
+            probabilities. Result: <strong>569 trees</strong>.</li>
+          <li><strong>No post-hoc recalibration</strong> — the raw probability was already calibrated (section
+            08), so I added no complexity without gain.</li>
         </ol>
       </section>
 
       <section id="avaliacao">
-        <h2><span class="num">08</span>Avaliação e calibração</h2>
-        <p class="deck">Em risco de crédito, uma métrica não basta: avaliei poder de ordenação (AUC, Gini, KS)
-          <em>e</em> qualidade da probabilidade (Brier, curva de calibração), além da PR-AUC, mais informativa sob
-          classes desbalanceadas.
+        <h2><span class="num">08</span>Evaluation and calibration</h2>
+        <p class="deck">In credit risk, one metric is not enough: I evaluated ranking power (AUC, Gini, KS)
+          <em>and</em> probability quality (Brier, calibration curve), plus PR-AUC, which is more informative
+          under imbalanced classes.
         </p>
 
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Modelo</th>
+                <th>Model</th>
                 <th class="num">AUC</th>
                 <th class="num">Gini</th>
                 <th class="num">KS</th>
@@ -1121,70 +1125,70 @@
             </thead>
             <tbody>
               <tr>
-                <td>Regressão Logística</td>
-                <td class="num">0,8691</td>
-                <td class="num">0,7382</td>
-                <td class="num">0,6348</td>
-                <td class="num">0,4461</td>
-                <td class="num">0,1469</td>
+                <td>Logistic Regression</td>
+                <td class="num">0.8691</td>
+                <td class="num">0.7382</td>
+                <td class="num">0.6348</td>
+                <td class="num">0.4461</td>
+                <td class="num">0.1469</td>
               </tr>
               <tr class="winner">
                 <td>LightGBM</td>
-                <td class="num">0,9330</td>
-                <td class="num">0,8660</td>
-                <td class="num">0,7374</td>
-                <td class="num">0,6081</td>
-                <td class="num">0,0354</td>
+                <td class="num">0.9330</td>
+                <td class="num">0.8660</td>
+                <td class="num">0.7374</td>
+                <td class="num">0.6081</td>
+                <td class="num">0.0354</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>O LightGBM ganha <strong>+0,128 de Gini</strong> sobre o baseline e reduz o Brier em <strong>4×</strong>
-          — a diferença mais relevante, já que o que se pede é uma probabilidade.</p>
+        <p>LightGBM gains <strong>+0.128 Gini</strong> over the baseline and cuts the Brier score by
+          <strong>4×</strong> — the most relevant difference, since what is asked for is a probability.</p>
 
         <figure>
-          <img src="img/credito/roc-ks.png" alt="Curva ROC comparando os dois modelos e curva KS do LightGBM"
+          <img src="img/credito/roc-ks.png" alt="ROC curve comparing the two models and KS curve of LightGBM"
             loading="lazy" />
-          <figcaption>Curva ROC dos dois modelos (esquerda) e estatística KS do LightGBM (direita), na validação
-            OOT.</figcaption>
+          <figcaption>ROC curve of both models (left) and KS statistic of LightGBM (right), on the OOT
+            validation.</figcaption>
         </figure>
 
-        <h3>A probabilidade é confiável?</h3>
+        <h3>Is the probability reliable?</h3>
         <figure class="tall">
           <img src="img/credito/calibracao.png"
-            alt="Curva de calibração do LightGBM, com os pontos sobre a diagonal" loading="lazy" />
-          <figcaption>Curva de calibração — os pontos caem sobre a diagonal.</figcaption>
+            alt="LightGBM calibration curve, with points on the diagonal" loading="lazy" />
+          <figcaption>Calibration curve — the points fall on the diagonal.</figcaption>
         </figure>
 
-        <p>A média prevista (<strong>≈6,5%</strong>) coincide com a taxa observada (<strong>6,3%</strong>). Testei
-          também recalibração isotônica e o Brier <strong>não melhorou</strong> (0,0354 → 0,0354). Mantive a
-          probabilidade crua — decisão a favor da simplicidade.</p>
+        <p>The mean prediction (<strong>≈6.5%</strong>) matches the observed rate (<strong>6.3%</strong>). I
+          also tested isotonic recalibration and the Brier score <strong>did not improve</strong> (0.0354 →
+          0.0354). I kept the raw probability — a decision in favor of simplicity.</p>
 
         <figure>
           <img src="img/credito/importancia-variaveis.png"
-            alt="Barras horizontais com as 15 variáveis mais importantes por ganho" loading="lazy" />
-          <figcaption>Importância por ganho — top 15 variáveis.</figcaption>
+            alt="Horizontal bars with the 15 most important features by gain" loading="lazy" />
+          <figcaption>Feature importance by gain — top 15 features.</figcaption>
         </figure>
 
-        <p>As variáveis mais fortes combinam comportamento passado (<code>HIST_*</code>), características da
-          cobrança (<code>VALOR_A_PAGAR</code>, <code>PRAZO_DIAS</code>) e geografia (<code>CEP_2_DIG</code>,
-          <code>DDD</code>). A importância por ganho tende a favorecer variáveis de alta cardinalidade, então na
-          seção seguinte medi por ablação o quanto o histórico realmente contribui.
+        <p>The strongest features combine past behavior (<code>HIST_*</code>), invoice characteristics
+          (<code>VALOR_A_PAGAR</code>, <code>PRAZO_DIAS</code>) and geography (<code>CEP_2_DIG</code>,
+          <code>DDD</code>). Gain importance tends to favor high-cardinality variables, so in the next section
+          I measured by ablation how much the history really contributes.
         </p>
       </section>
 
       <section id="robustez">
-        <h2><span class="num">09</span>Robustez e ablação</h2>
+        <h2><span class="num">09</span>Robustness and ablation</h2>
 
-        <h3>O desempenho é estável mês a mês?</h3>
+        <h3>Is performance stable month to month?</h3>
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Safra</th>
+                <th>Cohort</th>
                 <th class="num">n</th>
-                <th class="num">Taxa observada</th>
+                <th class="num">Observed rate</th>
                 <th class="num">AUC</th>
                 <th class="num">KS</th>
               </tr>
@@ -1192,58 +1196,59 @@
             <tbody>
               <tr>
                 <td>2021-01</td>
-                <td class="num">2.393</td>
-                <td class="num">6,50%</td>
-                <td class="num">0,944</td>
-                <td class="num">0,770</td>
+                <td class="num">2,393</td>
+                <td class="num">6.50%</td>
+                <td class="num">0.944</td>
+                <td class="num">0.770</td>
               </tr>
               <tr>
                 <td>2021-02</td>
-                <td class="num">2.146</td>
-                <td class="num">5,90%</td>
-                <td class="num">0,960</td>
-                <td class="num">0,824</td>
+                <td class="num">2,146</td>
+                <td class="num">5.90%</td>
+                <td class="num">0.960</td>
+                <td class="num">0.824</td>
               </tr>
               <tr>
                 <td>2021-03</td>
-                <td class="num">2.326</td>
-                <td class="num">6,60%</td>
-                <td class="num">0,940</td>
-                <td class="num">0,811</td>
+                <td class="num">2,326</td>
+                <td class="num">6.60%</td>
+                <td class="num">0.940</td>
+                <td class="num">0.811</td>
               </tr>
               <tr>
                 <td>2021-04</td>
-                <td class="num">2.358</td>
-                <td class="num">5,30%</td>
-                <td class="num">0,924</td>
-                <td class="num">0,753</td>
+                <td class="num">2,358</td>
+                <td class="num">5.30%</td>
+                <td class="num">0.924</td>
+                <td class="num">0.753</td>
               </tr>
               <tr>
                 <td>2021-05</td>
-                <td class="num">2.531</td>
-                <td class="num">7,50%</td>
-                <td class="num">0,932</td>
-                <td class="num">0,714</td>
+                <td class="num">2,531</td>
+                <td class="num">7.50%</td>
+                <td class="num">0.932</td>
+                <td class="num">0.714</td>
               </tr>
               <tr>
                 <td>2021-06</td>
-                <td class="num">2.513</td>
-                <td class="num">5,80%</td>
-                <td class="num">0,941</td>
-                <td class="num">0,752</td>
+                <td class="num">2,513</td>
+                <td class="num">5.80%</td>
+                <td class="num">0.941</td>
+                <td class="num">0.752</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p>AUC entre <strong>0,924 e 0,960</strong> nos seis meses — sem degradação ao longo do horizonte.</p>
+        <p>AUC between <strong>0.924 and 0.960</strong> across the six months — no degradation over the
+          horizon.</p>
 
-        <h3>O modelo depende de atalhos?</h3>
-        <p>Removi todo o bloco de histórico comportamental e re-treinei:</p>
+        <h3>Does the model rely on shortcuts?</h3>
+        <p>I removed the entire behavioral history block and retrained:</p>
         <div class="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Modelo</th>
+                <th>Model</th>
                 <th class="num">AUC</th>
                 <th class="num">Gini</th>
                 <th class="num">KS</th>
@@ -1253,105 +1258,105 @@
             </thead>
             <tbody>
               <tr>
-                <td>LightGBM sem histórico</td>
-                <td class="num">0,9205</td>
-                <td class="num">0,8410</td>
-                <td class="num">0,7305</td>
-                <td class="num">0,5900</td>
-                <td class="num">0,0369</td>
+                <td>LightGBM without history</td>
+                <td class="num">0.9205</td>
+                <td class="num">0.8410</td>
+                <td class="num">0.7305</td>
+                <td class="num">0.5900</td>
+                <td class="num">0.0369</td>
               </tr>
               <tr class="winner">
-                <td>LightGBM completo</td>
-                <td class="num">0,9330</td>
-                <td class="num">0,8660</td>
-                <td class="num">0,7374</td>
-                <td class="num">0,6081</td>
-                <td class="num">0,0354</td>
+                <td>Full LightGBM</td>
+                <td class="num">0.9330</td>
+                <td class="num">0.8660</td>
+                <td class="num">0.7374</td>
+                <td class="num">0.6081</td>
+                <td class="num">0.0354</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p>O histórico agrega <strong>+0,025 de Gini</strong>. O ponto importante é o inverso: mesmo
-          <strong>sem</strong> ele o modelo já é forte (Gini 0,841) — sinal de que o desempenho não depende de
-          vazamento disfarçado de variável.
+        <p>History adds <strong>+0.025 Gini</strong>. The important point is the inverse: even
+          <strong>without</strong> it the model is already strong (Gini 0.841) — a sign that performance does not
+          depend on leakage disguised as a feature.
         </p>
       </section>
 
       <section id="entrega">
-        <h2><span class="num">10</span>Modelo final e entrega</h2>
-        <p>Fixado o número de árvores pela validação OOT, re-treinei o LightGBM em <strong>toda</strong> a base de
-          desenvolvimento — aproveitando o máximo de dados, inclusive as safras mais recentes, que são as mais
-          parecidas com o teste — e gerei as probabilidades.</p>
+        <h2><span class="num">10</span>Final model and delivery</h2>
+        <p>With the number of trees fixed by the OOT validation, I retrained LightGBM on the <strong>whole</strong>
+          development set — making the most of the data, including the most recent cohorts, which are the most
+          similar to the test — and generated the probabilities.</p>
 
         <div class="callout">
           <svg aria-hidden="true">
             <use href="#i-info" />
           </svg>
-          <p><span class="label">Ponto decisivo</span>A submissão usa <code>predict_proba</code> — probabilidade
-            contínua em [0, 1] — e <strong>não</strong> <code>predict</code>, que devolveria rótulo 0/1. O case
-            pede explicitamente a probabilidade.</p>
+          <p><span class="label">Key point</span>The submission uses <code>predict_proba</code> — a continuous
+            probability in [0, 1] — and <strong>not</strong> <code>predict</code>, which would return a 0/1
+            label. The case explicitly asks for the probability.</p>
         </div>
 
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg>12.275 linhas — bate exatamente com a base de teste.</li>
+            </svg>12,275 rows — exactly matches the test table.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg>Colunas <code>ID_CLIENTE</code>, <code>SAFRA_REF</code>,
+            </svg>Columns <code>ID_CLIENTE</code>, <code>SAFRA_REF</code>,
             <code>PROBABILIDADE_INADIMPLENCIA</code>.
           </li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg>Todas as probabilidades em [0, 1], sem nulos.</li>
+            </svg>All probabilities in [0, 1], no nulls.</li>
         </ul>
 
         <figure style="margin-top:18px">
           <img src="img/credito/distribuicao-probabilidades.png"
-            alt="Histograma das probabilidades previstas na base de teste" loading="lazy" />
-          <figcaption>Distribuição das probabilidades previstas na base de teste.</figcaption>
+            alt="Histogram of predicted probabilities on the test set" loading="lazy" />
+          <figcaption>Distribution of predicted probabilities on the test set.</figcaption>
         </figure>
 
-        <p>A média prevista no teste é <strong>3,82%</strong>, abaixo da taxa base de 7,02% do desenvolvimento.
-          Não é um erro de calibração: a população de teste é de fato menos arriscada — sua taxa histórica média
-          é 5,60%, contra 6,58% na validação.</p>
+        <p>The mean prediction on the test set is <strong>3.82%</strong>, below the 7.02% base rate of
+          development. This is not a calibration error: the test population is genuinely less risky — its
+          average historical rate is 5.60%, versus 6.58% in validation.</p>
       </section>
 
       <section id="conclusoes">
-        <h2><span class="num">11</span>Conclusões e limitações</h2>
+        <h2><span class="num">11</span>Conclusions and limitations</h2>
 
-        <h3>Por que a solução é sólida</h3>
+        <h3>Why the solution is solid</h3>
         <ul class="checks">
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Sem vazamento:</strong> histórico point-in-time e auditado, validação temporal que
-            espelha a produção, e ablação mostrando que o modelo não depende de atalhos.</li>
+            </svg><strong>No leakage:</strong> audited point-in-time history, temporal validation that mirrors
+            production, and an ablation showing the model does not depend on shortcuts.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Saída fiel ao pedido:</strong> probabilidade calibrada via <code>predict_proba</code>,
-            sem rebalanceamento que a distorceria.</li>
+            </svg><strong>Output faithful to the request:</strong> calibrated probability via
+            <code>predict_proba</code>, with no rebalancing that would distort it.</li>
           <li><svg aria-hidden="true">
               <use href="#i-check" />
-            </svg><strong>Simplicidade justificada:</strong> um único modelo, sem recalibração desnecessária, cada
-            decisão explicável.</li>
+            </svg><strong>Justified simplicity:</strong> a single model, no unnecessary recalibration, every
+            decision explainable.</li>
         </ul>
 
-        <h3>Limitações</h3>
+        <h3>Limitations</h3>
         <ul>
-          <li><strong>Choques macro</strong> — o pico de fev–mar/2020 não é previsível a partir do histórico. O
-            modelo capta padrões estruturais, não crises exógenas.</li>
-          <li><strong>Variáveis de calendário</strong> (<code>VENC_MES</code>) podem carregar sazonalidade
-            específica de um ano; exigem monitoramento em produção.</li>
-          <li><strong>Clientes novos</strong>, sem histórico, são previstos apenas pelo perfil cadastral e
-            financeiro — sinal naturalmente mais fraco.</li>
+          <li><strong>Macro shocks</strong> — the Feb–Mar/2020 spike is not predictable from history. The model
+            captures structural patterns, not exogenous crises.</li>
+          <li><strong>Calendar variables</strong> (<code>VENC_MES</code>) may carry seasonality specific to one
+            year; they require monitoring in production.</li>
+          <li><strong>New customers</strong>, with no history, are predicted only from their registration and
+            financial profile — naturally a weaker signal.</li>
         </ul>
 
-        <h3>Próximos passos</h3>
+        <h3>Next steps</h3>
         <ul>
-          <li>Monitoramento de estabilidade populacional (PSI) das variáveis e do score.</li>
-          <li>Definição do ponto de corte conforme o custo de cobrança <em>vs.</em> perda esperada — transformar
-            probabilidade em ação.</li>
-          <li>Explicabilidade individual (SHAP) para apoiar a operação de cobrança.</li>
+          <li>Population stability (PSI) monitoring of the variables and the score.</li>
+          <li>Defining the cutoff based on collection cost <em>vs.</em> expected loss — turning probability into
+            action.</li>
+          <li>Individual explainability (SHAP) to support the collections operation.</li>
         </ul>
       </section>
 
@@ -1359,9 +1364,9 @@
   </div>
 
   <footer>
-    <a href="index.html">← Voltar ao portfólio</a> · &copy; <span id="year">2026</span> Wesley Brito
-  
-    <br><span class="no-print">Este site usa Google Analytics para medir audiência. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Como o Google usa os dados</a>.</span>
+    <a href="index.en.html">← Back to portfolio</a> · &copy; <span id="year">2026</span> Wesley Brito
+
+    <br><span class="no-print">This site uses Google Analytics to measure traffic. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses data</a>.</span>
   </footer>
 
   <script>
@@ -1377,7 +1382,7 @@
       // Reflect the *next* theme the button will switch to.
       function paint(isDark) {
         icon.firstElementChild.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
-        label.textContent = isDark ? 'Claro' : 'Escuro';
+        label.textContent = isDark ? 'Light' : 'Dark';
       }
 
       var saved = null;
