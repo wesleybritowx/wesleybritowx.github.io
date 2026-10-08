@@ -699,6 +699,9 @@
 
     .lang a,
     .lang span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
       padding: 8px 13px;
       line-height: 1.2;
       color: var(--text-muted);
@@ -708,6 +711,14 @@
       color: var(--accent-text);
       background: var(--accent-soft);
       text-decoration: none;
+    }
+
+    .flag {
+      width: 20px;
+      height: 14px;
+      flex: none;
+      border-radius: 2px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
     }
 
     .lang .on {
@@ -747,6 +758,18 @@
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 6 9 17l-5-5" />
     </symbol>
+      <symbol id="f-br" viewBox="0 0 50 35">
+      <rect width="50" height="35" fill="#009c3b" />
+      <path d="M25 4 46 17.5 25 31 4 17.5Z" fill="#ffdf00" />
+      <circle cx="25" cy="17.5" r="8.5" fill="#002776" />
+      <path d="M17 15.5c5-1.2 11-.4 16 3.2" stroke="#fff" stroke-width="1.6" fill="none" />
+    </symbol>
+    <symbol id="f-us" viewBox="0 0 50 35">
+      <rect width="50" height="35" fill="#fff" />
+      <path d="M0 2.7h50M0 8.1h50M0 13.5h50M0 18.9h50M0 24.3h50M0 29.7h50" stroke="#b22234" stroke-width="2.7" />
+      <rect width="22" height="18.9" fill="#3c3b6e" />
+      <g fill="#fff"><circle cx="4" cy="4" r="1.1" /><circle cx="9" cy="4" r="1.1" /><circle cx="14" cy="4" r="1.1" /><circle cx="19" cy="4" r="1.1" /><circle cx="6.5" cy="9.5" r="1.1" /><circle cx="11.5" cy="9.5" r="1.1" /><circle cx="16.5" cy="9.5" r="1.1" /><circle cx="4" cy="15" r="1.1" /><circle cx="9" cy="15" r="1.1" /><circle cx="14" cy="15" r="1.1" /><circle cx="19" cy="15" r="1.1" /></g>
+    </symbol>
   </svg>
 
   <div class="toolbar">
@@ -758,7 +781,7 @@
     </a>
     <span class="spacer"></span>
     <div class="lang" role="group" aria-label="Idioma / Language">
-      <span class="on" aria-current="true">PT</span><a href="turnover.en.html" hreflang="en" lang="en">EN</a>
+      <span class="on" aria-current="true"><svg class="flag" aria-hidden="true"><use href="#f-br" /></svg>BR</span><a href="turnover.en.html" hreflang="en" lang="en" title="English"><svg class="flag" aria-hidden="true"><use href="#f-us" /></svg>USA</a>
     </div>
     <button class="btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro">
       <svg id="themeIcon" aria-hidden="true">
